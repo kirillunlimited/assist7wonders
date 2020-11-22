@@ -1,10 +1,11 @@
 import * as React from 'react';
-import InputCounter from "../InputCounter";
+import InputCounter from "./InputCounter";
+import styles from './Score.module.css';
 
 interface IProps {
-	name: string;
 	value: number;
-	handleChange: Function
+	title: string;
+	handleChange: Function;
 }
 
 export default function Score(props: IProps) {
@@ -20,7 +21,7 @@ export default function Score(props: IProps) {
 
 	return(
 		<div>
-			{props.name}
+			<p className={styles.title}>{props.title && props.title}</p>
 			<InputCounter
 				handleDecrease={() => handleDecrease()}
 				handleChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}

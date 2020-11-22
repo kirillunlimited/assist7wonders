@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import Navigation from "./components/Navigation";
-import Score from "./components/Score";
-import NewPlayer from "./components/NewPlayer";
+import Scores from "./components/Scores";
+import Home from './components/Home';
 import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {IPlayer, IScore, IRoutes} from "./types";
 import ROUTES from './routes';
 import {nanoid} from 'nanoid';
-import {getSum} from './utils';
-import {Button, IconButton} from "@material-ui/core";
-import {DeleteForever} from "@material-ui/icons";
 import {debounce} from 'debounce';
 
 const scoreTemplate = {
@@ -124,36 +121,23 @@ function App() {
 						key={route}
 						path={ROUTES[route].path}
 					>
-						{players.map((player, index) =>
-							<div key={index}>
-								{ROUTES[route].scores.map((scoreKey, index) =>
-									<Score
-										key={index}
-										name={player.name}
-										value={player.score[scoreKey]}
-										handleChange={(value: number) => onChange(player.id, scoreKey, value)}
-									/>
-								)}
-							</div>)
-						}
+						<Scores
+							players={players}
+							scores={ROUTES[route].scores}
+							handleChange={onChange}
+						/>
 					</Route>
 				)}
 				<Route path="/total">
 					<Total players={players}/>
 				</Route>
 				<Route path="/">
-					<NewPlayer handleSubmit={addPlayer} />
-					{players.map((player, index) =>
-						<div key={index}>
-							{player.name} Σ{getSum(player.score)}
-							<IconButton onClick={() => deletePlayer(player.id)}>
-								<DeleteForever color="secondary"/>
-							</IconButton>
-						</div>)
-					}
-					<Button variant="contained" color="primary" onClick={() => resetScores()}>
-						Новая игра
-					</Button>
+					<Home
+						players={players}
+						handleAdd={addPlayer}
+						handleDelete={deletePlayer}
+						handleReset={resetScores}
+					/>
 				</Route>
 			</Switch>
 		</Router>

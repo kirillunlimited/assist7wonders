@@ -2,7 +2,7 @@ import * as React from 'react';
 import {IPlayer} from '../../types';
 import {getSum} from "../../utils";
 import {useState, useEffect} from "react";
-import styles from './index.module.css';
+import styles from './Total.module.css';
 
 interface IProps {
 	players: Array<IPlayer>
@@ -35,7 +35,7 @@ export default function Total(props: IProps) {
 	return(
 		<div>
 			{props.players.map((player, index) =>
-				<div key={index} className={winner === player.id ? styles.winner : ''}>
+				<div key={index} className={`${styles.player} ${winner === player.id ? styles.winner : ''}`}>
 					{player.name} Σ{getSum(player.score)}
 				</div>)
 			}

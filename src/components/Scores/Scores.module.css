@@ -1,0 +1,23 @@
+.player {
+	margin-bottom: 2em;
+}
+
+.player:last-child {
+	margin-bottom: 0;
+}
+
+.name {
+	margin: .5em 0;
+	font-weight: bold;
+}
+
+.scores {
+	display: flex;
+	justify-content: center;
+}
+
+@media (max-width: 480px) {
+	.scores {
+		flex-direction: column;
+	}
+}

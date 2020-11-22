@@ -11,7 +11,7 @@ export interface IScore {
 }
 
 export type ScienceParts = {
-	gears: number;
+	gear: number;
 	compass: number;
 	tablet: number;
 }

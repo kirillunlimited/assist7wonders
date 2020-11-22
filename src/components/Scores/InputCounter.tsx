@@ -15,7 +15,7 @@ export default function InputCounter(props: IProps) {
 			<IconButton onClick={(e) => props.handleDecrease && props.handleDecrease(e)}>
 				<RemoveCircle color="primary"/>
 			</IconButton>
-			<Input type='number' onChange={(e) => props.handleChange && props.handleChange(e)} value={props.value} />
+			<Input style={{width: 64}} type='number' onChange={(e) => props.handleChange && props.handleChange(e)} value={props.value} />
 			<IconButton onClick={(e) => props.handleIncrease && props.handleIncrease(e)}>
 				<AddCircle color="primary"/>
 			</IconButton>
