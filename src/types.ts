@@ -10,6 +10,8 @@ export interface IScore {
 	gear: number;
 }
 
+export type TScoreKeys = keyof IScore;
+
 export type ScienceParts = {
 	gear: number;
 	compass: number;
@@ -17,7 +19,6 @@ export type ScienceParts = {
 }
 
 export interface IPlayer {
-	id: string;
 	name: string;
 	score: IScore
 }
@@ -35,5 +36,5 @@ export interface IRoutes {
 export interface IRoute {
 	title: string;
 	path: string;
-	scores: Array<keyof IScore>;
+	scores: Array<TScoreKeys>;
 }

@@ -1,4 +1,4 @@
-import {getFlatSum, getScienceSum} from './utils';
+import {getFlatSum, getScienceSum} from './score';
 
 describe('getFlatSum', () => {
   test('should return zero', () => {

@@ -1,17 +1,17 @@
-import {IScore} from "./types";
+import {IScore, TScoreKeys} from "../types";
 
 const SCIENCE_KEYS = [
 	'compass',
 	'tablet',
 	'gear'
-] as Array<keyof IScore>;
+] as Array<TScoreKeys>;
 
 export function getSum(playerScore: IScore): number {
 	return getFlatSum(playerScore) + getScienceSum(playerScore);
 }
 
 export function getFlatSum(playerScore: IScore): number {
-	return (Object.keys(playerScore) as Array<keyof IScore>).reduce((sum, key) => {
+	return (Object.keys(playerScore) as Array<TScoreKeys>).reduce((sum, key) => {
 		if (!SCIENCE_KEYS.includes(key)) {
 			const value = playerScore[key];
 			sum += value;

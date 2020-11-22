@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Navigation from "./components/Navigation";
 import Scores from "./components/Scores";
 import Home from './components/Home';
 import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {IPlayer, IScore, IRoutes} from "./types";
+import {IPlayer, TScoreKeys, IRoutes} from "./types";
 import ROUTES from './routes';
-import {nanoid} from 'nanoid';
-import {debounce} from 'debounce';
+import {savePlayersToStorage, getPlayersFromStorage} from './utils/storage';
 
 const scoreTemplate = {
 	military: 0,
@@ -26,30 +25,21 @@ function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
 
 	useEffect(() => {
-		saveToStorage(players);
-	});
+		savePlayersToStorage(players);
+	}, [players]);
 
 	useEffect(() => {
-		restoreFromStorage();
+		restorePlayers();
 	}, []);
 
-	const saveToStorage = useMemo(() => debounce((players: IPlayer[]) => {
-		localStorage.setItem('players', JSON.stringify(players));
-	}, 500), []);
-
-	function restoreFromStorage(): void {
-		const players = localStorage.getItem('players');
-
-		if (players) {
-			setPlayers(JSON.parse(players));
-		}
+	function restorePlayers(): void {
+		setPlayers(getPlayersFromStorage());
 	}
 
 	function addPlayer(name: string) {
 		if (name) {
 			setPlayers([
 				...players, {
-					id: nanoid(),
 					name,
 					score: {
 						...scoreTemplate
@@ -59,41 +49,35 @@ function App() {
 		}
 	}
 
-	function deletePlayer(id: string): void {
-		if (id) {
+	function deletePlayer(name: string): void {
+		if (name) {
 			setPlayers([
 				...players.filter(player => {
-					return player.id !== id
+					return player.name !== name
 				})
 			]);
 		}
 	}
 
-	function updatePlayerScore(id: string, payload: IPlayer) {
-		if (id) {
+	function onChange(name: string, scoreKey: TScoreKeys, value: number): void {
+		const player = players.find(player => player.name === name);
+
+		if (player) {
 			setPlayers([
 				...players.map(player => {
-					if (player.id === id) {
-						return payload;
+					if (player.name === name) {
+						return {
+							...player,
+							score: {
+								...player.score,
+								[scoreKey]: value
+							}
+						};
 					} else {
 						return player;
 					}
 				}),
 			]);
-		}
-	}
-
-	function onChange(id: string, scoreKey: keyof IScore, value: number) {
-		const player = players.find(player => player.id === id);
-
-		if (player) {
-			updatePlayerScore(id, {
-				...player,
-				score: {
-					...player.score,
-					[scoreKey]: value
-				}
-			});
 		}
 	}
 

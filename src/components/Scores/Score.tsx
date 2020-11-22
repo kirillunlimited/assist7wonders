@@ -5,27 +5,27 @@ import styles from './Score.module.css';
 interface IProps {
 	value: number;
 	title: string;
-	handleChange: Function;
+	handleChange: (value: number) => void;
 }
 
 export default function Score(props: IProps) {
-	function handleDecrease() {
+	function handleDecrement(): void {
 		props.handleChange(props.value - 1);
 	}
-	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+	function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
 		props.handleChange(Number(event.target.value));
 	}
-	function handleIncrease() {
+	function handleIncrement(): void {
 		props.handleChange(props.value + 1);
 	}
 
 	return(
 		<div>
-			<p className={styles.title}>{props.title && props.title}</p>
+			{props.title && <p className={styles.title}>{props.title}</p>}
 			<InputCounter
-				handleDecrease={() => handleDecrease()}
-				handleChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-				handleIncrease={() => handleIncrease()}
+				handleDecrement={() => handleDecrement()}
+				handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e)}
+				handleIncrement={() => handleIncrement()}
 				value={props.value}
 			/>
 		</div>

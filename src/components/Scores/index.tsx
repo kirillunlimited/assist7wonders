@@ -1,12 +1,12 @@
 import Score from "./Score";
 import React from "react";
-import {IPlayer, IScore} from "../../types";
+import {IPlayer, TScoreKeys} from "../../types";
 import styles from './Scores.module.css';
 
 interface IProps {
 	players: Array<IPlayer>;
-	scores: Array<keyof IScore>;
-	handleChange: Function;
+	scores: Array<TScoreKeys>;
+	handleChange: (name: string, scoreKey: TScoreKeys, value: number) => void;
 }
 
 export default function Scores(props: IProps) {
@@ -21,7 +21,7 @@ export default function Scores(props: IProps) {
 								key={index}
 								title={arr.length > 1 ? scoreKey : ''}
 								value={player.score[scoreKey]}
-								handleChange={(value: number) => props.handleChange(player.id, scoreKey, value)}
+								handleChange={(value: number) => props.handleChange(player.name, scoreKey, value)}
 							/>
 						)}
 					</div>

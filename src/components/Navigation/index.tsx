@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import ROUTES from './../../routes';
 import {IRoutes} from "../../types";
 import { useLocation } from 'react-router-dom'
+import styles from './Navigation.module.css';
 
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 
@@ -25,6 +26,7 @@ export default function Navigation() {
 						component={Link}
 						value={ROUTES[route].path}
 						to={ROUTES[route].path}
+						classes={{root: styles.root}}
 					/>
 				)}
 				<Tab

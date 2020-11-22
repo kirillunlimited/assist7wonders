@@ -1,26 +1,29 @@
 import React from "react";
 import NewPlayer from './NewPlayer';
-import {getSum} from "../../utils";
+import {getSum} from "../../utils/score";
 import {Button, IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
 import {IPlayer} from "../../types";
 
 interface IProps {
 	players: Array<IPlayer>;
-	handleAdd: Function;
-	handleDelete: Function;
-	handleReset: Function;
+	handleAdd: (name: string) => void;
+	handleDelete: (name: string) => void;
+	handleReset: () => void;
 }
 
 export default function Home(props: IProps) {
 	return(
 		<div>
-			<NewPlayer handleSubmit={props.handleAdd} />
+			<NewPlayer
+				names={props.players.map(player => player.name)}
+				handleSubmit={props.handleAdd}
+			/>
 			<div>
 				{props.players.map((player, index) =>
 					<div key={index}>
 						{player.name} Σ{getSum(player.score)}
-						<IconButton onClick={() => props.handleDelete(player.id)}>
+						<IconButton onClick={() => props.handleDelete(player.name)}>
 							<DeleteForever color="secondary"/>
 						</IconButton>
 					</div>)
