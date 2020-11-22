@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import Navigation from "./components/Navigation";
 import Score from "./components/Score";
@@ -11,6 +11,7 @@ import {nanoid} from 'nanoid';
 import {getSum} from './utils';
 import {Button, IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
+import {debounce} from 'debounce';
 
 const scoreTemplate = {
 	military: 0,
@@ -26,6 +27,26 @@ const scoreTemplate = {
 
 function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
+
+	useEffect(() => {
+		saveToStorage(players);
+	});
+
+	useEffect(() => {
+		restoreFromStorage();
+	}, []);
+
+	const saveToStorage = useMemo(() => debounce((players: IPlayer[]) => {
+		localStorage.setItem('players', JSON.stringify(players));
+	}, 500), []);
+
+	function restoreFromStorage(): void {
+		const players = localStorage.getItem('players');
+
+		if (players) {
+			setPlayers(JSON.parse(players));
+		}
+	}
 
 	function addPlayer(name: string) {
 		if (name) {
@@ -125,12 +146,12 @@ function App() {
 					{players.map((player, index) =>
 						<div key={index}>
 							{player.name} Σ{getSum(player.score)}
-							<IconButton onClick={(e) => deletePlayer(player.id)}>
+							<IconButton onClick={() => deletePlayer(player.id)}>
 								<DeleteForever color="secondary"/>
 							</IconButton>
 						</div>)
 					}
-					<Button variant="contained" color="primary" onClick={(e) => resetScores()}>
+					<Button variant="contained" color="primary" onClick={() => resetScores()}>
 						Новая игра
 					</Button>
 				</Route>
