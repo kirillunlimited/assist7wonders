@@ -7,8 +7,22 @@ import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {IPlayer, IScore, IRoutes} from "./types";
 import ROUTES from './routes';
-import {getSum} from './utils';
 import {nanoid} from 'nanoid';
+import {getSum} from './utils';
+import {Button, IconButton} from "@material-ui/core";
+import {DeleteForever} from "@material-ui/icons";
+
+const scoreTemplate = {
+	military: 0,
+	treasury: 0,
+	wonders: 0,
+	civilian: 0,
+	commerce: 0,
+	guild: 0,
+	compass: 0,
+	tablet: 0,
+	gear: 0
+};
 
 function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
@@ -20,17 +34,19 @@ function App() {
 					id: nanoid(),
 					name,
 					score: {
-						military: 0,
-						treasury: 0,
-						wonders: 0,
-						civilian: 0,
-						commerce: 0,
-						guild: 0,
-						compass: 0,
-						tablet: 0,
-						gear: 0
+						...scoreTemplate
 					}
 				}
+			]);
+		}
+	}
+
+	function deletePlayer(id: string): void {
+		if (id) {
+			setPlayers([
+				...players.filter(player => {
+					return player.id !== id
+				})
 			]);
 		}
 	}
@@ -63,20 +79,25 @@ function App() {
 		}
 	}
 
+	function resetScores() {
+		setPlayers([
+			...players.map(player => {
+				return {
+					...player,
+					score: {
+						...scoreTemplate
+					}
+				}
+			}),
+		]);
+	}
+
   return (
     <div className="App">
 		<Router>
 			<Navigation/>
 			<h1>7 wonders</h1>
 			<Switch>
-				<Route path="/players">
-					<NewPlayer handleSubmit={addPlayer} />
-					{players.map((player, index) =>
-						<div key={index}>
-							{player.name} Σ{getSum(player.score)}
-						</div>)
-					}
-				</Route>
 				{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
 					<Route
 						key={route}
@@ -100,11 +121,18 @@ function App() {
 					<Total players={players}/>
 				</Route>
 				<Route path="/">
+					<NewPlayer handleSubmit={addPlayer} />
 					{players.map((player, index) =>
 						<div key={index}>
 							{player.name} Σ{getSum(player.score)}
+							<IconButton onClick={(e) => deletePlayer(player.id)}>
+								<DeleteForever color="secondary"/>
+							</IconButton>
 						</div>)
 					}
+					<Button variant="contained" color="primary" onClick={(e) => resetScores()}>
+						Новая игра
+					</Button>
 				</Route>
 			</Switch>
 		</Router>

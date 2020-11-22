@@ -18,12 +18,6 @@ export default function Navigation() {
 					value="/"
 					to="/"
 				/>
-				<Tab
-					label="Игроки"
-					component={Link}
-					value="/players"
-					to="/players"
-				/>
 				{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
 					<Tab
 						key={route}
@@ -33,6 +27,12 @@ export default function Navigation() {
 						to={ROUTES[route].path}
 					/>
 				)}
+				<Tab
+					label="Итог"
+					component={Link}
+					value="/total"
+					to="/total"
+				/>
 			</Tabs>
 		</AppBar>
 	)
