@@ -9,6 +9,7 @@ export interface IScore {
 	tablet: number;
 	gear: number;
 	cities: number;
+	debt: number;
 	leaders: number;
 }
 
@@ -34,6 +35,7 @@ export interface IRoutes {
 	guild: IRoute;
 	science: IRoute;
 	cities: IRoute;
+	debt: IRoute;
 	leaders: IRoute;
 }
 
@@ -42,6 +44,7 @@ export interface IRoute {
 	path: string;
 	scores: Array<TScoreKeys>;
 	addon?: keyof IAddons;
+	max?: number;
 }
 
 export interface IAddons {

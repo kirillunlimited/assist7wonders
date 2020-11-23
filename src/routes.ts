@@ -42,6 +42,13 @@ const ROUTES: IRoutes = {
 		scores: ['cities'],
 		addon: 'cities'
 	},
+	debt: {
+		title: 'DEBT',
+		path: '/debt',
+		scores: ['debt'],
+		addon: 'cities',
+		max: 0
+	},
 	leaders: {
 		title: 'LEADERS',
 		path: '/leaders',

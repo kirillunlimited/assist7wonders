@@ -6,6 +6,7 @@ interface IProps {
 	value: number;
 	title: string;
 	handleChange: (value: number) => void;
+	max?: number;
 }
 
 export default function Score(props: IProps) {
@@ -16,7 +17,12 @@ export default function Score(props: IProps) {
 		props.handleChange(value);
 	}
 	function handleIncrement(): void {
-		props.handleChange(props.value + 1);
+		const value = isMaxValue(props.value + 1, props.max) ? Number(props.max) : props.value + 1;
+		props.handleChange(value);
+	}
+
+	function isMaxValue(value: number, max?: number): boolean {
+		return max !== undefined && value >= max;
 	}
 
 	return(
@@ -27,6 +33,8 @@ export default function Score(props: IProps) {
 				handleChange={handleChange}
 				handleIncrement={handleIncrement}
 				value={props.value}
+				max={props.max}
+				isMaxValueFilter={isMaxValue}
 			/>
 		</div>
 	)
