@@ -7,12 +7,12 @@ const SCIENCE_KEYS = [
 ] as Array<TScoreKeys>;
 
 export function getSum(playerScore: IScore): number {
-	return getFlatSum(playerScore) + getScienceSum(playerScore);
+	return getFlatSum(playerScore) + getScienceSum(playerScore) + getTreasurySum(playerScore);
 }
 
 export function getFlatSum(playerScore: IScore): number {
 	return (Object.keys(playerScore) as Array<TScoreKeys>).reduce((sum, key) => {
-		if (!SCIENCE_KEYS.includes(key)) {
+		if (!SCIENCE_KEYS.includes(key) && key !== 'treasury') {
 			const value = playerScore[key];
 			sum += value;
 		}
@@ -29,4 +29,8 @@ export function getScienceSum(playerScore: IScore): number {
 		}, {sum: 0, min: playerScore[SCIENCE_KEYS[0]]});
 
 	return sum + min * 7;
+}
+
+export function getTreasurySum(playerScore: IScore): number {
+	return Math.trunc(playerScore.treasury / 3);
 }
