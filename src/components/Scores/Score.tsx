@@ -12,8 +12,8 @@ export default function Score(props: IProps) {
 	function handleDecrement(): void {
 		props.handleChange(props.value - 1);
 	}
-	function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
-		props.handleChange(Number(event.target.value));
+	function handleChange(value: number): void {
+		props.handleChange(value);
 	}
 	function handleIncrement(): void {
 		props.handleChange(props.value + 1);
@@ -23,9 +23,9 @@ export default function Score(props: IProps) {
 		<div>
 			{props.title && <p className={styles.title}>{props.title}</p>}
 			<InputCounter
-				handleDecrement={() => handleDecrement()}
-				handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e)}
-				handleIncrement={() => handleIncrement()}
+				handleDecrement={handleDecrement}
+				handleChange={handleChange}
+				handleIncrement={handleIncrement}
 				value={props.value}
 			/>
 		</div>
