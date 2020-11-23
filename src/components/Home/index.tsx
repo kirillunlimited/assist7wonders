@@ -46,6 +46,7 @@ export default function Home(props: IProps) {
 			<FormGroup row>
 				{(Object.keys(props.addons) as Array<keyof IAddons>).map(addon =>
 					<FormControlLabel
+						key={addon}
 						control={
 							<Checkbox
 								checked={props.addons[addon]}
