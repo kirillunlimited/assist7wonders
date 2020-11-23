@@ -44,3 +44,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# Firebase
+1. `npm install -g firebase-tools` to install [Firebase CLI](https://github.com/firebase/firebase-tools)
+2. `firebase login` to authorize to your firebase account
+3. `firebase use --add` to init `.firebaserc` file
+4. `npm run deploy` to reveal this amazing project to the world
