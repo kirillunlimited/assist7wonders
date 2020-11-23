@@ -5,7 +5,7 @@ import Scores from "./components/Scores";
 import Home from './components/Home';
 import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {IPlayer, TScoreKeys, IRoutes} from "./types";
+import {IPlayer, TScoreKeys, IRoutes, IAddons} from "./types";
 import ROUTES from './routes';
 import {savePlayersToStorage, getPlayersFromStorage} from './utils/storage';
 
@@ -18,11 +18,17 @@ const scoreTemplate = {
 	guild: 0,
 	compass: 0,
 	tablet: 0,
-	gear: 0
+	gear: 0,
+	cities: 0,
+	leaders: 0
 };
 
 function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
+	const [addons, setAddons] = useState({
+		cities: false,
+		leaders: false
+	} as IAddons);
 
 	useEffect(() => {
 		savePlayersToStorage(players);
@@ -94,10 +100,33 @@ function App() {
 		]);
 	}
 
+	function toggleAddon(addon: keyof IAddons, value: boolean): void {
+		setAddons({
+			...addons,
+			[addon]: value
+		});
+
+		if (!value) {
+			setPlayers([
+				...players.map(player => {
+						return {
+							...player,
+							score: {
+								...player.score,
+								[addon]: 0
+							}
+						};
+				}),
+			]);
+		}
+	}
+
   return (
     <div className="App">
 		<Router>
-			<Navigation/>
+			<Navigation
+				addons={addons}
+			/>
 			<h1>7 wonders</h1>
 			<Switch>
 				{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
@@ -121,6 +150,8 @@ function App() {
 						handleAdd={addPlayer}
 						handleDelete={deletePlayer}
 						handleReset={resetScores}
+						addons={addons}
+						handleAddonToggle={toggleAddon}
 					/>
 				</Route>
 			</Switch>

@@ -1,13 +1,15 @@
 import * as React from 'react';
 import {Link} from "react-router-dom";
 import ROUTES from './../../routes';
-import {IRoutes} from "../../types";
+import {IRoutes, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
-import styles from './Navigation.module.css';
-
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 
-export default function Navigation() {
+interface IProps {
+	addons: IAddons;
+}
+
+export default function Navigation(props: IProps) {
 	const location = useLocation();
 
 	return(
@@ -19,16 +21,21 @@ export default function Navigation() {
 					value="/"
 					to="/"
 				/>
-				{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
-					<Tab
-						key={route}
-						label={ROUTES[route].title}
-						component={Link}
-						value={ROUTES[route].path}
-						to={ROUTES[route].path}
-						classes={{root: styles.root}}
-					/>
-				)}
+				{(Object.keys(ROUTES) as Array<keyof IRoutes>)
+					.filter(route => {
+						const addonKey = ROUTES[route].addon;
+						return addonKey ? props.addons[addonKey] : true;
+					})
+					.map(route =>
+						<Tab
+							key={route}
+							label={ROUTES[route].title}
+							component={Link}
+							value={ROUTES[route].path}
+							to={ROUTES[route].path}
+						/>
+					)
+				}
 				<Tab
 					label="Итог"
 					component={Link}
