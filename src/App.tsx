@@ -7,7 +7,7 @@ import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {IPlayer, TScoreKeys, IRoutes, IAddons} from "./types";
 import ROUTES from './routes';
-import {savePlayersToStorage, getPlayersFromStorage} from './utils/storage';
+import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from './utils/storage';
 
 const scoreTemplate = {
 	military: 0,
@@ -24,23 +24,30 @@ const scoreTemplate = {
 	leaders: 0
 };
 
+export const addonsTemplate: IAddons = {
+	cities: false,
+	leaders: false
+};
+
 function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
-	const [addons, setAddons] = useState({
-		cities: false,
-		leaders: false
-	} as IAddons);
+	const [addons, setAddons] = useState(addonsTemplate);
 
 	useEffect(() => {
 		savePlayersToStorage(players);
 	}, [players]);
 
 	useEffect(() => {
-		restorePlayers();
+		saveAddonsToStorage(addons);
+	}, [addons]);
+
+	useEffect(() => {
+		restoreGame();
 	}, []);
 
-	function restorePlayers(): void {
+	function restoreGame(): void {
 		setPlayers(getPlayersFromStorage());
+		setAddons(getAddonsFromStorage());
 	}
 
 	function addPlayer(name: string) {
