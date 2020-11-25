@@ -7,6 +7,7 @@ interface IProps {
 	players: Array<IPlayer>;
 	scores: Array<TScoreKeys>;
 	handleChange: (name: string, scoreKey: TScoreKeys, value: number) => void;
+	max?: number;
 }
 
 export default function Scores(props: IProps) {
@@ -22,6 +23,7 @@ export default function Scores(props: IProps) {
 								title={arr.length > 1 ? scoreKey : ''}
 								value={player.score[scoreKey]}
 								handleChange={(value: number) => props.handleChange(player.name, scoreKey, value)}
+								max={props.max}
 							/>
 						)}
 					</div>

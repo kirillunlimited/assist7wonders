@@ -8,6 +8,9 @@ export interface IScore {
 	compass: number;
 	tablet: number;
 	gear: number;
+	cities: number;
+	debt: number;
+	leaders: number;
 }
 
 export type TScoreKeys = keyof IScore;
@@ -31,10 +34,29 @@ export interface IRoutes {
 	commerce: IRoute;
 	guild: IRoute;
 	science: IRoute;
+	cities: IRoute;
+	debt: IRoute;
+	leaders: IRoute;
 }
 
 export interface IRoute {
 	title: string;
 	path: string;
 	scores: Array<TScoreKeys>;
+	addon?: keyof IAddons;
+	max?: number;
+}
+
+export interface IAddons {
+	cities: boolean;
+	leaders: boolean;
+}
+
+export interface IAddonsConfig {
+	cities: IAddonConfig;
+	leaders: IAddonConfig;
+}
+
+export interface IAddonConfig {
+	label: string;
 }

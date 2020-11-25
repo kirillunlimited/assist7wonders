@@ -5,9 +5,9 @@ import Scores from "./components/Scores";
 import Home from './components/Home';
 import Total from "./components/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {IPlayer, TScoreKeys, IRoutes} from "./types";
+import {IPlayer, TScoreKeys, IRoutes, IAddons} from "./types";
 import ROUTES from './routes';
-import {savePlayersToStorage, getPlayersFromStorage} from './utils/storage';
+import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from './utils/storage';
 
 const scoreTemplate = {
 	military: 0,
@@ -18,22 +18,36 @@ const scoreTemplate = {
 	guild: 0,
 	compass: 0,
 	tablet: 0,
-	gear: 0
+	gear: 0,
+	cities: 0,
+	debt: 0,
+	leaders: 0
+};
+
+export const addonsTemplate: IAddons = {
+	cities: false,
+	leaders: false
 };
 
 function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
+	const [addons, setAddons] = useState(addonsTemplate);
 
 	useEffect(() => {
 		savePlayersToStorage(players);
 	}, [players]);
 
 	useEffect(() => {
-		restorePlayers();
+		saveAddonsToStorage(addons);
+	}, [addons]);
+
+	useEffect(() => {
+		restoreGame();
 	}, []);
 
-	function restorePlayers(): void {
+	function restoreGame(): void {
 		setPlayers(getPlayersFromStorage());
+		setAddons(getAddonsFromStorage());
 	}
 
 	function addPlayer(name: string) {
@@ -94,10 +108,33 @@ function App() {
 		]);
 	}
 
+	function toggleAddon(addon: keyof IAddons, value: boolean): void {
+		setAddons({
+			...addons,
+			[addon]: value
+		});
+
+		if (!value) {
+			setPlayers([
+				...players.map(player => {
+						return {
+							...player,
+							score: {
+								...player.score,
+								[addon]: 0
+							}
+						};
+				}),
+			]);
+		}
+	}
+
   return (
     <div className="App">
 		<Router>
-			<Navigation/>
+			<Navigation
+				addons={addons}
+			/>
 			<h1>7 wonders</h1>
 			<Switch>
 				{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
@@ -108,6 +145,7 @@ function App() {
 						<Scores
 							players={players}
 							scores={ROUTES[route].scores}
+							max={ROUTES[route].max}
 							handleChange={onChange}
 						/>
 					</Route>
@@ -121,6 +159,8 @@ function App() {
 						handleAdd={addPlayer}
 						handleDelete={deletePlayer}
 						handleReset={resetScores}
+						addons={addons}
+						handleAddonToggle={toggleAddon}
 					/>
 				</Route>
 			</Switch>

@@ -1,4 +1,4 @@
-import {getFlatSum, getScienceSum} from './score';
+import {getFlatSum, getScienceSum, getTreasurySum} from './score';
 
 describe('getFlatSum', () => {
   test('should return zero', () => {
@@ -26,7 +26,7 @@ describe('getFlatSum', () => {
       compass: 0,
       tablet: 0,
       gear: 0
-    })).toEqual(25);
+    })).toEqual(19);
   });
 
   test('should return negative value', () => {
@@ -99,5 +99,33 @@ describe('getScienceSum', () => {
       tablet: 2,
       gear: 3
     })).toEqual(21);
+  });
+
+  test('should return sum of treasury points', () => {
+    expect(getTreasurySum({
+      military: 1,
+      treasury: 3,
+      wonders: 0,
+      civilian: 0,
+      commerce: 1,
+      guild: 0,
+      compass: 1,
+      tablet: 0,
+      gear: 1
+    })).toEqual(1);
+  });
+
+  test('should return sum of another treasury points', () => {
+    expect(getTreasurySum({
+      military: 0,
+      treasury: 7,
+      wonders: 0,
+      civilian: 1,
+      commerce: 0,
+      guild: 1,
+      compass: 0,
+      tablet: 1,
+      gear: 0
+    })).toEqual(2);
   });
 });
