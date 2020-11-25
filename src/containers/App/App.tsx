@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Navigation from "./components/Navigation";
-import Scores from "./components/Scores";
-import Home from './components/Home';
-import Total from "./components/Total";
+import Navigation from "../../components/Navigation/Navigation";
+import Scores from "../Scores/Scores";
+import Home from '../Home/Home';
+import Total from "../Total/Total";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {IPlayer, TScoreKeys, IRoutes, IAddons} from "./types";
-import ROUTES from './routes';
-import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from './utils/storage';
+import {IPlayer, TScoreKeys, IRoutes, IAddons} from "../../types";
+import ROUTES from '../../config/routes';
+import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
 
 const scoreTemplate = {
 	military: 0,
@@ -29,7 +29,7 @@ export const addonsTemplate: IAddons = {
 	leaders: false
 };
 
-function App() {
+export default function App() {
 	const [players, setPlayers] = useState<IPlayer[]>([]);
 	const [addons, setAddons] = useState(addonsTemplate);
 
@@ -168,5 +168,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

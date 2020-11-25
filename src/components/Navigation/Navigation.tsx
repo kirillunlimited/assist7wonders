@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Link} from "react-router-dom";
-import ROUTES from './../../routes';
+import ROUTES from './../../config/routes';
 import {IRoutes, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';

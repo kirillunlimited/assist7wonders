@@ -1,4 +1,4 @@
-import {IRoutes} from "./types";
+import {IRoutes} from "../types";
 
 const ROUTES: IRoutes = {
 	military: {

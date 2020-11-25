@@ -1,13 +1,13 @@
 import React from "react";
-import NewPlayer from './NewPlayer';
+import NewPlayer from '../../components/NewPlayer/NewPlayer';
 import {getSum} from "../../utils/score";
 import {Button, IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
-import {IPlayer, IAddons} from "../../types";
+import {IPlayer, IAddons} from '../../types';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import ADDONS from "../../addons";
+import ADDONS from "../../config/addons";
 
 interface IProps {
 	players: Array<IPlayer>;

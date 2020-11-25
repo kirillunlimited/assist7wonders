@@ -1,4 +1,4 @@
-import Score from "./Score";
+import Score from "../../components/Score/Score";
 import React from "react";
 import {IPlayer, TScoreKeys} from "../../types";
 import styles from './Scores.module.css';

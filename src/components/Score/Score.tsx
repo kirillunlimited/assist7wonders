@@ -1,5 +1,5 @@
 import * as React from 'react';
-import InputCounter from "./InputCounter";
+import Counter from "./Counter/Counter";
 import styles from './Score.module.css';
 
 interface IProps {
@@ -28,7 +28,7 @@ export default function Score(props: IProps) {
 	return(
 		<div>
 			{props.title && <p className={styles.title}>{props.title}</p>}
-			<InputCounter
+			<Counter
 				handleDecrement={handleDecrement}
 				handleChange={handleChange}
 				handleIncrement={handleIncrement}

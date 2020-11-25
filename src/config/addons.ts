@@ -1,4 +1,4 @@
-import {IAddonsConfig} from './types';
+import {IAddonsConfig} from '../types';
 
 const ADDONS: IAddonsConfig = {
 	cities: {
