@@ -1,6 +1,6 @@
 import {debounce} from "debounce";
 import {IAddons, IPlayer} from "../types";
-import {addonsTemplate} from '../containers/App/App';
+import {addonsTemplate} from '../reducers/addons';
 
 const SAVE_TIMEOUT = 500;
 

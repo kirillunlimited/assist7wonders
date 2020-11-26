@@ -1,19 +1,18 @@
 import * as React from 'react';
 import {Link} from "react-router-dom";
 import ROUTES from './../../config/routes';
-import {IRoutes, IAddons} from "../../types";
+import {IRoutes} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 import {Redirect} from "react-router-dom";
-import {useState, useEffect} from "react";
-
-interface IProps {
-	addons: IAddons;
-}
+import {useState, useEffect, useContext} from "react";
+import {AddonsContext} from "../App/App";
 
 const DEFAULT_ROUTE = '/';
 
-export default function Navigation(props: IProps) {
+export default function Navigation() {
+	const addonsContext = useContext(AddonsContext);
+
 	const location = useLocation();
 	const [isRouteAvailable, setIsRouteAvailable] = useState(true);
 	const [currentPath, setCurrentPath] = useState(DEFAULT_ROUTE);
@@ -27,12 +26,12 @@ export default function Navigation(props: IProps) {
 
 		if (routeKey) {
 			const route = ROUTES[routeKey];
-			isAvailable = route.addon ? Boolean(props.addons[route.addon]) : true;
+			isAvailable = route.addon ? Boolean(addonsContext.state[route.addon]) : true;
 		}
 
 		setIsRouteAvailable(isAvailable);
 		setCurrentPath(isAvailable ? location.pathname : DEFAULT_ROUTE);
-	}, [location, props.addons]);
+	}, [location, addonsContext.state]);
 
 	return(
 		<AppBar position="static">
@@ -48,7 +47,7 @@ export default function Navigation(props: IProps) {
 				{(Object.keys(ROUTES) as Array<keyof IRoutes>)
 					.filter(route => {
 						const addonKey = ROUTES[route].addon;
-						return addonKey ? props.addons[addonKey] : true;
+						return addonKey ? addonsContext.state[addonKey] : true;
 					})
 					.map(route =>
 						<Tab

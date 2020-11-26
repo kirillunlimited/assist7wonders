@@ -1,55 +1,50 @@
-import React from "react";
+import React, {useContext} from "react";
 import NewPlayer from '../../components/NewPlayer/NewPlayer';
 import {getSum} from "../../utils/score";
 import {Button, IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
-import {IPlayer, IAddons} from '../../types';
+import {IAddons} from '../../types';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import ADDONS from "../../config/addons";
+import {PlayersContext, AddonsContext} from "../App/App";
 
-interface IProps {
-	players: Array<IPlayer>;
-	handleAdd: (name: string) => void;
-	handleDelete: (name: string) => void;
-	handleReset: () => void;
-	addons: IAddons;
-	handleAddonToggle: (addon: keyof IAddons, value: boolean) => void;
-}
+export default function Home() {
+	const playersContext = useContext(PlayersContext);
+	const addonsContext = useContext(AddonsContext);
 
-export default function Home(props: IProps) {
 	function onAddonToggle(event: React.ChangeEvent<HTMLInputElement>, addon: keyof IAddons) {
-		props.handleAddonToggle(addon, event.target.checked);
+		addonsContext.dispatch({type: 'toggle', payload: {addon, value: event.target.checked}});
 	}
 
 	return(
 		<div>
 			<NewPlayer
-				names={props.players.map(player => player.name)}
-				handleSubmit={props.handleAdd}
+				names={playersContext.state.map(player => player.name)}
+				handleSubmit={(name) => playersContext.dispatch({type: 'add', payload: name})}
 			/>
 			<div>
-				{props.players.map((player, index) =>
+				{playersContext.state.map((player, index) =>
 					<div key={index}>
 						{player.name} Σ{getSum(player.score)}
-						<IconButton onClick={() => props.handleDelete(player.name)}>
+						<IconButton onClick={() => playersContext.dispatch({type: 'delete', payload: player.name})}>
 							<DeleteForever color="secondary"/>
 						</IconButton>
 					</div>)
 				}
 			</div>
-			<Button variant="contained" color="primary" onClick={() => props.handleReset()}>
+			<Button variant="contained" color="primary" onClick={() => playersContext.dispatch({type: 'reset'})}>
 				Новая игра
 			</Button>
 
 			<FormGroup row>
-				{(Object.keys(props.addons) as Array<keyof IAddons>).map(addon =>
+				{(Object.keys(addonsContext.state) as Array<keyof IAddons>).map(addon =>
 					<FormControlLabel
 						key={addon}
 						control={
 							<Checkbox
-								checked={props.addons[addon]}
+								checked={addonsContext.state[addon]}
 								name={addon}
 								onChange={(e) => onAddonToggle(e, addon)}
 							/>
