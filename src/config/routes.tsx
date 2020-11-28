@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {IRoute, IRoutes, TScoreKeys} from "../types";
+import {IAddons, IRoute, IRoutes, TScoreKeys} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
 
 import Home from '../containers/Home/Home';
@@ -103,7 +103,7 @@ const ROUTES: IRoutes = [
 			component: () => RenderScoresRoute({
 				scores: ['cities']
 			}, 'cities'),
-			available: () => IsScoreRouteAvailable('cities')
+			available: (addons: IAddons) => isScoreRouteAvailable('cities', addons)
 		  },
 		  {
 			path: '/scores/debt',
@@ -115,7 +115,7 @@ const ROUTES: IRoutes = [
 				scores: ['debt'],
 		  		max: 0
 			}, 'debt'),
-			available: () => IsScoreRouteAvailable('debt')
+			available: (addons: IAddons) => isScoreRouteAvailable('debt', addons)
 		  },
 		  {
 			path: '/scores/leaders',
@@ -126,7 +126,7 @@ const ROUTES: IRoutes = [
 			component: () => RenderScoresRoute({
 			  scores: ['leaders']
 			}, 'leaders'),
-			available: () => IsScoreRouteAvailable('leaders')
+			available: (addons: IAddons) => isScoreRouteAvailable('leaders', addons)
 		  }
 		]
 	},
@@ -170,9 +170,8 @@ function RenderScoresRoute(props: IScoresProps, score: TScoreKeys) {
 }
 
 /** Needed for navigation menu render */
-function IsScoreRouteAvailable(score: TScoreKeys) {
-	const addonsContext = useContext(AddonsContext);
-	return isScoreAvailable(score, addonsContext.state);
+function isScoreRouteAvailable(score: TScoreKeys, addons: IAddons) {
+	return isScoreAvailable(score, addons);
 }
 
 export default ROUTES;

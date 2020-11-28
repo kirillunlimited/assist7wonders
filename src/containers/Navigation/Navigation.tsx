@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {Link} from "react-router-dom";
-import {IRoutes} from "../../types";
+import {IRoutes, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 
 interface IProps {
-	routes: IRoutes
+	routes: IRoutes;
+	addons: IAddons;
 }
 
 export default function Navigation(props: IProps) {
@@ -17,7 +18,7 @@ export default function Navigation(props: IProps) {
 				return renderTabs(route.routes);
 			} else {
 				return <Tab
-					disabled={route.available && route.available() === false}
+					disabled={route.available && route.available(props.addons) === false}
 					key={route.key}
 					label={route.label}
 					component={Link}

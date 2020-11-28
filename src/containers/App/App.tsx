@@ -53,7 +53,7 @@ export default function App() {
     <div className="App">
 		<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
 			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-				<Navigation routes={ROUTES} />
+				<Navigation routes={ROUTES} addons={addons} />
 				<RenderRoutes routes={ROUTES} />
 			</AddonsContext.Provider>
 		</PlayersContext.Provider>
