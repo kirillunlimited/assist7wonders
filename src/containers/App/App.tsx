@@ -1,12 +1,8 @@
 import React, {useEffect, useReducer} from 'react';
 import './App.css';
 import Navigation from "../Navigation/Navigation";
-import Scores from "../Scores/Scores";
-import Home from '../Home/Home';
-import Total from "../Total/Total";
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {IPlayer, IRoutes, IAddons} from "../../types";
-import ROUTES from '../../config/routes';
+import {IPlayer, IAddons} from "../../types";
+import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
 
 import playersReducer from '../../reducers/players';
@@ -57,29 +53,8 @@ export default function App() {
     <div className="App">
 		<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
 			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-				<Router>
-					<Navigation />
-					<h1>7 wonders</h1>
-					<Switch>
-						{(Object.keys(ROUTES) as Array<keyof IRoutes>).map(route =>
-							<Route
-								key={route}
-								path={ROUTES[route].path}
-							>
-								<Scores
-									scores={ROUTES[route].scores}
-									max={ROUTES[route].max}
-								/>
-							</Route>
-						)}
-						<Route path="/total">
-							<Total />
-						</Route>
-						<Route path="/">
-							<Home />
-						</Route>
-					</Switch>
-				</Router>
+				<Navigation routes={ROUTES} />
+				<RenderRoutes routes={ROUTES} />
 			</AddonsContext.Provider>
 		</PlayersContext.Provider>
     </div>

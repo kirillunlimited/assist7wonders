@@ -26,26 +26,18 @@ export interface IPlayer {
 	score: IScore
 }
 
-export interface IRoutes {
-	military: IRoute;
-	treasury: IRoute;
-	wonders: IRoute;
-	civilian: IRoute;
-	commerce: IRoute;
-	guild: IRoute;
-	science: IRoute;
-	cities: IRoute;
-	debt: IRoute;
-	leaders: IRoute;
+export interface IRoute {
+	path: string;
+	key: string;
+	label?: string;
+	title?: string;
+	exact?: boolean,
+	component: Function;
+	routes?: IRoutes;
+	available?: Function;
 }
 
-export interface IRoute {
-	title: string;
-	path: string;
-	scores: Array<TScoreKeys>;
-	addon?: keyof IAddons;
-	max?: number;
-}
+export type IRoutes = Array<IRoute>;
 
 export interface IAddons {
 	cities: boolean;
@@ -59,4 +51,5 @@ export interface IAddonsConfig {
 
 export interface IAddonConfig {
 	label: string;
+	scores: Array<TScoreKeys>;
 }

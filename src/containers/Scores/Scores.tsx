@@ -4,10 +4,8 @@ import {TScoreKeys} from "../../types";
 import styles from './Scores.module.css';
 import {PlayersContext} from "../App/App";
 
-interface IProps {
-	// players: Array<IPlayer>;
+export interface IProps {
 	scores: Array<TScoreKeys>;
-	// handleChange: (name: string, scoreKey: TScoreKeys, value: number) => void;
 	max?: number;
 }
 
