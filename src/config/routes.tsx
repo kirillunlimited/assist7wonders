@@ -31,20 +31,20 @@ const ROUTES: IRoutes = [
 			title: 'Military',
 			exact: true,
 			component: () => Scores({
-			  scores: ['military']
+				scores: ['military']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/treasury',
 			key: 'treasury',
 			label: 'Treasury',
 			title: 'Treasury',
 			exact: true,
 			component: () => Scores({
-			  scores: ['treasury']
+				scores: ['treasury']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/wonders',
 			key: 'wonders',
 			label: 'Wonders',
@@ -53,8 +53,8 @@ const ROUTES: IRoutes = [
 			component: () => Scores({
 			  scores: ['wonders']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/civilian',
 			key: 'civilian',
 			label: 'Civilian',
@@ -63,8 +63,8 @@ const ROUTES: IRoutes = [
 			component: () => Scores({
 			  scores: ['civilian']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/commerce',
 			key: 'commerce',
 			label: 'Commerce',
@@ -73,8 +73,8 @@ const ROUTES: IRoutes = [
 			component: () => Scores({
 			  scores: ['commerce']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/guild',
 			key: 'guild',
 			label: 'Guild',
@@ -83,8 +83,8 @@ const ROUTES: IRoutes = [
 			component: () => Scores({
 			  scores: ['guild']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/science',
 			key: 'science',
 			label: 'Science',
@@ -93,41 +93,41 @@ const ROUTES: IRoutes = [
 			component: () => Scores({
 			  scores: ['compass', 'tablet', 'gear']
 			})
-		  },
-		  {
+		},
+		{
 			path: '/scores/cities',
 			key: 'cities',
 			label: 'Cities',
 			title: 'Cities',
 			exact: true,
-			component: () => RenderScoresRoute({
+			component: ({addons}: {addons: IAddons}) => RenderScoresRoute({
 				scores: ['cities']
-			}, 'cities'),
+			}, 'cities', addons),
 			available: (addons: IAddons) => isScoreRouteAvailable('cities', addons)
-		  },
-		  {
+		},
+		{
 			path: '/scores/debt',
 			key: 'debt',
 			label: 'Debt',
 			title: 'Debt',
 			exact: true,
-			component: () => RenderScoresRoute({
+			component: ({addons}: {addons: IAddons}) => RenderScoresRoute({
 				scores: ['debt'],
 		  		max: 0
-			}, 'debt'),
+			}, 'debt', addons),
 			available: (addons: IAddons) => isScoreRouteAvailable('debt', addons)
-		  },
-		  {
+		},
+		{
 			path: '/scores/leaders',
 			key: 'leaders',
 			label: 'Leaders',
 			title: 'Leaders',
 			exact: true,
-			component: () => RenderScoresRoute({
-			  scores: ['leaders']
-			}, 'leaders'),
+			component: ({addons}: {addons: IAddons}) => RenderScoresRoute({
+				scores: ['leaders']
+			}, 'leaders', addons),
 			available: (addons: IAddons) => isScoreRouteAvailable('leaders', addons)
-		  }
+			}
 		]
 	},
 	{
@@ -140,17 +140,21 @@ const ROUTES: IRoutes = [
 	}
 ];
 
+export default ROUTES;
+
 function RouteWithSubRoutes(route: IRoute) {
-  return (
-    <div>
-      {route.title && <h1>{route.title}</h1>}
-      <Route
-        path={route.path}
-        exact={route.exact}
-        render={props => <route.component {...props} routes={route.routes} />}
-      />
-    </div>
-  );
+	const addonsContext = useContext(AddonsContext);
+
+	return (
+		<div>
+		  {route.title && <h1>{route.title}</h1>}
+		  <Route
+			path={route.path}
+			exact={route.exact}
+			render={props => <route.component {...props} addons={addonsContext.state} routes={route.routes} />}
+		  />
+		</div>
+	);
 }
 
 export function RenderRoutes({ routes }: { routes: IRoutes}) {
@@ -164,14 +168,11 @@ export function RenderRoutes({ routes }: { routes: IRoutes}) {
 	);
 }
 
-function RenderScoresRoute(props: IScoresProps, score: TScoreKeys) {
-	const addonsContext = useContext(AddonsContext);
-	return isScoreAvailable(score, addonsContext.state) ? Scores(props) : <h2>Дополнение отключено</h2>;
+function RenderScoresRoute(props: IScoresProps, score: TScoreKeys, addons: IAddons) {
+	return isScoreAvailable(score, addons) ? Scores(props) : <h2>Дополнение отключено</h2>;
 }
 
 /** Needed for navigation menu render */
 function isScoreRouteAvailable(score: TScoreKeys, addons: IAddons) {
 	return isScoreAvailable(score, addons);
 }
-
-export default ROUTES;

@@ -11,6 +11,7 @@ const ADDONS: IAddonsConfig = {
 	}
 }
 
+/** Get scores view availability based on toggled addons */
 export function isScoreAvailable(score: TScoreKeys, addons: IAddons) {
 	const addon = (Object.keys(ADDONS) as Array<keyof IAddons>).find(addon => ADDONS[addon].scores.includes(score));
 
