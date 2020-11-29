@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {IAddons, IPlayer, IRoute, IRoutes, TScoreKeys} from "../types";
+import {IAddons, TPlayers, IRoute, TRoutes, TScoreKeys} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
 
 import Home from '../containers/Home/Home';
@@ -11,12 +11,17 @@ import {isScoresAvailable} from './addons';
 
 interface IRouteContexts {
 	contexts: {
-		players: IPlayer[];
+		players: TPlayers;
 		addons: IAddons;
 	}
 }
 
-const ROUTES: IRoutes = [
+const MESSAGES = {
+	NOT_ENOUGH_PLAYERS: 'Недостаточно игроков. Добавьте не менее 2 игроков.',
+	ADDON_IS_OFF: 'Дополнение отключено.'
+}
+
+const ROUTES: TRoutes = [
 	{
 		path: '/',
 		key: 'root',
@@ -36,10 +41,10 @@ const ROUTES: IRoutes = [
 				label: 'Military',
 				title: 'Military',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['military']
 				}, ['military'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons)
 			},
 			{
 				path: '/scores/treasury',
@@ -47,10 +52,10 @@ const ROUTES: IRoutes = [
 				label: 'Treasury',
 				title: 'Treasury',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['treasury']
 				}, ['treasury'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons)
 			},
 			{
 				path: '/scores/wonders',
@@ -58,10 +63,10 @@ const ROUTES: IRoutes = [
 				label: 'Wonders',
 				title: 'Wonders',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['wonders']
 				}, ['wonders'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons)
 			},
 			{
 				path: '/scores/civilian',
@@ -69,10 +74,10 @@ const ROUTES: IRoutes = [
 				label: 'Civilian',
 				title: 'Civilian',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['civilian']
 				}, ['civilian'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons)
 			},
 			{
 				path: '/scores/commerce',
@@ -80,10 +85,10 @@ const ROUTES: IRoutes = [
 				label: 'Commerce',
 				title: 'Commerce',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['commerce']
 				}, ['commerce'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons)
 			},
 			{
 				path: '/scores/guild',
@@ -91,10 +96,10 @@ const ROUTES: IRoutes = [
 				label: 'Guild',
 				title: 'Guild',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['guild']
 				}, ['guild'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons)
 			},
 			{
 				path: '/scores/science',
@@ -102,10 +107,10 @@ const ROUTES: IRoutes = [
 				label: 'Science',
 				title: 'Science',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['compass', 'tablet', 'gear']
 				}, ['compass', 'tablet', 'gear'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons)
 			},
 			{
 				path: '/scores/cities',
@@ -113,10 +118,10 @@ const ROUTES: IRoutes = [
 				label: 'Cities',
 				title: 'Cities',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['cities']
 				}, ['cities'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons)
 			},
 			{
 				path: '/scores/debt',
@@ -124,11 +129,11 @@ const ROUTES: IRoutes = [
 				label: 'Debt',
 				title: 'Debt',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['debt'],
 					max: 0
 				}, ['debt'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons)
 			},
 			{
 				path: '/scores/leaders',
@@ -136,10 +141,10 @@ const ROUTES: IRoutes = [
 				label: 'Leaders',
 				title: 'Leaders',
 				exact: true,
-				component: ({players, addons}: {players: IPlayer[], addons: IAddons}) => RenderScoresRoute({
+				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['leaders']
 				}, ['leaders'], players, addons),
-				available: ({players, addons}: {players: IPlayer[], addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons)
 			}
 		]
 	},
@@ -149,14 +154,14 @@ const ROUTES: IRoutes = [
 		label: 'Total',
 		title: 'Total',
 		exact: true,
-		component: ({players}: {players: IPlayer[]}) => RouteRenderer(Total, players),
-		available: ({players}: {players: IPlayer[]}) => isRouteAvailable(players)
+		component: ({players}: {players: TPlayers}) => RenderRoute(Total, players),
+		available: ({players}: {players: TPlayers}) => isRouteAvailable(players)
 	}
 ];
 
 export default ROUTES;
 
-export function RenderRoutes({ routes, players, addons }: { routes: IRoutes, players: IPlayer[], addons: IAddons}) {
+export function RenderRoutes({ routes, players, addons }: { routes: TRoutes, players: TPlayers, addons: IAddons}) {
 	return (
 		<Switch>
 			{routes.map(route => <RouteWithSubRoutes
@@ -188,23 +193,23 @@ function RouteWithSubRoutes(payload: IRoute & IRouteContexts) {
 	);
 }
 
-function isRouteAvailable(players: IPlayer[]) {
+function isRouteAvailable(players: TPlayers): boolean {
 	return players.length > 1;
 }
 
-function RenderScoresRoute(props: IScoresProps, scores: TScoreKeys[], players: IPlayer[], addons: IAddons) {
+/** Needed for navigation menu render */
+function isScoreRouteAvailable(scores: TScoreKeys[], players: TPlayers, addons: IAddons): boolean {
+	return isRouteAvailable(players) ? isScoresAvailable(scores, addons) : false;
+}
+
+function RenderScores(props: IScoresProps, scores: TScoreKeys[], players: TPlayers, addons: IAddons) {
 	return isRouteAvailable(players)
 		? isScoresAvailable(scores, addons)
 			? Scores(props)
-			: <h2>Дополнение отключено</h2>
-		: <h2>Добавьте больше игроков</h2>;
+			: <h2>{MESSAGES.ADDON_IS_OFF}</h2>
+		: <h2>{MESSAGES.NOT_ENOUGH_PLAYERS}</h2>;
 }
 
-function RouteRenderer(Component: Function, players: IPlayer[]) {
-	return isRouteAvailable(players) ? <Component /> : <h2>Добавьте больше игроков</h2>;
-}
-
-/** Needed for navigation menu render */
-function isScoreRouteAvailable(scores: TScoreKeys[], players: IPlayer[], addons: IAddons) {
-	return isRouteAvailable(players) ? isScoresAvailable(scores, addons) : false;
+function RenderRoute(Component: Function, players: TPlayers) {
+	return isRouteAvailable(players) ? <Component /> : <h2>{MESSAGES.NOT_ENOUGH_PLAYERS}</h2>;
 }

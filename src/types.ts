@@ -21,10 +21,12 @@ export type ScienceParts = {
 	tablet: number;
 }
 
-export interface IPlayer {
+interface IPlayer {
 	name: string;
 	score: IScore
 }
+
+export type TPlayers = IPlayer[];
 
 export interface IRoute {
 	path: string;
@@ -33,11 +35,11 @@ export interface IRoute {
 	title?: string;
 	exact?: boolean,
 	component: Function;
-	routes?: IRoutes;
+	routes?: TRoutes;
 	available?: Function;
 }
 
-export type IRoutes = Array<IRoute>;
+export type TRoutes = IRoute[];
 
 export interface IAddons {
 	cities: boolean;

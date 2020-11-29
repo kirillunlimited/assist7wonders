@@ -1,4 +1,4 @@
-import {IPlayer} from "../types";
+import {TPlayers} from "../types";
 
 const scoreTemplate = {
 	military: 0,
@@ -20,7 +20,7 @@ interface IAction {
 	payload?: any;
 }
 
-const reducer = (state: IPlayer[], action: IAction) => {
+const reducer = (state: TPlayers, action: IAction) => {
 	switch(action.type) {
 		case 'init':
 			return [

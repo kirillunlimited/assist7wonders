@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import './App.css';
 import Navigation from "../Navigation/Navigation";
-import {IPlayer, IAddons} from "../../types";
+import {TPlayers, IAddons} from "../../types";
 import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
 import playersReducer from '../../reducers/players';
 import addonsReducer, {addonsTemplate} from '../../reducers/addons';
 
 interface IPlayersContextProps {
-	state: IPlayer[];
+	state: TPlayers;
 	// dispatch: (type: string) => void;
 	dispatch: ({type, payload}: {type: string, payload?: any}) => void;
 }

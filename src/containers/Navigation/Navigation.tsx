@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {Link} from "react-router-dom";
-import {IRoutes, IAddons, IPlayer} from "../../types";
+import {TRoutes, TPlayers, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 import {useState, useEffect} from "react";
 
 interface IProps {
-	routes: IRoutes;
-	players: IPlayer[];
+	routes: TRoutes;
+	players: TPlayers;
 	addons: IAddons;
 }
 
-function getFilteredRoutes(routes: IRoutes, players: IPlayer[], addons: IAddons) {
-	return routes.reduce((routes: IRoutes, route) => {
+function getFilteredRoutes(routes: TRoutes, players: TPlayers, addons: IAddons) {
+	return routes.reduce((routes: TRoutes, route) => {
 		const targetRoute = {...route};
 
 		if (targetRoute.routes) {
@@ -37,7 +37,7 @@ export default function Navigation(props: IProps) {
 		setFilteredRoutes(getFilteredRoutes(props.routes, props.players, props.addons));
 	}, [props.routes, props.players, props.addons]);
 
-	function renderTabs(routes: IRoutes): Array<React.ReactNode> {
+	function renderTabs(routes: TRoutes): Array<React.ReactNode> {
 		return routes.map(route => {
 			if (route.routes) {
 				return renderTabs(route.routes);

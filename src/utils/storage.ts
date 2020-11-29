@@ -1,5 +1,5 @@
 import {debounce} from "debounce";
-import {IAddons, IPlayer} from "../types";
+import {IAddons, TPlayers} from "../types";
 import {addonsTemplate} from '../reducers/addons';
 
 const SAVE_TIMEOUT = 500;
@@ -8,7 +8,7 @@ const saveToStorage = (key: string, data: Object) => {
 	localStorage.setItem(key, JSON.stringify(data));
 }
 
-export const savePlayersToStorage = debounce((players: IPlayer[]) => {
+export const savePlayersToStorage = debounce((players: TPlayers) => {
 	saveToStorage('players', players);
 }, SAVE_TIMEOUT);
 
@@ -16,7 +16,7 @@ export const saveAddonsToStorage = debounce((addons: IAddons) => {
 	saveToStorage('addons', addons);
 }, SAVE_TIMEOUT);
 
-export function getPlayersFromStorage(): IPlayer[] {
+export function getPlayersFromStorage(): TPlayers {
 	const playersString = localStorage.getItem('players');
 
 	if (playersString) {

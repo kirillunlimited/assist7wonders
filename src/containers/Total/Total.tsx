@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IPlayer} from '../../types';
+import {TPlayers} from '../../types';
 import {getSum} from "../../utils/score";
 import {useState, useEffect, useContext} from "react";
 import styles from './Total.module.css';
@@ -14,7 +14,7 @@ export default function Total() {
 		setWinner(getWinner(playersContext.state));
 	}, [playersContext.state]);
 
-	function getWinner(players: Array<IPlayer>): string {
+	function getWinner(players: TPlayers): string {
 		const bestPlayer =  players
 			.reduce((acc, player) => {
 				const playerSum = getSum(player.score);
