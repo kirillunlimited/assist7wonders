@@ -46,12 +46,10 @@ export interface IAddons {
 	leaders: boolean;
 }
 
-export interface IAddonsConfig {
-	cities: IAddonConfig;
-	leaders: IAddonConfig;
-}
-
 export interface IAddonConfig {
+	key: keyof IAddons;
 	label: string;
 	scores: Array<TScoreKeys>;
 }
+
+export type TAddonsConfig = IAddonConfig[];

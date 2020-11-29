@@ -48,17 +48,17 @@ export default function Home() {
 			</Button>
 
 			<FormGroup row>
-				{(Object.keys(addonsContext.state) as Array<keyof IAddons>).map(addon =>
+				{ADDONS.map(addon =>
 					<FormControlLabel
-						key={addon}
+						key={addon.key}
 						control={
 							<Checkbox
-								checked={addonsContext.state[addon]}
-								name={addon}
-								onChange={(e) => onAddonToggle(e, addon)}
+								checked={addonsContext.state[addon.key]}
+								name={addon.key}
+								onChange={(e) => onAddonToggle(e, addon.key)}
 							/>
 						}
-						label={ADDONS[addon].label}
+						label={addon.label}
 				/>)}
 			</FormGroup>
 		</div>
