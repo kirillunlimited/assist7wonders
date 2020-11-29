@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import {IAddons, IPlayer, IRoute, IRoutes, TScoreKeys} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
@@ -7,8 +7,14 @@ import Home from '../containers/Home/Home';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
 
-import {AddonsContext, PlayersContext} from "../containers/App/App";
-import {isScoresAvailable} from './addons'
+import {isScoresAvailable} from './addons';
+
+interface IRouteContexts {
+	contexts: {
+		players: IPlayer[];
+		addons: IAddons;
+	}
+}
 
 const ROUTES: IRoutes = [
 	{
@@ -150,35 +156,35 @@ const ROUTES: IRoutes = [
 
 export default ROUTES;
 
-function RouteWithSubRoutes(route: IRoute) {
-	const playersContext = useContext(PlayersContext);
-	const addonsContext = useContext(AddonsContext);
-
+export function RenderRoutes({ routes, players, addons }: { routes: IRoutes, players: IPlayer[], addons: IAddons}) {
 	return (
-		<div>
-		  {route.title && <h1>{route.title}</h1>}
-		  <Route
-			path={route.path}
-			exact={route.exact}
-			render={props => <route.component
-				{...props}
-				routes={route.routes}
-				players={playersContext.state}
-				addons={addonsContext.state}
-			/>}
-		  />
-		</div>
+		<Switch>
+			{routes.map(route => <RouteWithSubRoutes
+				{...route}
+				key={route.key}
+				contexts={{players, addons}}
+			/>)}
+			<Route component={() => <h1>Страница не найдена</h1>} />
+		</Switch>
 	);
 }
 
-export function RenderRoutes({ routes }: { routes: IRoutes}) {
+function RouteWithSubRoutes(payload: IRoute & IRouteContexts) {
+	const {players, addons} = payload.contexts;
 	return (
-		<Switch>
-			{routes.map(route => {
-				return <RouteWithSubRoutes {...route} key={route.key} />;
-			})}
-			<Route component={() => <h1>Страница не найдена</h1>} />
-		</Switch>
+		<div>
+		  {payload.title && <h1>{payload.title}</h1>}
+		  <Route
+			path={payload.path}
+			exact={payload.exact}
+			render={props => <payload.component
+				{...props}
+				routes={payload.routes}
+				players={players}
+				addons={addons}
+			/>}
+		  />
+		</div>
 	);
 }
 

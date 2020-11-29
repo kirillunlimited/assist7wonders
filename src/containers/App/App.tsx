@@ -56,7 +56,7 @@ export default function App() {
 			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
 				{isReady && <React.Fragment>
 					<Navigation routes={ROUTES} players={players} addons={addons} />
-					<RenderRoutes routes={ROUTES} />
+					<RenderRoutes routes={ROUTES} players={players} addons={addons} />
 				</React.Fragment>}
 			</AddonsContext.Provider>
 		</PlayersContext.Provider>
