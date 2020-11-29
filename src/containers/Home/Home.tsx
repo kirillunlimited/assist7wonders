@@ -14,27 +14,36 @@ export default function Home() {
 	const playersContext = useContext(PlayersContext);
 	const addonsContext = useContext(AddonsContext);
 
+	function onNewPlayerSubmit(name: string) {
+		playersContext.dispatch({type: 'ADD', payload: name});
+	}
+	function onPlayerDelete(name: string) {
+		playersContext.dispatch({type: 'DELETE', payload: name});
+	}
+	function onResetGame() {
+		playersContext.dispatch({type: 'RESET'});
+	}
 	function onAddonToggle(event: React.ChangeEvent<HTMLInputElement>, addon: keyof IAddons) {
-		addonsContext.dispatch({type: 'toggle', payload: {addon, value: event.target.checked}});
+		addonsContext.dispatch({type: 'TOGGLE', payload: {addon, value: event.target.checked}});
 	}
 
 	return(
 		<div>
 			<NewPlayer
 				names={playersContext.state.map(player => player.name)}
-				handleSubmit={(name) => playersContext.dispatch({type: 'add', payload: name})}
+				handleSubmit={onNewPlayerSubmit}
 			/>
 			<div>
 				{playersContext.state.map((player, index) =>
 					<div key={index}>
 						{player.name} Σ{getSum(player.score)}
-						<IconButton onClick={() => playersContext.dispatch({type: 'delete', payload: player.name})}>
+						<IconButton onClick={() => onPlayerDelete(player.name)}>
 							<DeleteForever color="secondary"/>
 						</IconButton>
 					</div>)
 				}
 			</div>
-			<Button variant="contained" color="primary" onClick={() => playersContext.dispatch({type: 'reset'})}>
+			<Button variant="contained" color="primary" onClick={onResetGame}>
 				Новая игра
 			</Button>
 

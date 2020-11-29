@@ -5,21 +5,35 @@ export const addonsTemplate: IAddons = {
 	leaders: false
 };
 
-interface IAction {
-	type: string;
-	payload?: any;
+const INIT = 'INIT';
+const TOGGLE = 'TOGGLE';
+
+interface IInitAction {
+	type: typeof INIT;
+	payload: IAddons;
 }
 
-const reducer = (state: IAddons, action: IAction) => {
+interface IToggleAction {
+	type: typeof TOGGLE;
+	payload: {
+		addon: keyof IAddons;
+		value: boolean;
+	}
+}
+
+export type TAction = IInitAction | IToggleAction;
+
+const reducer = (state: IAddons, action: TAction) => {
 	switch(action.type) {
-		case 'init':
+		case INIT:
 			return {
 				...action.payload
 			};
-		case 'toggle':
+		case TOGGLE:
+			const {addon, value} = action.payload;
 			return {
 				...state,
-				[action.payload.addon]: action.payload.value
+				[addon]: value
 			};
 		default:
 			return state;

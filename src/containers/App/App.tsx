@@ -4,20 +4,18 @@ import Navigation from "../Navigation/Navigation";
 import {TPlayers, IAddons} from "../../types";
 import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
-import playersReducer from '../../reducers/players';
-import addonsReducer, {addonsTemplate} from '../../reducers/addons';
+import playersReducer, {TAction as TPlayersAction} from '../../reducers/players';
+import addonsReducer, {TAction as TAddonsAction, addonsTemplate} from '../../reducers/addons';
 
 interface IPlayersContextProps {
 	state: TPlayers;
-	// dispatch: (type: string) => void;
-	dispatch: ({type, payload}: {type: string, payload?: any}) => void;
+	dispatch: (action: TPlayersAction) => void;
 }
 
 interface IAddonsContextProps {
 	state: IAddons;
-	dispatch: ({type, payload}: {type: string, payload?: any}) => void;
+	dispatch: (action: TAddonsAction) => void;
 }
-//interface IContextProps {   state: IState;   dispatch: Dispatch<Actions>; }
 
 export const PlayersContext = React.createContext({} as IPlayersContextProps);
 export const AddonsContext = React.createContext({} as IAddonsContextProps);
@@ -40,14 +38,14 @@ export default function App() {
 	}, []);
 
 	function restoreGame(): void {
-		playersDispatch({type: 'init', payload: getPlayersFromStorage()});
-		addonsDispatch({type: 'init', payload: getAddonsFromStorage()});
+		playersDispatch({type: 'INIT', payload: getPlayersFromStorage()});
+		addonsDispatch({type: 'INIT', payload: getAddonsFromStorage()});
 		setIsReady(true);
 	}
 
 	useEffect(() => {
 		// TODO
-		playersDispatch({type: 'setAddon', payload: addons});
+		playersDispatch({type: 'SET_ADDON', payload: addons});
 	}, [addons]);
 
   return (

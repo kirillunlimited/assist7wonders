@@ -1,4 +1,4 @@
-import {TPlayers} from "../types";
+import {IAddons, TPlayers, TScoreKeys} from "../types";
 
 const scoreTemplate = {
 	military: 0,
@@ -15,18 +15,55 @@ const scoreTemplate = {
 	leaders: 0
 };
 
-interface IAction {
-	type: string;
-	payload?: any;
+const INIT = 'INIT';
+const ADD = 'ADD';
+const DELETE = 'DELETE';
+const UPDATE = 'UPDATE';
+const RESET = 'RESET';
+const SET_ADDON = 'SET_ADDON';
+
+interface IInitAction {
+	type: typeof INIT;
+	payload: TPlayers;
 }
 
-const reducer = (state: TPlayers, action: IAction) => {
+interface IAddAction {
+	type: typeof ADD;
+	payload: string;
+}
+
+interface IDeleteAction {
+	type: typeof DELETE;
+	payload: string;
+}
+
+interface IUpdateAction {
+	type: typeof UPDATE;
+	payload: {
+		name: string;
+		scoreKey: TScoreKeys;
+		value: number;
+	};
+}
+
+interface IResetAction {
+	type: typeof RESET;
+}
+
+interface ISetAddonAction {
+	type: typeof SET_ADDON;
+	payload: IAddons;
+}
+
+export type TAction = IInitAction | IAddAction | IDeleteAction | IUpdateAction | IResetAction | ISetAddonAction;
+
+const reducer = (state: TPlayers, action: TAction) => {
 	switch(action.type) {
-		case 'init':
+		case INIT:
 			return [
 				...action.payload
 			];
-		case 'add':
+		case ADD:
 			if (action.payload) {
 				return [
 					...state, {
@@ -38,7 +75,7 @@ const reducer = (state: TPlayers, action: IAction) => {
 				]
 			}
 			return state;
-		case 'delete':
+		case DELETE:
 			if (action.payload) {
 				return [
 					...state.filter(player => {
@@ -47,18 +84,20 @@ const reducer = (state: TPlayers, action: IAction) => {
 				];
 			}
 			return state;
-		case 'update':
-			const player = state.find(player => player.name === action.payload.name);
+		case UPDATE:
+			const {name, scoreKey, value} = action.payload;
+
+			const player = state.find(player => player.name === name);
 
 			if (player) {
 				return [
 					...state.map(player => {
-						if (player.name === action.payload.name) {
+						if (player.name === name) {
 							return {
 								...player,
 								score: {
 									...player.score,
-									[action.payload.scoreKey]: action.payload.value
+									[scoreKey]: value
 								}
 							};
 						} else {
@@ -68,7 +107,7 @@ const reducer = (state: TPlayers, action: IAction) => {
 				];
 			}
 			return state;
-		case 'reset':
+		case RESET:
 			return [
 				...state.map(player => {
 					return {
@@ -79,7 +118,7 @@ const reducer = (state: TPlayers, action: IAction) => {
 					}
 				}),
 			];
-		case 'setAddon':
+		case SET_ADDON:
 			// TODO
 			// const disabledAddonsScore = action.payload.addons.reduce((score, addon) => {
 			// 	if (!addon) {

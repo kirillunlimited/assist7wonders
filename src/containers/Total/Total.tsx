@@ -8,7 +8,7 @@ import {PlayersContext} from "../App/App";
 export default function Total() {
 	const playersContext = useContext(PlayersContext);
 
-	const [winner, setWinner] = useState('null');
+	const [winner, setWinner] = useState('');
 
 	useEffect(() => {
 		setWinner(getWinner(playersContext.state));
