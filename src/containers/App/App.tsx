@@ -1,10 +1,9 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import './App.css';
 import Navigation from "../Navigation/Navigation";
 import {IPlayer, IAddons} from "../../types";
 import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
-
 import playersReducer from '../../reducers/players';
 import addonsReducer, {addonsTemplate} from '../../reducers/addons';
 
@@ -24,6 +23,7 @@ export const PlayersContext = React.createContext({} as IPlayersContextProps);
 export const AddonsContext = React.createContext({} as IAddonsContextProps);
 
 export default function App() {
+	const [isReady, setIsReady] = useState(false);
 	const [players, playersDispatch] = useReducer(playersReducer, []);
 	const [addons, addonsDispatch] = useReducer(addonsReducer, addonsTemplate);
 
@@ -42,6 +42,7 @@ export default function App() {
 	function restoreGame(): void {
 		playersDispatch({type: 'init', payload: getPlayersFromStorage()});
 		addonsDispatch({type: 'init', payload: getAddonsFromStorage()});
+		setIsReady(true);
 	}
 
 	useEffect(() => {
@@ -53,8 +54,10 @@ export default function App() {
     <div className="App">
 		<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
 			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-				<Navigation routes={ROUTES} addons={addons} />
-				<RenderRoutes routes={ROUTES} />
+				{isReady && <React.Fragment>
+					<Navigation routes={ROUTES} players={players} addons={addons} />
+					<RenderRoutes routes={ROUTES} />
+				</React.Fragment>}
 			</AddonsContext.Provider>
 		</PlayersContext.Provider>
     </div>
