@@ -1,4 +1,5 @@
 import {IAddons, TPlayers, TScoreKeys} from "../types";
+import ADDONS from "../config/addons";
 
 const scoreTemplate = {
 	military: 0,
@@ -64,26 +65,20 @@ const reducer = (state: TPlayers, action: TAction) => {
 				...action.payload
 			];
 		case ADD:
-			if (action.payload) {
-				return [
-					...state, {
-						name: action.payload,
-						score: {
-							...scoreTemplate
-						}
+			return [
+				...state, {
+					name: action.payload,
+					score: {
+						...scoreTemplate
 					}
-				]
-			}
-			return state;
+				}
+			];
 		case DELETE:
-			if (action.payload) {
-				return [
-					...state.filter(player => {
-						return player.name !== action.payload
-					})
-				];
-			}
-			return state;
+			return [
+				...state.filter(player => {
+					return player.name !== action.payload
+				})
+			];
 		case UPDATE:
 			const {name, scoreKey, value} = action.payload;
 
@@ -119,26 +114,28 @@ const reducer = (state: TPlayers, action: TAction) => {
 				}),
 			];
 		case SET_ADDON:
-			// TODO
-			// const disabledAddonsScore = action.payload.addons.reduce((score, addon) => {
-			// 	if (!addon) {
-			// 		score[addon] = 0;
-			// 	}
-			// 	return score;
-			// }, {});
-			//
-			// return {
-			// 	...state.map(player => {
-			// 		return {
-			// 			...player,
-			// 			score: {
-			// 				...player.score,
-			// 				...disabledAddonsScore
-			// 			}
-			// 		}
-			// 	}),
-			// }
-			return state;
+			const disabledAddons = ADDONS.filter((addon) => {
+				return !action.payload[addon.key];
+			});
+
+			const scoresDisabledByAddons = disabledAddons.reduce((scores: {[key in TScoreKeys]?: number}, addon) => {
+				addon.scores.forEach(score => {
+					scores[score] = 0;
+				})
+				return scores;
+			}, {});
+
+			return [
+				...state.map(player => {
+					return {
+						...player,
+						score: {
+							...player.score,
+							...scoresDisabledByAddons
+						}
+					}
+				}),
+			];
 		default:
 			return state;
 	}
