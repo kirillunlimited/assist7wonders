@@ -52,10 +52,10 @@ export default function App() {
     <div className="App">
 		<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
 			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-				{isReady && <React.Fragment>
+				{isReady && <>
 					<Navigation routes={ROUTES} players={players} addons={addons} />
 					<RenderRoutes routes={ROUTES} players={players} addons={addons} />
-				</React.Fragment>}
+				</>}
 			</AddonsContext.Provider>
 		</PlayersContext.Provider>
     </div>
