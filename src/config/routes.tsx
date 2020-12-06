@@ -44,7 +44,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['military']
 				}, ['military'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons),
+				color: '#D81F25'
 			},
 			{
 				path: '/scores/treasury',
@@ -55,7 +56,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['treasury']
 				}, ['treasury'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons),
+				color: '#AA8E69'
 			},
 			{
 				path: '/scores/wonders',
@@ -66,7 +68,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['wonders']
 				}, ['wonders'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons),
+				color: '#E8C44A'
 			},
 			{
 				path: '/scores/civilian',
@@ -77,7 +80,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['civilian']
 				}, ['civilian'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons),
+				color: '#2376CF'
 			},
 			{
 				path: '/scores/commerce',
@@ -88,7 +92,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['commerce']
 				}, ['commerce'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons),
+				color: '#E8A33C'
 			},
 			{
 				path: '/scores/guild',
@@ -99,7 +104,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['guild']
 				}, ['guild'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons),
+				color: '#91288F'
 			},
 			{
 				path: '/scores/science',
@@ -110,7 +116,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 				  scores: ['compass', 'tablet', 'gear']
 				}, ['compass', 'tablet', 'gear'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons),
+				color: '#006118'
 			},
 			{
 				path: '/scores/cities',
@@ -121,7 +128,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['cities']
 				}, ['cities'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons),
+				color: '#545454'
 			},
 			{
 				path: '/scores/debt',
@@ -133,7 +141,8 @@ const ROUTES: TRoutes = [
 					scores: ['debt'],
 					max: 0
 				}, ['debt'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons),
+				color: '#8F7B66'
 			},
 			{
 				path: '/scores/leaders',
@@ -144,7 +153,8 @@ const ROUTES: TRoutes = [
 				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
 					scores: ['leaders']
 				}, ['leaders'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons)
+				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons),
+				color: '#BCBCBC'
 			}
 		]
 	},

@@ -5,6 +5,17 @@ import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 import {useState, useEffect} from "react";
 
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles({
+	indicator: {
+		backgroundColor: '#FFF'
+	},
+	tab: {
+		opacity: 1,
+		textShadow: '0px 1px 0 #999'
+	}
+});
+
 interface IProps {
 	routes: TRoutes;
 	players: TPlayers;
@@ -29,6 +40,7 @@ function getFilteredRoutes(routes: TRoutes, players: TPlayers, addons: IAddons) 
 }
 
 export default function Navigation(props: IProps) {
+	const classes = useStyles();
 	const location = useLocation();
 
 	const [filteredRoutes, setFilteredRoutes] = useState(props.routes);
@@ -44,10 +56,14 @@ export default function Navigation(props: IProps) {
 			} else {
 				return <Tab
 					key={route.key}
+					className={classes.tab}
 					label={route.label}
 					component={Link}
 					value={route.path}
 					to={route.path}
+					style={{
+						backgroundColor: route.color
+					}}
 				/>
 			}
 		});
@@ -55,7 +71,14 @@ export default function Navigation(props: IProps) {
 
 	return(
 		<AppBar position="static">
-			<Tabs value={location.pathname} variant="scrollable" scrollButtons="auto">
+			<Tabs
+				classes={{
+					indicator: classes.indicator
+				}}
+				value={location.pathname}
+				variant="scrollable"
+				scrollButtons="auto"
+			>
 				{renderTabs(filteredRoutes)}
 			</Tabs>
 		</AppBar>

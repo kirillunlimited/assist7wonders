@@ -37,6 +37,7 @@ export interface IRoute {
 	component: Function;
 	routes?: TRoutes;
 	available?: Function;
+	color?: string;
 }
 
 export type TRoutes = IRoute[];
