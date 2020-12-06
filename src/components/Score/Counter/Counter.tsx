@@ -12,7 +12,7 @@ interface IProps {
 	isMaxValueFilter: (value: number, max?: number) => boolean;
 }
 
-export default function InputCounter(props: IProps) {
+export default function Counter(props: IProps) {
 	const [localValue, setLocalValue] = useState(String(props.value));
 
 	useEffect(() => {

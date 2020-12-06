@@ -21,42 +21,35 @@ export type ScienceParts = {
 	tablet: number;
 }
 
-export interface IPlayer {
+interface IPlayer {
 	name: string;
 	score: IScore
 }
 
-export interface IRoutes {
-	military: IRoute;
-	treasury: IRoute;
-	wonders: IRoute;
-	civilian: IRoute;
-	commerce: IRoute;
-	guild: IRoute;
-	science: IRoute;
-	cities: IRoute;
-	debt: IRoute;
-	leaders: IRoute;
-}
+export type TPlayers = IPlayer[];
 
 export interface IRoute {
-	title: string;
 	path: string;
-	scores: Array<TScoreKeys>;
-	addon?: keyof IAddons;
-	max?: number;
+	key: string;
+	label?: string;
+	title?: string;
+	exact?: boolean,
+	component: Function;
+	routes?: TRoutes;
+	available?: Function;
 }
+
+export type TRoutes = IRoute[];
 
 export interface IAddons {
 	cities: boolean;
 	leaders: boolean;
 }
 
-export interface IAddonsConfig {
-	cities: IAddonConfig;
-	leaders: IAddonConfig;
+export interface IAddonConfig {
+	key: keyof IAddons;
+	label: string;
+	scores: Array<TScoreKeys>;
 }
 
-export interface IAddonConfig {
-	label: string;
-}
+export type TAddonsConfig = IAddonConfig[];

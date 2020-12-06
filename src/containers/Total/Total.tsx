@@ -1,21 +1,20 @@
 import * as React from 'react';
-import {IPlayer} from '../../types';
+import {TPlayers} from '../../types';
 import {getSum} from "../../utils/score";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import styles from './Total.module.css';
+import {PlayersContext} from "../App/App";
 
-interface IProps {
-	players: Array<IPlayer>
-}
+export default function Total() {
+	const playersContext = useContext(PlayersContext);
 
-export default function Total(props: IProps) {
-	const [winner, setWinner] = useState('null');
+	const [winner, setWinner] = useState('');
 
 	useEffect(() => {
-		setWinner(getWinner(props.players));
-	}, [props.players]);
+		setWinner(getWinner(playersContext.state));
+	}, [playersContext.state]);
 
-	function getWinner(players: Array<IPlayer>): string {
+	function getWinner(players: TPlayers): string {
 		const bestPlayer =  players
 			.reduce((acc, player) => {
 				const playerSum = getSum(player.score);
@@ -34,7 +33,7 @@ export default function Total(props: IProps) {
 
 	return(
 		<div>
-			{props.players.map((player, index) =>
+			{playersContext.state.map((player, index) =>
 				<div key={index} className={`${styles.player} ${winner === player.name ? styles.winner : ''}`}>
 					{player.name} Σ{getSum(player.score)}
 				</div>)
