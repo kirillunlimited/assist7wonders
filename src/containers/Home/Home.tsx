@@ -29,10 +29,6 @@ export default function Home() {
 
 	return(
 		<div>
-			<NewPlayer
-				names={playersContext.state.map(player => player.name)}
-				handleSubmit={onNewPlayerSubmit}
-			/>
 			<div>
 				{playersContext.state.map((player, index) =>
 					<div key={index}>
@@ -61,6 +57,11 @@ export default function Home() {
 						label={addon.label}
 				/>)}
 			</FormGroup>
+
+			<NewPlayer
+				names={playersContext.state.map(player => player.name)}
+				handleSubmit={onNewPlayerSubmit}
+			/>
 		</div>
 	);
 }

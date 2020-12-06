@@ -4,8 +4,8 @@ import {TRoutes, TPlayers, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 import {useState, useEffect} from "react";
-
 import { makeStyles } from '@material-ui/core/styles';
+
 const useStyles = makeStyles({
 	indicator: {
 		backgroundColor: '#FFF'
