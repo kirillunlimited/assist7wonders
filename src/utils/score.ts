@@ -6,7 +6,7 @@ const SCIENCE_KEYS = [
 	'gear'
 ] as Array<TScoreKeys>;
 
-export function getSum(playerScore: IScore): number {
+export function getTotalSum(playerScore: IScore): number {
 	return getFlatSum(playerScore) + getScienceSum(playerScore) + getTreasurySum(playerScore);
 }
 
@@ -18,6 +18,10 @@ export function getFlatSum(playerScore: IScore): number {
 		}
 		return sum;
 	}, 0);
+}
+
+export function getSum(playerScore: IScore, scoreKey: TScoreKeys): number {
+	return playerScore[scoreKey];
 }
 
 export function getScienceSum(playerScore: IScore): number {

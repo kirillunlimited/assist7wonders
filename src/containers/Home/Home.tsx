@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import NewPlayer from '../../components/NewPlayer/NewPlayer';
-import {getSum} from "../../utils/score";
+import {getTotalSum} from "../../utils/score";
 import {Button, IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
 import {IAddons} from '../../types';
@@ -32,7 +32,7 @@ export default function Home() {
 			<div>
 				{playersContext.state.map((player, index) =>
 					<div key={index}>
-						{player.name} Σ{getSum(player.score)}
+						{player.name} Σ{getTotalSum(player.score)}
 						<IconButton onClick={() => onPlayerDelete(player.name)}>
 							<DeleteForever color="secondary"/>
 						</IconButton>

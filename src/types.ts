@@ -38,6 +38,7 @@ export interface IRoute {
 	routes?: TRoutes;
 	available?: Function;
 	color?: string;
+	sum?: Function;
 }
 
 export type TRoutes = IRoute[];

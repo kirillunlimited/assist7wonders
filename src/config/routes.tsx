@@ -1,11 +1,13 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {IAddons, TPlayers, IRoute, TRoutes, TScoreKeys} from "../types";
+import {IAddons, TPlayers, IRoute, TRoutes, TScoreKeys, IScore} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
 
 import Home from '../containers/Home/Home';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
+
+import {getSum, getScienceSum, getTreasurySum} from '../utils/score';
 
 import {isScoresAvailable} from './addons';
 
@@ -21,6 +23,140 @@ const MESSAGES = {
 	ADDON_IS_OFF: 'Дополнение отключено.'
 }
 
+export const ScoreRoutes: TRoutes = [
+	{
+		path: '/scores/military',
+		key: 'military',
+		label: 'Military',
+		title: 'Military',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['military']
+		}, ['military'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons),
+		color: '#D81F25',
+		sum: (playerScore: IScore) => getSum(playerScore, 'military')
+	},
+	{
+		path: '/scores/treasury',
+		key: 'treasury',
+		label: 'Treasury',
+		title: 'Treasury',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['treasury']
+		}, ['treasury'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons),
+		color: '#AA8E69',
+		sum: getTreasurySum
+	},
+	{
+		path: '/scores/wonders',
+		key: 'wonders',
+		label: 'Wonders',
+		title: 'Wonders',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['wonders']
+		}, ['wonders'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons),
+		color: '#E8C44A',
+		sum: (playerScore: IScore) => getSum(playerScore, 'wonders')
+	},
+	{
+		path: '/scores/civilian',
+		key: 'civilian',
+		label: 'Civilian',
+		title: 'Civilian',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['civilian']
+		}, ['civilian'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons),
+		color: '#2376CF',
+		sum: (playerScore: IScore) => getSum(playerScore, 'civilian')
+	},
+	{
+		path: '/scores/commerce',
+		key: 'commerce',
+		label: 'Commerce',
+		title: 'Commerce',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['commerce']
+		}, ['commerce'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons),
+		color: '#E8A33C',
+		sum: (playerScore: IScore) => getSum(playerScore, 'commerce')
+	},
+	{
+		path: '/scores/guild',
+		key: 'guild',
+		label: 'Guild',
+		title: 'Guild',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['guild']
+		}, ['guild'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons),
+		color: '#91288F',
+		sum: (playerScore: IScore) => getSum(playerScore, 'guild')
+	},
+	{
+		path: '/scores/science',
+		key: 'science',
+		label: 'Science',
+		title: 'Science',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['compass', 'tablet', 'gear']
+		}, ['compass', 'tablet', 'gear'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons),
+		color: '#006118',
+		sum: getScienceSum
+	},
+	{
+		path: '/scores/cities',
+		key: 'cities',
+		label: 'Cities',
+		title: 'Cities',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['cities']
+		}, ['cities'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons),
+		color: '#545454',
+		sum: (playerScore: IScore) => getSum(playerScore, 'cities')
+	},
+	{
+		path: '/scores/debt',
+		key: 'debt',
+		label: 'Debt',
+		title: 'Debt',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['debt'],
+			max: 0
+		}, ['debt'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons),
+		color: '#8F7B66',
+		sum: (playerScore: IScore) => getSum(playerScore, 'debt')
+	},
+	{
+		path: '/scores/leaders',
+		key: 'leaders',
+		label: 'Leaders',
+		title: 'Leaders',
+		exact: true,
+		component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
+			scores: ['leaders']
+		}, ['leaders'], players, addons),
+		available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons),
+		color: '#BCBCBC',
+		sum: (playerScore: IScore) => getSum(playerScore, 'leaders')
+	}
+];
+
 const ROUTES: TRoutes = [
 	{
 		path: '/',
@@ -34,129 +170,7 @@ const ROUTES: TRoutes = [
 		path: '/scores',
 		key: 'scores',
 		component: RenderRoutes,
-		routes: [
-			{
-				path: '/scores/military',
-				key: 'military',
-				label: 'Military',
-				title: 'Military',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-					scores: ['military']
-				}, ['military'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['military'], players, addons),
-				color: '#D81F25'
-			},
-			{
-				path: '/scores/treasury',
-				key: 'treasury',
-				label: 'Treasury',
-				title: 'Treasury',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-					scores: ['treasury']
-				}, ['treasury'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['treasury'], players, addons),
-				color: '#AA8E69'
-			},
-			{
-				path: '/scores/wonders',
-				key: 'wonders',
-				label: 'Wonders',
-				title: 'Wonders',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-				  scores: ['wonders']
-				}, ['wonders'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['wonders'], players, addons),
-				color: '#E8C44A'
-			},
-			{
-				path: '/scores/civilian',
-				key: 'civilian',
-				label: 'Civilian',
-				title: 'Civilian',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-				  scores: ['civilian']
-				}, ['civilian'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['civilian'], players, addons),
-				color: '#2376CF'
-			},
-			{
-				path: '/scores/commerce',
-				key: 'commerce',
-				label: 'Commerce',
-				title: 'Commerce',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-				  scores: ['commerce']
-				}, ['commerce'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['commerce'], players, addons),
-				color: '#E8A33C'
-			},
-			{
-				path: '/scores/guild',
-				key: 'guild',
-				label: 'Guild',
-				title: 'Guild',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-				  scores: ['guild']
-				}, ['guild'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['guild'], players, addons),
-				color: '#91288F'
-			},
-			{
-				path: '/scores/science',
-				key: 'science',
-				label: 'Science',
-				title: 'Science',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-				  scores: ['compass', 'tablet', 'gear']
-				}, ['compass', 'tablet', 'gear'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons),
-				color: '#006118'
-			},
-			{
-				path: '/scores/cities',
-				key: 'cities',
-				label: 'Cities',
-				title: 'Cities',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-					scores: ['cities']
-				}, ['cities'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['cities'], players, addons),
-				color: '#545454'
-			},
-			{
-				path: '/scores/debt',
-				key: 'debt',
-				label: 'Debt',
-				title: 'Debt',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-					scores: ['debt'],
-					max: 0
-				}, ['debt'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['debt'], players, addons),
-				color: '#8F7B66'
-			},
-			{
-				path: '/scores/leaders',
-				key: 'leaders',
-				label: 'Leaders',
-				title: 'Leaders',
-				exact: true,
-				component: ({players, addons}: {players: TPlayers, addons: IAddons}) => RenderScores({
-					scores: ['leaders']
-				}, ['leaders'], players, addons),
-				available: ({players, addons}: {players: TPlayers, addons: IAddons}) => isScoreRouteAvailable(['leaders'], players, addons),
-				color: '#BCBCBC'
-			}
-		]
+		routes: ScoreRoutes
 	},
 	{
 		path: '/total',
