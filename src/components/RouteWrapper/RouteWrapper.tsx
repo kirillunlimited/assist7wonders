@@ -24,7 +24,7 @@ export default function RouteWrapper(props: IProps) {
 	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
 	return (
-		<Box width="100%">
+		<Box width="100%" overflow="auto">
 			<Container maxWidth="md" disableGutters>
 				{bigScreen ? <Card className={classes.card} elevation={3}>
 					{props.children}
