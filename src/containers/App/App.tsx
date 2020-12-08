@@ -6,6 +6,7 @@ import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
 import playersReducer, {TAction as TPlayersAction} from '../../reducers/players';
 import addonsReducer, {TAction as TAddonsAction, addonsTemplate} from '../../reducers/addons';
+import Layout from '../../components/Layout/Layout';
 import RouteWrapper from "../../components/RouteWrapper/RouteWrapper";
 
 interface IPlayersContextProps {
@@ -52,12 +53,15 @@ export default function App() {
 		<div className="App">
 			<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
 				<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-					{isReady && <>
-						<Navigation routes={ROUTES} players={players} addons={addons} />
-						<RouteWrapper>
-							<RenderRoutes routes={ROUTES} players={players} addons={addons} />
-						</RouteWrapper>
-					</>}
+					{isReady && <Layout>
+						<>
+							<Navigation routes={ROUTES} players={players} addons={addons} />
+							<RouteWrapper>
+								<RenderRoutes routes={ROUTES} players={players} addons={addons} />
+							</RouteWrapper>
+						</>
+					</Layout>
+					}
 				</AddonsContext.Provider>
 			</PlayersContext.Provider>
 		</div>

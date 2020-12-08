@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import {makeStyles, useTheme} from '@material-ui/core/styles';
@@ -23,7 +24,7 @@ export default function RouteWrapper(props: IProps) {
 	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
 	return (
-		<div>
+		<Box width="100%">
 			<Container maxWidth="md" disableGutters>
 				{bigScreen ? <Card className={classes.card} elevation={3}>
 					{props.children}
@@ -31,6 +32,6 @@ export default function RouteWrapper(props: IProps) {
 					{props.children}
 				</div>}
 			</Container>
-		</div>
+		</Box>
 	)
 }

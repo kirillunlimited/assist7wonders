@@ -4,9 +4,21 @@ import {TRoutes, TPlayers, IAddons} from "../../types";
 import { useLocation } from 'react-router-dom'
 import {AppBar, Tabs, Tab} from '@material-ui/core';
 import {useState, useEffect} from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-const useStyles = makeStyles({
+interface IProps {
+	routes: TRoutes;
+	players: TPlayers;
+	addons: IAddons;
+}
+
+const useStyles = makeStyles(theme => ({
+	appBar: {
+		[theme.breakpoints.up('sm')]: {
+			width: 'auto'
+		},
+	},
 	indicator: {
 		backgroundColor: '#FFF'
 	},
@@ -14,13 +26,7 @@ const useStyles = makeStyles({
 		opacity: 1,
 		textShadow: '0px 1px 0 #999'
 	}
-});
-
-interface IProps {
-	routes: TRoutes;
-	players: TPlayers;
-	addons: IAddons;
-}
+}));
 
 function getFilteredRoutes(routes: TRoutes, players: TPlayers, addons: IAddons) {
 	return routes.reduce((routes: TRoutes, route) => {
@@ -41,6 +47,8 @@ function getFilteredRoutes(routes: TRoutes, players: TPlayers, addons: IAddons) 
 
 export default function Navigation(props: IProps) {
 	const classes = useStyles();
+	const theme = useTheme();
+	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
 	const location = useLocation();
 
 	const [filteredRoutes, setFilteredRoutes] = useState(props.routes);
@@ -70,8 +78,9 @@ export default function Navigation(props: IProps) {
 	}
 
 	return(
-		<AppBar position="static">
+		<AppBar className={classes.appBar} position="static">
 			<Tabs
+				orientation={bigScreen ? 'vertical': 'horizontal'}
 				classes={{
 					indicator: classes.indicator
 				}}
