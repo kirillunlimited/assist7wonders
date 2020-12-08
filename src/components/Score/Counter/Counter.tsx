@@ -32,10 +32,13 @@ export default function Counter(props: IProps) {
 	return (
 		<div>
 			<IconButton onClick={props.handleDecrement}>
-				<RemoveCircle color="primary"/>
+				<RemoveCircle
+					color="primary"
+					fontSize="large"
+				/>
 			</IconButton>
 			<Input
-				style={{width: 64}}
+				style={{width: 48}}
 				type='number'
 				onChange={onChange}
 				onBlur={onBlur}
@@ -48,7 +51,10 @@ export default function Counter(props: IProps) {
 				onClick={props.handleIncrement}
 				disabled={props.isMaxValueFilter(Number(localValue), props.max)}
 			>
-				<AddCircle color={props.isMaxValueFilter(Number(localValue), props.max) ? 'disabled' : 'primary'} />
+				<AddCircle
+					color={props.isMaxValueFilter(Number(localValue), props.max) ? 'disabled' : 'primary'}
+					fontSize="large"
+				/>
 			</IconButton>
 		</div>
 	)
