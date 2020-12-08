@@ -16,7 +16,7 @@ interface IProps {
 
 const useStyles = makeStyles((theme) => ({
 	newPlayerButton: {
-		position: 'absolute',
+		position: 'fixed',
 		bottom: theme.spacing(4),
 		right: theme.spacing(4),
 	}

@@ -6,6 +6,7 @@ import ROUTES, {RenderRoutes} from '../../config/routes';
 import {savePlayersToStorage, saveAddonsToStorage, getPlayersFromStorage, getAddonsFromStorage} from '../../utils/storage';
 import playersReducer, {TAction as TPlayersAction} from '../../reducers/players';
 import addonsReducer, {TAction as TAddonsAction, addonsTemplate} from '../../reducers/addons';
+import RouteWrapper from "../../components/RouteWrapper/RouteWrapper";
 
 interface IPlayersContextProps {
 	state: TPlayers;
@@ -37,27 +38,28 @@ export default function App() {
 		restoreGame();
 	}, []);
 
+	useEffect(() => {
+		playersDispatch({type: 'SET_ADDON', payload: addons});
+	}, [addons]);
+
 	function restoreGame(): void {
 		playersDispatch({type: 'INIT', payload: getPlayersFromStorage()});
 		addonsDispatch({type: 'INIT', payload: getAddonsFromStorage()});
 		setIsReady(true);
 	}
 
-	useEffect(() => {
-		// TODO
-		playersDispatch({type: 'SET_ADDON', payload: addons});
-	}, [addons]);
-
-  return (
-    <div className="App">
-		<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
-			<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
-				{isReady && <>
-					<Navigation routes={ROUTES} players={players} addons={addons} />
-					<RenderRoutes routes={ROUTES} players={players} addons={addons} />
-				</>}
-			</AddonsContext.Provider>
-		</PlayersContext.Provider>
-    </div>
-  );
+	return (
+		<div className="App">
+			<PlayersContext.Provider value={{state: players, dispatch: playersDispatch}}>
+				<AddonsContext.Provider value={{state: addons, dispatch: addonsDispatch}}>
+					{isReady && <>
+						<Navigation routes={ROUTES} players={players} addons={addons} />
+						<RouteWrapper>
+							<RenderRoutes routes={ROUTES} players={players} addons={addons} />
+						</RouteWrapper>
+					</>}
+				</AddonsContext.Provider>
+			</PlayersContext.Provider>
+		</div>
+	);
 }
