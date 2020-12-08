@@ -85,7 +85,7 @@ export default function Navigation(props: IProps) {
 					indicator: classes.indicator
 				}}
 				value={location.pathname}
-				variant="scrollable"
+				variant={bigScreen ? 'standard' : 'scrollable'}
 				scrollButtons="auto"
 			>
 				{renderTabs(filteredRoutes)}
