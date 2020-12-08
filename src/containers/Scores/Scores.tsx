@@ -49,7 +49,7 @@ export default function Scores(props: IProps) {
 							<TableCell className={classes.tdScore}>
 								{props.scores.map((scoreKey, index, arr) =>
 									<Score
-										key={player.name}
+										key={scoreKey}
 										title={arr.length > 1 ? scoreKey : ''}
 										value={player.score[scoreKey]}
 										handleChange={(value: number) => onChange(player.name, scoreKey, value)}

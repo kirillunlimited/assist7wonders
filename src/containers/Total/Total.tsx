@@ -72,7 +72,9 @@ export default function Total() {
 						<TableRow key={index}>
 							<TableCell className={classes.medal}>{winner === player.name ? '🥇' : ''}</TableCell>
 							<TableCell>{player.name}</TableCell>
-							{ScoreRoutes.map(route => <TableCell className={classes.score} style={{backgroundColor: route.color}}>{route.sum ? route.sum(player.score) : 0}</TableCell>)}
+							{ScoreRoutes.map(route =>
+								<TableCell key={route.key} className={classes.score} style={{backgroundColor: route.color}}>{route.sum ? route.sum(player.score) : 0}</TableCell>
+							)}
 							<TableCell>{getTotalSum(player.score)}</TableCell>
 						</TableRow>)
 					}
