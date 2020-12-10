@@ -1,23 +1,9 @@
-.player {
-	margin-bottom: 2em;
+.td:first-child {
+	padding-left: 0;
 }
 
-.player:last-child {
-	margin-bottom: 0;
-}
-
-.name {
-	margin: .5em 0;
-	font-weight: bold;
-}
-
-.scores {
-	display: flex;
-	justify-content: center;
-}
-
-@media (max-width: 480px) {
-	.scores {
-		flex-direction: column;
-	}
+.td:last-child {
+	width: 100%;
+	padding-right: 0;
+	white-space: nowrap;
 }
