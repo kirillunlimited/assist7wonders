@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import {IAddons, TPlayers, IRoute, TRoutes, TScoreKeys, IScore} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
 
-import Home from '../containers/Home/Home';
+import Players from '../containers/Players/Players';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
 
@@ -160,11 +160,11 @@ export const ScoreRoutes: TRoutes = [
 const ROUTES: TRoutes = [
 	{
 		path: '/',
-		key: 'root',
-		label: 'Главная',
-		title: '7 Wonders',
+		key: 'players',
+		label: 'Игроки',
+		title: 'Игроки',
 		exact: true,
-		component: Home
+		component: Players
 	},
 	{
 		path: '/scores',

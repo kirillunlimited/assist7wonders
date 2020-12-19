@@ -13,7 +13,7 @@ export default function Scores(props: IProps) {
 	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
 	return(
 		<div className={`${styles.player} ${!bigScreen && styles.sm}`}>
-			<Avatar>{props.name[0]}</Avatar>
+			<Avatar alt={props.name}>{props.name[0]}</Avatar>
 			<span className={styles.name}>{props.name}</span>
 		</div>
 	)

@@ -8,6 +8,7 @@ import playersReducer, {TAction as TPlayersAction} from '../../reducers/players'
 import addonsReducer, {TAction as TAddonsAction, addonsTemplate} from '../../reducers/addons';
 import Layout from '../../components/Layout/Layout';
 import RouteWrapper from "../../components/RouteWrapper/RouteWrapper";
+import MainMenu from '../MainMenu/MainMenu';
 
 interface IPlayersContextProps {
 	state: TPlayers;
@@ -56,6 +57,7 @@ export default function App() {
 					{isReady && <Layout>
 						<>
 							<Navigation routes={ROUTES} players={players} addons={addons} />
+							<MainMenu />
 							<RouteWrapper>
 								<RenderRoutes routes={ROUTES} players={players} addons={addons} />
 							</RouteWrapper>
