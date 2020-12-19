@@ -1,4 +1,4 @@
-import {IAddons, TAddonsConfig, TScoreKeys} from '../types';
+import {IAddons, TAddonsConfig, TScoreKey} from '../types';
 
 const ADDONS: TAddonsConfig = [
 	{
@@ -14,7 +14,7 @@ const ADDONS: TAddonsConfig = [
 ];
 
 /** Get scores view availability based on toggled addons */
-export function isScoresAvailable(scores: TScoreKeys[], addons: IAddons) {
+export function isScoresAvailable(scores: TScoreKey[], addons: IAddons) {
 	const addon = ADDONS.find(addon => scores.every(score => addon.scores.includes(score)));
 
 	if (addon) {

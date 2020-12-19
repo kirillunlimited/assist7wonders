@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {IAddons, TPlayers, IRoute, TRoutes, TScoreKeys, IScore} from "../types";
+import {IAddons, TPlayers, IRoute, TRoutes, TScoreKey, IScore} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
 
 import Players from '../containers/Players/Players';
@@ -222,11 +222,11 @@ function isRouteAvailable(players: TPlayers): boolean {
 }
 
 /** Needed for navigation menu render */
-function isScoreRouteAvailable(scores: TScoreKeys[], players: TPlayers, addons: IAddons): boolean {
+function isScoreRouteAvailable(scores: TScoreKey[], players: TPlayers, addons: IAddons): boolean {
 	return isRouteAvailable(players) ? isScoresAvailable(scores, addons) : false;
 }
 
-function RenderScores(props: IScoresProps, scores: TScoreKeys[], players: TPlayers, addons: IAddons) {
+function RenderScores(props: IScoresProps, scores: TScoreKey[], players: TPlayers, addons: IAddons) {
 	return isRouteAvailable(players)
 		? isScoresAvailable(scores, addons)
 			? Scores(props)

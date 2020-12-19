@@ -2,10 +2,10 @@ import * as React from 'react';
 import Counter from "./Counter/Counter";
 import { SCORE_ICONS } from "../../config/score";
 import styles from './Score.module.css';
-import {TScoreKeys} from "../../types";
+import {TScoreKey} from "../../types";
 
 interface IProps {
-	scoreKey: TScoreKeys;
+	scoreKey: TScoreKey;
 	value: number;
 	title: string;
 	handleChange: (value: number) => void;

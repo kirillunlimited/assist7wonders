@@ -1,17 +1,17 @@
-import {IScore, TScoreKeys} from "../types";
+import {IScore, TScoreKey} from "../types";
 
 const SCIENCE_KEYS = [
 	'compass',
 	'tablet',
 	'gear'
-] as Array<TScoreKeys>;
+] as TScoreKey[];
 
 export function getTotalSum(playerScore: IScore): number {
 	return getFlatSum(playerScore) + getScienceSum(playerScore) + getTreasurySum(playerScore);
 }
 
 export function getFlatSum(playerScore: IScore): number {
-	return (Object.keys(playerScore) as Array<TScoreKeys>).reduce((sum, key) => {
+	return (Object.keys(playerScore) as Array<TScoreKey>).reduce((sum, key) => {
 		if (!SCIENCE_KEYS.includes(key) && key !== 'treasury') {
 			const value = playerScore[key];
 			sum += value;
@@ -20,7 +20,7 @@ export function getFlatSum(playerScore: IScore): number {
 	}, 0);
 }
 
-export function getSum(playerScore: IScore, scoreKey: TScoreKeys): number {
+export function getSum(playerScore: IScore, scoreKey: TScoreKey): number {
 	return playerScore[scoreKey];
 }
 

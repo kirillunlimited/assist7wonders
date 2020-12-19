@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {TPlayers} from '../../types';
+import {TPlayers, IRoute} from '../../types';
 import {getTotalSum} from "../../utils/score";
 import {useState, useEffect, useContext} from "react";
-import {PlayersContext} from "../App/App";
+import {AddonsContext, PlayersContext} from "../App/App";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -23,7 +23,11 @@ const useStyles = makeStyles({
 		textAlign: 'center'
 	},
 	score: {
-		color: '#FFF'
+		color: '#FFF',
+		textAlign: 'center'
+	},
+	sum: {
+		textAlign: 'center'
 	},
 	medal: {
 		width: '1em'
@@ -32,9 +36,11 @@ const useStyles = makeStyles({
 
 export default function Total() {
 	const playersContext = useContext(PlayersContext);
-	const classes = useStyles();
-	const [winner, setWinner] = useState('');
+	const addonsContext = useContext(AddonsContext);
 
+	const classes = useStyles();
+
+	const [winner, setWinner] = useState('');
 	useEffect(() => {
 		setWinner(getWinner(playersContext.state));
 	}, [playersContext.state]);
@@ -56,6 +62,10 @@ export default function Total() {
 		return bestPlayer ? bestPlayer.name : '';
 	}
 
+	function isScoreRouteAvailable(route: IRoute) {
+		return route.available && route.available({players: playersContext.state, addons: addonsContext.state});
+	}
+
 	return(
 		<TableContainer>
 			<Table>
@@ -63,8 +73,13 @@ export default function Total() {
 					<TableRow>
 						<TableCell/>
 						<TableCell className={classes.headerCell}>Игрок</TableCell>
-						<TableCell className={`${classes.headerCell} ${classes.scoresHead}`} colSpan={ScoreRoutes.length}>Очки</TableCell>
-						<TableCell className={classes.headerCell}>Σ</TableCell>
+						<TableCell
+							className={`${classes.headerCell} ${classes.scoresHead}`}
+							colSpan={ScoreRoutes.filter(route => route.available && route.available({players: playersContext.state, addons: addonsContext.state})).length}
+						>
+							Очки
+						</TableCell>
+						<TableCell className={`${classes.headerCell} ${classes.scoresHead}`}>Σ</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -73,9 +88,15 @@ export default function Total() {
 							<TableCell className={classes.medal}>{winner === player.name ? '🥇' : ''}</TableCell>
 							<TableCell>{player.name}</TableCell>
 							{ScoreRoutes.map(route =>
-								<TableCell key={route.key} className={classes.score} style={{backgroundColor: route.color}}>{route.sum ? route.sum(player.score) : 0}</TableCell>
+								isScoreRouteAvailable(route) && <TableCell
+									key={route.key}
+									className={classes.score}
+									style={{backgroundColor: route.color}}
+								>
+									{route.sum ? route.sum(player.score) : 0}
+								</TableCell>
 							)}
-							<TableCell>{getTotalSum(player.score)}</TableCell>
+							<TableCell className={classes.sum}>{getTotalSum(player.score)}</TableCell>
 						</TableRow>)
 					}
 				</TableBody>

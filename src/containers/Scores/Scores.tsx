@@ -1,6 +1,6 @@
 import Score from "../../components/Score/Score";
 import React, {useContext} from "react";
-import {TScoreKeys} from "../../types";
+import {TScoreKey} from "../../types";
 import {PlayersContext} from "../App/App";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -11,14 +11,14 @@ import Profile from '../../components/Profile/Profile';
 import styles from './Scores.module.css';
 
 export interface IProps {
-	scores: Array<TScoreKeys>;
+	scores: TScoreKey[];
 	max?: number;
 }
 
 export default function Scores(props: IProps) {
 	const playersContext = useContext(PlayersContext);
 
-	function onChange(name: string, scoreKey: TScoreKeys, value: number) {
+	function onChange(name: string, scoreKey: TScoreKey, value: number) {
 		playersContext.dispatch({type: 'UPDATE', payload: {name, scoreKey, value}});
 	}
 
