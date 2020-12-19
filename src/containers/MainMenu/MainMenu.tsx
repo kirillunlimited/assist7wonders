@@ -25,9 +25,6 @@ const useStyles = makeStyles(() => ({
 		fontSize: '24px',
 		textAlign: 'left',
 		padding: '0 12px'
-	},
-	contextMenuTitle: {
-		padding: '6px 16px'
 	}
 }));
 
@@ -99,7 +96,6 @@ export default function MainMenu() {
 				open={Boolean(anchorEl)}
 				onClose={handleCloseContextMenu}
 			>
-				<li className={classes.contextMenuTitle}>Дополнения</li>
 				{ADDONS.map(addon =>
 					<MenuItem key={addon.key}>
 						<FormControlLabel
