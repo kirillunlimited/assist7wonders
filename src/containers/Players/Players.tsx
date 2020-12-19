@@ -23,24 +23,29 @@ export default function Players() {
 
 	return(
 		<div>
-			<TableContainer>
-				<Table>
-					<TableBody>
-						{playersContext.state.map((player) =>
-							<TableRow key={player.name}>
-								<TableCell className={styles.td}>
-									<Profile name={player.name} />
-								</TableCell>
-								<TableCell className={styles.td}>
-									<IconButton onClick={() => onPlayerDelete(player.name)}>
-										<DeleteForever fontSize="large" color="secondary"/>
-									</IconButton>
-								</TableCell>
-							</TableRow>)
-						}
-					</TableBody>
-				</Table>
-			</TableContainer>
+			{playersContext.state.length ?
+				<TableContainer>
+					<Table>
+						<TableBody>
+							{playersContext.state.map((player) =>
+								<TableRow key={player.name}>
+									<TableCell className={styles.td}>
+										<Profile name={player.name} />
+									</TableCell>
+									<TableCell className={styles.td}>
+										<IconButton onClick={() => onPlayerDelete(player.name)}>
+											<DeleteForever fontSize="large" color="secondary"/>
+										</IconButton>
+									</TableCell>
+								</TableRow>)
+							}
+						</TableBody>
+					</Table>
+				</TableContainer>
+				: <p>Добавьте игроков</p>
+			}
+
+			{playersContext.state.length === 1 ? <p>Добавьте больше игроков</p> : null}
 
 			<NewPlayer
 				names={playersContext.state.map(player => player.name)}
