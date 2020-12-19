@@ -23,7 +23,8 @@ const useStyles = makeStyles(() => ({
 		flexGrow: 1,
 		fontWeight: 'bold',
 		fontSize: '24px',
-		textAlign: 'left'
+		textAlign: 'left',
+		padding: '0 12px'
 	},
 	contextMenuTitle: {
 		padding: '6px 16px'
