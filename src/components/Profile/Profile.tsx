@@ -1,19 +1,29 @@
 import React from "react";
 import Avatar from '@material-ui/core/Avatar';
 import styles from './Profile.module.css';
-import {useTheme} from "@material-ui/core/styles";
+import {useTheme, makeStyles, Theme} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { blue } from '@material-ui/core/colors';
 
 export interface IProps {
 	name: string;
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+	avatar: {
+		color: theme.palette.getContrastText(blue[500]),
+		backgroundColor: blue[500],
+	},
+}));
+
 export default function Scores(props: IProps) {
+	const classes = useStyles();
 	const theme = useTheme();
 	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
+
 	return(
 		<div className={`${styles.player} ${!bigScreen && styles.sm}`}>
-			<Avatar alt={props.name}>{props.name[0]}</Avatar>
+			<Avatar className={classes.avatar} alt={props.name}>{props.name[0]}</Avatar>
 			<span className={styles.name}>{props.name}</span>
 		</div>
 	)

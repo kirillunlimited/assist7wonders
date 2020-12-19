@@ -1,9 +1,15 @@
 import React, {useContext} from "react";
 import NewPlayer from '../../components/NewPlayer/NewPlayer';
-import {getTotalSum} from "../../utils/score";
 import {IconButton} from "@material-ui/core";
 import {DeleteForever} from "@material-ui/icons";
 import {PlayersContext} from "../App/App";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import styles from "./Players.module.css";
+import Profile from "../../components/Profile/Profile";
 
 export default function Players() {
 	const playersContext = useContext(PlayersContext);
@@ -17,16 +23,24 @@ export default function Players() {
 
 	return(
 		<div>
-			<div>
-				{playersContext.state.map((player, index) =>
-					<div key={index}>
-						{player.name} Σ{getTotalSum(player.score)}
-						<IconButton onClick={() => onPlayerDelete(player.name)}>
-							<DeleteForever color="secondary"/>
-						</IconButton>
-					</div>)
-				}
-			</div>
+			<TableContainer>
+				<Table>
+					<TableBody>
+						{playersContext.state.map((player) =>
+							<TableRow key={player.name}>
+								<TableCell className={styles.td}>
+									<Profile name={player.name} />
+								</TableCell>
+								<TableCell className={styles.td}>
+									<IconButton onClick={() => onPlayerDelete(player.name)}>
+										<DeleteForever fontSize="large" color="secondary"/>
+									</IconButton>
+								</TableCell>
+							</TableRow>)
+						}
+					</TableBody>
+				</Table>
+			</TableContainer>
 
 			<NewPlayer
 				names={playersContext.state.map(player => player.name)}

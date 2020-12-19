@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from "@material-ui/core/Fab";
-import PersonIcon from "@material-ui/icons/Person";
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {makeStyles} from "@material-ui/core/styles";
 
 interface IProps {
@@ -38,14 +38,12 @@ export default function NewPlayer(props: IProps) {
 	return(
 		<div>
 			<Fab
-				variant="extended"
 				className={classes.newPlayerButton}
 				color="primary"
 				aria-label="add"
 				onClick={() => toggleDialog(true)}
 			>
-				<PersonIcon />
-				Новый игрок
+				<PersonAddIcon />
 			</Fab>
 
 			<Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
