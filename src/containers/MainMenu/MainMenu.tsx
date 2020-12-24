@@ -17,6 +17,8 @@ import ADDONS from "../../config/addons";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(() => ({
@@ -75,7 +77,12 @@ export default function MainMenu() {
 			  onClose={handleCloseConfirm}
 			  aria-labelledby="alert-dialog-title"
 			>
-			  <DialogTitle>Начать новую игру?</DialogTitle>
+				<DialogTitle>Начать новую игру?</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Результаты игроков будут сброшены, вы уверены?
+					</DialogContentText>
+				</DialogContent>
 			  <DialogActions>
 				  <Button onClick={handleCloseConfirm} color="primary">Нет</Button>
 				  <Button onClick={onResetGame} color="primary" autoFocus>Да</Button>
