@@ -29,7 +29,13 @@ export default function Score(props: IProps) {
 
 	return(
 		<div className={styles.container}>
-			{SCORE_ICONS[props.scoreKey] ? <span className={styles.scoreIcon}>{SCORE_ICONS[props.scoreKey]}</span> : null}
+			{SCORE_ICONS[props.scoreKey]
+				? <img
+					src={SCORE_ICONS[props.scoreKey]}
+					className={styles.scoreIcon}
+					alt={props.scoreKey}
+				/> : null
+			}
 			<Counter
 				handleDecrement={handleDecrement}
 				handleChange={handleChange}
