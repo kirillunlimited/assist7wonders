@@ -4,7 +4,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ExtensionIcon from '@material-ui/icons/Extension';
+import Tooltip from '@material-ui/core/Tooltip';
 import {makeStyles} from '@material-ui/core/styles';
 import {AddonsContext, PlayersContext} from "../App/App";
 import Menu from '@material-ui/core/Menu';
@@ -64,30 +65,34 @@ export default function MainMenu() {
 			<Typography variant="h1" className={classes.title}>
 				7 Wonders
 			</Typography>
-			<IconButton onClick={handleOpenConfirm} color="inherit">
-				<RefreshIcon />
-			</IconButton>
-			  <Dialog
-				  open={isConfirmOpened}
-				  onClose={handleCloseConfirm}
-				  aria-labelledby="alert-dialog-title"
-			  >
-				  <DialogTitle>Начать новую игру?</DialogTitle>
-				  <DialogActions>
-					  <Button onClick={handleCloseConfirm} color="primary">Нет</Button>
-					  <Button onClick={onResetGame} color="primary" autoFocus>Да</Button>
-				  </DialogActions>
-			  </Dialog>
+			  <Tooltip title="Новая игра">
+				  <IconButton onClick={handleOpenConfirm} color="inherit">
+					  <RefreshIcon />
+				  </IconButton>
+			  </Tooltip>
+			<Dialog
+			  open={isConfirmOpened}
+			  onClose={handleCloseConfirm}
+			  aria-labelledby="alert-dialog-title"
+			>
+			  <DialogTitle>Начать новую игру?</DialogTitle>
+			  <DialogActions>
+				  <Button onClick={handleCloseConfirm} color="primary">Нет</Button>
+				  <Button onClick={onResetGame} color="primary" autoFocus>Да</Button>
+			  </DialogActions>
+			</Dialog>
 
-			<IconButton
-				aria-label="account of current user"
-				aria-controls="primary-search-account-menu"
-				aria-haspopup="true"
-				color="inherit"
-				onClick={handleOpenContextMenu}
-			  >
-				<MoreVertIcon />
-			  </IconButton>
+			<Tooltip title="Дополнения">
+				<IconButton
+					aria-label="account of current user"
+					aria-controls="primary-search-account-menu"
+					aria-haspopup="true"
+					color="inherit"
+					onClick={handleOpenContextMenu}
+				>
+					<ExtensionIcon />
+				</IconButton>
+			</Tooltip>
 		  </Toolbar>
 
 			<Menu
