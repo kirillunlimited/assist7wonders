@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from "@material-ui/core/Fab";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {makeStyles} from "@material-ui/core/styles";
+import Tooltip from '@material-ui/core/Tooltip';
 
 interface IProps {
 	names: Array<string>;
@@ -37,14 +38,16 @@ export default function NewPlayer(props: IProps) {
 
 	return(
 		<div>
-			<Fab
-				className={classes.newPlayerButton}
-				color="primary"
-				aria-label="add"
-				onClick={() => toggleDialog(true)}
-			>
-				<PersonAddIcon />
-			</Fab>
+			<Tooltip title="Новый игрок">
+				<Fab
+					className={classes.newPlayerButton}
+					color="primary"
+					aria-label="add"
+					onClick={() => toggleDialog(true)}
+				>
+					<PersonAddIcon />
+				</Fab>
+			</Tooltip>
 
 			<Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
 				<DialogTitle>Новый игрок</DialogTitle>
