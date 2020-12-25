@@ -40,7 +40,6 @@ export default function Players() {
 		handleCloseConfirm();
 	}
 	function handleCloseConfirm() {
-		setPlayerToDelete('');
 		setIsDeleteConfirmOpened(false);
 	}
 
