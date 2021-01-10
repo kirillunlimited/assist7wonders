@@ -17,14 +17,24 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
+/* Get first 2 capital letters of the name */
+const getAvatarText = (name: string) => {
+	return name
+		.split(' ')
+		.reduce((acc, word) => word ? acc + word[0] : acc, '')
+		.substring(0,2)
+		.toUpperCase();
+};
+
 export default function Scores(props: IProps) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
+	const avatarText = getAvatarText(props.name);
 
 	return(
 		<div className={`${styles.player} ${!bigScreen && styles.sm}`}>
-			<Avatar className={classes.avatar} alt={props.name}>{props.name[0]}</Avatar>
+			<Avatar className={classes.avatar} alt={props.name}>{avatarText}</Avatar>
 			<div className={styles.name}>
 				<Typography variant="body2">
 					{props.name}
