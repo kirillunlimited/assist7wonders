@@ -18,14 +18,22 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Typography from '@material-ui/core/Typography';
+import {makeStyles} from "@material-ui/core/styles";
 
 const MESSAGES = {
 	ADD_PLAYERS: 'Добавьте игроков',
 	ADD_MORE_PLAYERS: 'Добавьте больше игроков'
 }
 
+const useStyles = makeStyles(() => ({
+	subtitle: {
+		marginTop: '1em'
+	}
+}));
+
 export default function Players() {
 	const playersContext = useContext(PlayersContext);
+	const classes = useStyles();
 
 	function onNewPlayerSubmit(name: string) {
 		playersContext.dispatch({type: 'ADD', payload: name});
@@ -75,7 +83,10 @@ export default function Players() {
 				: <Typography variant="subtitle1">{MESSAGES.ADD_PLAYERS}</Typography>
 			}
 
-			{playersContext.state.length === 1 ? <Typography variant="subtitle1">{MESSAGES.ADD_MORE_PLAYERS}</Typography> : null}
+			{playersContext.state.length === 1
+				? <Typography variant="subtitle1" className={classes.subtitle}>{MESSAGES.ADD_MORE_PLAYERS}</Typography>
+				: null
+			}
 
 			<Dialog
 				open={isDeleteConfirmOpened}
