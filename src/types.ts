@@ -13,7 +13,7 @@ export interface IScore {
 	leaders: number;
 }
 
-export type TScoreKeys = keyof IScore;
+export type TScoreKey = keyof IScore;
 
 export type ScienceParts = {
 	gear: number;
@@ -37,6 +37,8 @@ export interface IRoute {
 	component: Function;
 	routes?: TRoutes;
 	available?: Function;
+	color?: string;
+	sum?: Function;
 }
 
 export type TRoutes = IRoute[];
@@ -49,7 +51,7 @@ export interface IAddons {
 export interface IAddonConfig {
 	key: keyof IAddons;
 	label: string;
-	scores: Array<TScoreKeys>;
+	scores: TScoreKey[];
 }
 
 export type TAddonsConfig = IAddonConfig[];

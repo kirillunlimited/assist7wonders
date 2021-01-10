@@ -1,4 +1,4 @@
-import {IAddons, TPlayers, TScoreKeys} from "../types";
+import {IAddons, TPlayers, TScoreKey} from "../types";
 import ADDONS from "../config/addons";
 
 const scoreTemplate = {
@@ -42,7 +42,7 @@ interface IUpdateAction {
 	type: typeof UPDATE;
 	payload: {
 		name: string;
-		scoreKey: TScoreKeys;
+		scoreKey: TScoreKey;
 		value: number;
 	};
 }
@@ -118,7 +118,7 @@ const reducer = (state: TPlayers, action: TAction) => {
 				return !action.payload[addon.key];
 			});
 
-			const scoresDisabledByAddons = disabledAddons.reduce((scores: {[key in TScoreKeys]?: number}, addon) => {
+			const scoresDisabledByAddons = disabledAddons.reduce((scores: {[key in TScoreKey]?: number}, addon) => {
 				addon.scores.forEach(score => {
 					scores[score] = 0;
 				})

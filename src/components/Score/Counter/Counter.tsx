@@ -24,18 +24,22 @@ export default function Counter(props: IProps) {
 	}
 
 	function onBlur(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-		const value = props.isMaxValueFilter(Number(event.target.value), props.max) ? String(props.max) : event.target.value;
-		setLocalValue(value || '0'); // empty string should be set to '0'
-		props.handleChange(Number(value));
+		const value = props.isMaxValueFilter(Number(event.target.value), props.max) ? props.max : event.target.value;
+		const intValue = Math.floor(Number(value));
+		setLocalValue(String(intValue) || '0'); // empty string should be set to '0'
+		props.handleChange(intValue);
 	}
 
 	return (
 		<div>
 			<IconButton onClick={props.handleDecrement}>
-				<RemoveCircle color="primary"/>
+				<RemoveCircle
+					color="primary"
+					fontSize="large"
+				/>
 			</IconButton>
 			<Input
-				style={{width: 64}}
+				style={{width: 48}}
 				type='number'
 				onChange={onChange}
 				onBlur={onBlur}
@@ -48,7 +52,10 @@ export default function Counter(props: IProps) {
 				onClick={props.handleIncrement}
 				disabled={props.isMaxValueFilter(Number(localValue), props.max)}
 			>
-				<AddCircle color={props.isMaxValueFilter(Number(localValue), props.max) ? 'disabled' : 'primary'} />
+				<AddCircle
+					color={props.isMaxValueFilter(Number(localValue), props.max) ? 'disabled' : 'primary'}
+					fontSize="large"
+				/>
 			</IconButton>
 		</div>
 	)
