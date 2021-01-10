@@ -17,6 +17,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
+import Typography from '@material-ui/core/Typography';
+
+const MESSAGES = {
+	ADD_PLAYERS: 'Добавьте игроков',
+	ADD_MORE_PLAYERS: 'Добавьте больше игроков'
+}
 
 export default function Players() {
 	const playersContext = useContext(PlayersContext);
@@ -66,10 +72,10 @@ export default function Players() {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				: <p>Добавьте игроков</p>
+				: <Typography variant="subtitle1">{MESSAGES.ADD_PLAYERS}</Typography>
 			}
 
-			{playersContext.state.length === 1 ? <p>Добавьте больше игроков</p> : null}
+			{playersContext.state.length === 1 ? <Typography variant="subtitle1">{MESSAGES.ADD_MORE_PLAYERS}</Typography> : null}
 
 			<Dialog
 				open={isDeleteConfirmOpened}

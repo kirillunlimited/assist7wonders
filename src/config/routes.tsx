@@ -2,14 +2,13 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import {IAddons, TPlayers, IRoute, TRoutes, TScoreKey, IScore} from "../types";
 import {IProps as IScoresProps} from '../containers/Scores/Scores';
-
 import Players from '../containers/Players/Players';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
-
+import Typography from '@material-ui/core/Typography';
 import {getSum, getScienceSum, getTreasurySum} from '../utils/score';
-
 import {isScoresAvailable} from './addons';
+import {makeStyles} from "@material-ui/core/styles";
 
 interface IRouteContexts {
 	contexts: {
@@ -19,9 +18,20 @@ interface IRouteContexts {
 }
 
 const MESSAGES = {
-	NOT_ENOUGH_PLAYERS: 'Недостаточно игроков. Добавьте не менее 2 игроков.',
-	ADDON_IS_OFF: 'Дополнение отключено.'
+	NOT_ENOUGH_PLAYERS: 'Недостаточно игроков: добавьте не менее 2 игроков',
+	ADDON_IS_OFF: 'Дополнение отключено'
 }
+
+const useStyles = makeStyles({
+	title: {
+		fontSize: '30px',
+		fontWeight: 'bold',
+		marginBottom: '0.5em',
+		"&:last-child": {
+			marginBottom: 0
+		}
+	},
+});
 
 export const ScoreRoutes: TRoutes = [
 	{
@@ -186,6 +196,8 @@ const ROUTES: TRoutes = [
 export default ROUTES;
 
 export function RenderRoutes({ routes, players, addons }: { routes: TRoutes, players: TPlayers, addons: IAddons}) {
+	const classes = useStyles();
+
 	return (
 		<Switch>
 			{routes.map(route => <RouteWithSubRoutes
@@ -193,16 +205,18 @@ export function RenderRoutes({ routes, players, addons }: { routes: TRoutes, pla
 				key={route.key}
 				contexts={{players, addons}}
 			/>)}
-			<Route component={() => <h1>Страница не найдена</h1>} />
+			<Route component={() => <Typography variant="h1" className={classes.title}>Страница не найдена</Typography>} />
 		</Switch>
 	);
 }
 
 function RouteWithSubRoutes(payload: IRoute & IRouteContexts) {
 	const {players, addons} = payload.contexts;
+	const classes = useStyles();
+
 	return (
 		<div>
-		  {payload.title && <h1>{payload.title}</h1>}
+		  {payload.title && <Typography variant="h1" className={classes.title}>{payload.title}</Typography>}
 		  <Route
 			path={payload.path}
 			exact={payload.exact}
@@ -230,10 +244,12 @@ function RenderScores(props: IScoresProps, scores: TScoreKey[], players: TPlayer
 	return isRouteAvailable(players)
 		? isScoresAvailable(scores, addons)
 			? Scores(props)
-			: <h2>{MESSAGES.ADDON_IS_OFF}</h2>
-		: <h2>{MESSAGES.NOT_ENOUGH_PLAYERS}</h2>;
+			: <Typography variant="subtitle1">{MESSAGES.ADDON_IS_OFF}</Typography>
+		: <Typography variant="subtitle1">{MESSAGES.NOT_ENOUGH_PLAYERS}</Typography>;
 }
 
 function RenderRoute(Component: Function, players: TPlayers) {
-	return isRouteAvailable(players) ? <Component /> : <h2>{MESSAGES.NOT_ENOUGH_PLAYERS}</h2>;
+	return isRouteAvailable(players)
+		? <Component />
+		: <Typography variant="subtitle1">{MESSAGES.NOT_ENOUGH_PLAYERS}</Typography>;
 }

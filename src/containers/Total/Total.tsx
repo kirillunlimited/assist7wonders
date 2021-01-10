@@ -30,7 +30,9 @@ const useStyles = makeStyles({
 		textAlign: 'center'
 	},
 	medal: {
-		width: '1em'
+		fontSize: '1.5em',
+		lineHeight: 0,
+		paddingRight: 0
 	}
 });
 
@@ -85,7 +87,7 @@ export default function Total() {
 				<TableBody>
 					{playersContext.state.map((player, index) =>
 						<TableRow key={index}>
-							<TableCell className={classes.medal}>{winner === player.name ? '🥇' : ''}</TableCell>
+							<TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
 							<TableCell>{player.name}</TableCell>
 							{ScoreRoutes.map(route =>
 								isScoreRouteAvailable(route) && <TableCell

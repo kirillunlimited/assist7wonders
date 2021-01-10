@@ -64,9 +64,7 @@ export default function MainMenu() {
 	return (
 		<AppBar>
 		  <Toolbar>
-			<Typography variant="h1" className={classes.title}>
-				7 Wonders
-			</Typography>
+			<Typography variant="body1" className={classes.title}>7 Wonders</Typography>
 			  <Tooltip title="Новая игра">
 				  <IconButton onClick={handleOpenConfirm} color="inherit">
 					  <RefreshIcon />
@@ -79,9 +77,7 @@ export default function MainMenu() {
 			>
 				<DialogTitle>Начать новую игру?</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
-						Результаты игроков будут сброшены, вы уверены?
-					</DialogContentText>
+					<DialogContentText>Результаты игроков будут сброшены, вы уверены?</DialogContentText>
 				</DialogContent>
 			  <DialogActions>
 				  <Button onClick={handleCloseConfirm} color="primary">Нет</Button>
