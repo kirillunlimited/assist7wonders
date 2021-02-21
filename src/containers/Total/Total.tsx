@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TPlayers, IRoute } from '../../types';
-import { getTotalSum } from '../../utils/score';
+import { TPlayers, IRoute, IScore } from '../../types';
+import { getTotal } from '../../utils/score';
 import { useState, useEffect, useContext } from 'react';
 import { AddonsContext, PlayersContext } from '../App/App';
 import Table from '@material-ui/core/Table';
@@ -50,7 +50,7 @@ export default function Total() {
   function getWinner(players: TPlayers): string {
     const bestPlayer = players.reduce(
       (acc, player) => {
-        const playerSum = getTotalSum(player.score);
+        const playerSum = getTotal(player.score);
 
         if (acc.name === '' || playerSum > acc.score) {
           acc = {
@@ -114,11 +114,13 @@ export default function Total() {
                       className={classes.score}
                       style={{ backgroundColor: route.color }}
                     >
-                      {route.sum ? route.sum(player.score) : 0}
+                      {route.sum
+                        ? route.sum(player.score)
+                        : player.score[route.key as keyof IScore]}
                     </TableCell>
                   )
               )}
-              <TableCell className={classes.sum}>{getTotalSum(player.score)}</TableCell>
+              <TableCell className={classes.sum}>{getTotal(player.score)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
