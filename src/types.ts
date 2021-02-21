@@ -8,6 +8,7 @@ export interface IScore {
   compass: number;
   tablet: number;
   gear: number;
+  wildcards: number;
   cities: number;
   debt: number;
   leaders: number;

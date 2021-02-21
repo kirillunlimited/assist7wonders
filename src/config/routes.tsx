@@ -6,7 +6,7 @@ import Players from '../containers/Players/Players';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
 import Typography from '@material-ui/core/Typography';
-import { getSum, getScienceSum, getTreasurySum } from '../utils/score';
+import { getSum, getTreasurySum, getScienceTotalSum } from '../utils/score';
 import { isScoresAvailable } from './addons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -163,16 +163,16 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
-          scores: ['compass', 'tablet', 'gear'],
+          scores: ['compass', 'tablet', 'gear', 'wildcards'],
         },
-        ['compass', 'tablet', 'gear'],
+        ['compass', 'tablet', 'gear', 'wildcards'],
         players,
         addons
       ),
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons),
     color: '#006118',
-    sum: getScienceSum,
+    sum: getScienceTotalSum,
   },
   {
     path: '/scores/cities',

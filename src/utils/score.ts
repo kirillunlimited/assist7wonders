@@ -1,14 +1,16 @@
 import { IScore, TScoreKey } from '../types';
 
 const SCIENCE_KEYS = ['compass', 'tablet', 'gear'] as TScoreKey[];
+const WILDCARD_SCIENCE_KEY = 'wildcards';
+const TREASURY_KEY = 'treasury';
 
 export function getTotalSum(playerScore: IScore): number {
-  return getFlatSum(playerScore) + getScienceSum(playerScore) + getTreasurySum(playerScore);
+  return getFlatSum(playerScore) + getScienceTotalSum(playerScore) + getTreasurySum(playerScore);
 }
 
 export function getFlatSum(playerScore: IScore): number {
   return (Object.keys(playerScore) as Array<TScoreKey>).reduce((sum, key) => {
-    if (!SCIENCE_KEYS.includes(key) && key !== 'treasury') {
+    if (!SCIENCE_KEYS.includes(key) && key !== WILDCARD_SCIENCE_KEY && key !== TREASURY_KEY) {
       const value = playerScore[key];
       sum += value;
     }
@@ -31,6 +33,32 @@ export function getScienceSum(playerScore: IScore): number {
   );
 
   return sum + min * 7;
+}
+
+export function getWildcardPossibilities(playerScore: IScore, wildcards: number): number[] {
+  if (wildcards <= 0) {
+    return [getScienceSum(playerScore)];
+  }
+  return SCIENCE_KEYS.reduce((sum, key) => {
+    const value = playerScore[key];
+    return [
+      ...sum,
+      Math.max(
+        ...getWildcardPossibilities(
+          {
+            ...playerScore,
+            [key]: value + 1,
+          },
+          wildcards - 1
+        )
+      ),
+    ];
+  }, [] as number[]);
+}
+
+export function getScienceTotalSum(playerScore: IScore): number {
+  const wildcards = playerScore[WILDCARD_SCIENCE_KEY];
+  return Math.max(...getWildcardPossibilities(playerScore, wildcards));
 }
 
 export function getTreasurySum(playerScore: IScore): number {

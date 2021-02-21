@@ -11,6 +11,7 @@ const scoreTemplate = {
   compass: 0,
   tablet: 0,
   gear: 0,
+  wildcards: 0,
   cities: 0,
   debt: 0,
   leaders: 0,
