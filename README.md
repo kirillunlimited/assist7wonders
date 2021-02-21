@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kirillunlimited/assist7wonders.svg?branch=master)](https://travis-ci.com/kirillunlimited/assist7wonders)
+
 # 7 Wonders assistant app
 
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
