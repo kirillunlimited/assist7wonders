@@ -5,6 +5,7 @@
 
 .player.sm {
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .name {

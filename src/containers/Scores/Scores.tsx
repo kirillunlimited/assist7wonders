@@ -38,7 +38,7 @@ export default function Scores(props: IProps) {
         <TableBody>
           {playersContext.state.map(player => (
             <TableRow key={player.name}>
-              <TableCell className={styles.td} colSpan={2}>
+              <TableCell className={styles.td}>
                 <Profile name={player.name} />
               </TableCell>
               <TableCell className={styles.td}>
