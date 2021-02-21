@@ -1,17 +1,17 @@
 .player {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .player.sm {
-	flex-direction: column;
+  flex-direction: column;
 }
 
 .name {
-	margin-left: 0.5em;
+  margin-left: 0.5em;
 }
 
 .player.sm .name {
-	margin: 0;
-	text-align: center;
+  margin: 0;
+  text-align: center;
 }

@@ -1,9 +1,9 @@
 .td:first-child {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 .td:last-child {
-	width: 100%;
-	padding-right: 0;
-	white-space: nowrap;
+  width: 100%;
+  padding-right: 0;
+  white-space: nowrap;
 }

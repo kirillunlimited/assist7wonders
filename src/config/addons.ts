@@ -1,28 +1,30 @@
-import {IAddons, TAddonsConfig, TScoreKey} from '../types';
+import { IAddons, TAddonsConfig, TScoreKey } from '../types';
 
 const ADDONS: TAddonsConfig = [
-	{
-		key: 'cities',
-		label: 'Cities',
-		scores: ['cities', 'debt']
-	},
-	{
-		key: 'leaders',
-		label: 'Leaders',
-		scores: ['leaders']
-	}
+  {
+    key: 'cities',
+    label: 'Cities',
+    scores: ['cities', 'debt'],
+  },
+  {
+    key: 'leaders',
+    label: 'Leaders',
+    scores: ['leaders'],
+  },
 ];
 
 /** Get scores view availability based on toggled addons */
 export function isScoresAvailable(scores: TScoreKey[], addons: IAddons) {
-	const addon = ADDONS.find(addon => scores.every(score => addon.scores.includes(score)));
+  const addon = ADDONS.find(addon => scores.every(score => addon.scores.includes(score)));
 
-	if (addon) {
-		const activeAddons = (Object.keys(addons) as Array<keyof IAddons>).filter(addon => addons[addon]);
-		return activeAddons.includes(addon.key);
-	}
+  if (addon) {
+    const activeAddons = (Object.keys(addons) as Array<keyof IAddons>).filter(
+      addon => addons[addon]
+    );
+    return activeAddons.includes(addon.key);
+  }
 
-	return true;
+  return true;
 }
 
 export default ADDONS;
