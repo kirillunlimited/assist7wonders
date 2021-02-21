@@ -5,6 +5,7 @@
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
 
 ## Roadmap
+* Add science wildcards
 * Add wonders selection + randomization
 * Add i18n
 * Add players order change functionality

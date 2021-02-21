@@ -1,6 +1,6 @@
 import Score from '../../components/Score/Score';
 import React, { useContext } from 'react';
-import { TScoreKey } from '../../types';
+import { TScoreKey, IPlayer } from '../../types';
 import { PlayersContext } from '../App/App';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -9,10 +9,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Profile from '../../components/Profile/Profile';
 import styles from './Scores.module.css';
+import { ScoreRoutes } from '../../config/routes';
+import Chip from '@material-ui/core/Chip';
 
 export interface IProps {
+  key: string;
   scores: TScoreKey[];
   max?: number;
+  isSumVisible?: boolean;
 }
 
 export default function Scores(props: IProps) {
@@ -22,16 +26,23 @@ export default function Scores(props: IProps) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
+  const route = ScoreRoutes.find(route => route.key === props.key);
+
+  function getSum(player: IPlayer): number {
+    return route && route.sum ? route.sum(player.score) : 0;
+  }
+
   return (
     <TableContainer>
       <Table>
         <TableBody>
           {playersContext.state.map(player => (
             <TableRow key={player.name}>
-              <TableCell className={styles.td}>
+              <TableCell className={styles.td} colSpan={2}>
                 <Profile name={player.name} />
               </TableCell>
               <TableCell className={styles.td}>
+                {props.isSumVisible ? <Chip label={`Σ ${getSum(player)}`} /> : null}
                 {props.scores.map((scoreKey, index, arr) => (
                   <Score
                     key={scoreKey}

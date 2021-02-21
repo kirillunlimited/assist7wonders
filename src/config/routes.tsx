@@ -43,6 +43,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'military',
           scores: ['military'],
         },
         ['military'],
@@ -63,7 +64,9 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'treasury',
           scores: ['treasury'],
+          isSumVisible: true,
         },
         ['treasury'],
         players,
@@ -83,6 +86,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'wonders',
           scores: ['wonders'],
         },
         ['wonders'],
@@ -103,6 +107,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'civilian',
           scores: ['civilian'],
         },
         ['civilian'],
@@ -123,6 +128,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'commerce',
           scores: ['commerce'],
         },
         ['commerce'],
@@ -143,6 +149,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'guild',
           scores: ['guild'],
         },
         ['guild'],
@@ -163,7 +170,9 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'science',
           scores: ['compass', 'tablet', 'gear', 'wildcards'],
+          isSumVisible: true,
         },
         ['compass', 'tablet', 'gear', 'wildcards'],
         players,
@@ -183,6 +192,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'cities',
           scores: ['cities'],
         },
         ['cities'],
@@ -203,6 +213,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'debt',
           scores: ['debt'],
           max: 0,
         },
@@ -224,6 +235,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'leaders',
           scores: ['leaders'],
         },
         ['leaders'],

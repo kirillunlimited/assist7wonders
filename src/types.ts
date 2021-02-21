@@ -22,7 +22,7 @@ export type ScienceParts = {
   tablet: number;
 };
 
-interface IPlayer {
+export interface IPlayer {
   name: string;
   score: IScore;
 }
