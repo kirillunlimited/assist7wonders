@@ -39,8 +39,9 @@ export default function Scores(props: IProps) {
           {playersContext.state.map(player => (
             <TableRow key={player.name}>
               <TableCell className={styles.td}>
-                <Profile name={player.name} />
+                <Profile name={player.name} wonder={player.wonder} />
               </TableCell>
+              <TableCell className={`${styles.td} ${styles.empty}`} />
               <TableCell className={styles.td}>
                 {props.isSumVisible ? <Chip label={`Σ ${getSum(player)}`} /> : null}
                 {props.scores.map((scoreKey, index, arr) => (
