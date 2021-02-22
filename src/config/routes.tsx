@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { IAddons, TPlayers, IRoute, TRoutes, TScoreKey, IScore } from '../types';
+import { IAddons, TPlayers, IRoute, TRoutes, TScoreKey } from '../types';
 import { IProps as IScoresProps } from '../containers/Scores/Scores';
 import Players from '../containers/Players/Players';
 import Scores from '../containers/Scores/Scores';
 import Total from '../containers/Total/Total';
 import Typography from '@material-ui/core/Typography';
-import { getSum, getScienceSum, getTreasurySum } from '../utils/score';
+import { getTreasuryTotal, getScienceTotal } from '../utils/score';
 import { isScoresAvailable } from './addons';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -43,6 +43,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'military',
           scores: ['military'],
         },
         ['military'],
@@ -52,7 +53,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['military'], players, addons),
     color: '#D81F25',
-    sum: (playerScore: IScore) => getSum(playerScore, 'military'),
   },
   {
     path: '/scores/treasury',
@@ -63,7 +63,9 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'treasury',
           scores: ['treasury'],
+          isSumVisible: true,
         },
         ['treasury'],
         players,
@@ -72,7 +74,7 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['treasury'], players, addons),
     color: '#AA8E69',
-    sum: getTreasurySum,
+    sum: getTreasuryTotal,
   },
   {
     path: '/scores/wonders',
@@ -83,6 +85,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'wonders',
           scores: ['wonders'],
         },
         ['wonders'],
@@ -92,7 +95,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['wonders'], players, addons),
     color: '#E8C44A',
-    sum: (playerScore: IScore) => getSum(playerScore, 'wonders'),
   },
   {
     path: '/scores/civilian',
@@ -103,6 +105,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'civilian',
           scores: ['civilian'],
         },
         ['civilian'],
@@ -112,7 +115,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['civilian'], players, addons),
     color: '#2376CF',
-    sum: (playerScore: IScore) => getSum(playerScore, 'civilian'),
   },
   {
     path: '/scores/commerce',
@@ -123,6 +125,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'commerce',
           scores: ['commerce'],
         },
         ['commerce'],
@@ -132,7 +135,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['commerce'], players, addons),
     color: '#E8A33C',
-    sum: (playerScore: IScore) => getSum(playerScore, 'commerce'),
   },
   {
     path: '/scores/guild',
@@ -143,6 +145,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'guild',
           scores: ['guild'],
         },
         ['guild'],
@@ -152,7 +155,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['guild'], players, addons),
     color: '#91288F',
-    sum: (playerScore: IScore) => getSum(playerScore, 'guild'),
   },
   {
     path: '/scores/science',
@@ -163,16 +165,18 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
-          scores: ['compass', 'tablet', 'gear'],
+          key: 'science',
+          scores: ['compass', 'tablet', 'gear', 'wildcards'],
+          isSumVisible: true,
         },
-        ['compass', 'tablet', 'gear'],
+        ['compass', 'tablet', 'gear', 'wildcards'],
         players,
         addons
       ),
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['compass', 'tablet', 'gear'], players, addons),
     color: '#006118',
-    sum: getScienceSum,
+    sum: getScienceTotal,
   },
   {
     path: '/scores/cities',
@@ -183,6 +187,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'cities',
           scores: ['cities'],
         },
         ['cities'],
@@ -192,7 +197,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['cities'], players, addons),
     color: '#545454',
-    sum: (playerScore: IScore) => getSum(playerScore, 'cities'),
   },
   {
     path: '/scores/debt',
@@ -203,6 +207,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'debt',
           scores: ['debt'],
           max: 0,
         },
@@ -213,7 +218,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['debt'], players, addons),
     color: '#8F7B66',
-    sum: (playerScore: IScore) => getSum(playerScore, 'debt'),
   },
   {
     path: '/scores/leaders',
@@ -224,6 +228,7 @@ export const ScoreRoutes: TRoutes = [
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
         {
+          key: 'leaders',
           scores: ['leaders'],
         },
         ['leaders'],
@@ -233,7 +238,6 @@ export const ScoreRoutes: TRoutes = [
     available: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       isScoreRouteAvailable(['leaders'], players, addons),
     color: '#BCBCBC',
-    sum: (playerScore: IScore) => getSum(playerScore, 'leaders'),
   },
 ];
 

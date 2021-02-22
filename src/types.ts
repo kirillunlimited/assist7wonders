@@ -8,6 +8,7 @@ export interface IScore {
   compass: number;
   tablet: number;
   gear: number;
+  wildcards: number;
   cities: number;
   debt: number;
   leaders: number;
@@ -21,7 +22,7 @@ export type ScienceParts = {
   tablet: number;
 };
 
-interface IPlayer {
+export interface IPlayer {
   name: string;
   score: IScore;
 }
