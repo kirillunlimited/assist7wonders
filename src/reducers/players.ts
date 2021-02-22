@@ -23,6 +23,7 @@ const DELETE = 'DELETE';
 const UPDATE = 'UPDATE';
 const RESET = 'RESET';
 const SET_ADDON = 'SET_ADDON';
+const SET_WONDER = 'SET_WONDER';
 
 interface IInitAction {
   type: typeof INIT;
@@ -57,13 +58,22 @@ interface ISetAddonAction {
   payload: IAddons;
 }
 
+interface ISetWonderAction {
+  type: typeof SET_WONDER;
+  payload: {
+    name: string;
+    wonder: string;
+  };
+}
+
 export type TAction =
   | IInitAction
   | IAddAction
   | IDeleteAction
   | IUpdateAction
   | IResetAction
-  | ISetAddonAction;
+  | ISetAddonAction
+  | ISetWonderAction;
 
 const reducer = (state: TPlayers, action: TAction) => {
   switch (action.type) {
@@ -85,7 +95,7 @@ const reducer = (state: TPlayers, action: TAction) => {
           return player.name !== action.payload;
         }),
       ];
-    case UPDATE:
+    case UPDATE: {
       const { name, scoreKey, value } = action.payload;
 
       const player = state.find(player => player.name === name);
@@ -108,6 +118,7 @@ const reducer = (state: TPlayers, action: TAction) => {
         ];
       }
       return state;
+    }
     case RESET:
       return [
         ...state.map(player => {
@@ -145,6 +156,22 @@ const reducer = (state: TPlayers, action: TAction) => {
           };
         }),
       ];
+    case 'SET_WONDER': {
+      const { name, wonder } = action.payload;
+
+      return [
+        ...state.map(player => {
+          if (player.name === name) {
+            return {
+              ...player,
+              wonder,
+            };
+          } else {
+            return player;
+          }
+        }),
+      ];
+    }
     default:
       return state;
   }

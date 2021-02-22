@@ -19,6 +19,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { WONDERS } from '../../config/wonders';
 
 const MESSAGES = {
   ADD_PLAYERS: 'Добавьте игроков',
@@ -60,6 +63,14 @@ export default function Players() {
     setIsDeleteConfirmOpened(false);
   }
 
+  function handleWonderChange(name: string, wonder: string) {
+    playersContext.dispatch({ type: 'SET_WONDER', payload: { name, wonder } });
+  }
+
+  function isValueSelected(wonder: string) {
+    return playersContext.state.some(player => player.wonder === wonder);
+  }
+
   return (
     <div>
       {playersContext.state.length ? (
@@ -70,6 +81,20 @@ export default function Players() {
                 <TableRow key={player.name}>
                   <TableCell className={styles.td}>
                     <Profile name={player.name} />
+                  </TableCell>
+                  <TableCell>
+                    <Select
+                      value={player.wonder}
+                      onChange={(event: React.ChangeEvent<{ value: unknown }>) =>
+                        handleWonderChange(player.name, event.target.value as string)
+                      }
+                    >
+                      {WONDERS.sort().map(wonder => (
+                        <MenuItem key={wonder} value={wonder} disabled={isValueSelected(wonder)}>
+                          {wonder}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </TableCell>
                   <TableCell className={styles.td}>
                     <IconButton onClick={() => handleOpenConfirm(player.name)}>
