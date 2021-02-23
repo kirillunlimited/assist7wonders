@@ -83,7 +83,10 @@ export default function MainMenu() {
         >
           <DialogTitle>Начать новую игру?</DialogTitle>
           <DialogContent>
-            <DialogContentText>Результаты игроков будут сброшены, вы уверены?</DialogContentText>
+            <DialogContentText>
+              Результаты игроков будут сброшены, а выбранные чудеса света будут перемешаны. Вы
+              уверены?
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseConfirm} color="primary">

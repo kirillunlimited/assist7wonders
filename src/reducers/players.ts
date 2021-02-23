@@ -1,5 +1,7 @@
 import { IAddons, TPlayers, TScoreKey } from '../types';
 import ADDONS from '../config/addons';
+import { WONDERS } from '../config/wonders';
+import { shuffleWonders } from '../utils/wonders';
 
 const scoreTemplate = {
   military: 0,
@@ -126,10 +128,12 @@ const reducer = (state: TPlayers, action: TAction) => {
       return state;
     }
     case RESET:
+      const shuffledWonders = shuffleWonders(WONDERS);
       return [
-        ...state.map(player => {
+        ...state.map((player, index) => {
           return {
             ...player,
+            wonder: shuffledWonders[index],
             score: {
               ...scoreTemplate,
             },
