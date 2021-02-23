@@ -34,9 +34,9 @@ export default function NewPlayer(props: IProps) {
   const [wonder, setWonder] = useState('');
   const [isDialogOpened, setIsDialogOpened] = useState(false);
 
-  function isAddButtonEnabled() {
+  function isAddButtonDisabled() {
     return Boolean(
-      name && !props.names.includes(name) && wonder && !props.wonders.includes(wonder)
+      !name || props.names.includes(name) || !wonder || props.wonders.includes(wonder)
     );
   }
 
@@ -88,7 +88,7 @@ export default function NewPlayer(props: IProps) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" type="submit" disabled={!isAddButtonEnabled()}>
+            <Button color="primary" type="submit" disabled={isAddButtonDisabled()}>
               Добавить
             </Button>
           </DialogActions>
