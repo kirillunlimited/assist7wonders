@@ -32,7 +32,10 @@ interface IInitAction {
 
 interface IAddAction {
   type: typeof ADD;
-  payload: string;
+  payload: {
+    name: string;
+    wonder: string;
+  };
 }
 
 interface IDeleteAction {
@@ -80,10 +83,13 @@ const reducer = (state: TPlayers, action: TAction) => {
     case INIT:
       return [...action.payload];
     case ADD:
+      const { name, wonder } = action.payload;
+
       return [
         ...state,
         {
-          name: action.payload,
+          name,
+          wonder,
           score: {
             ...scoreTemplate,
           },

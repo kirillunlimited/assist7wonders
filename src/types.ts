@@ -24,7 +24,7 @@ export type ScienceParts = {
 
 export interface IPlayer {
   name: string;
-  wonder?: string;
+  wonder: string;
   score: IScore;
 }
 

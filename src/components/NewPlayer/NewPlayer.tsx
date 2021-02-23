@@ -9,10 +9,12 @@ import Fab from '@material-ui/core/Fab';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import WonderSelect from '../WonderSelect/WonderSelect';
 
 interface IProps {
-  names: Array<string>;
-  handleSubmit: (name: string) => void;
+  names: string[];
+  wonders: string[];
+  handleSubmit: (name: string, wonder: string) => void;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -21,15 +23,30 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(4),
     right: theme.spacing(4),
   },
+  wondersSelect: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export default function NewPlayer(props: IProps) {
   const classes = useStyles();
   const [name, setName] = useState('');
+  const [wonder, setWonder] = useState('');
   const [isDialogOpened, setIsDialogOpened] = useState(false);
 
-  function isAddButtonDisabled() {
-    return Boolean(!name || props.names.includes(name));
+  function isAddButtonEnabled() {
+    return Boolean(
+      name && !props.names.includes(name) && wonder && !props.wonders.includes(wonder)
+    );
+  }
+
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    props.handleSubmit(name, wonder);
+
+    /* Reset */
+    setName('');
+    setWonder('');
   }
 
   function toggleDialog(value: boolean) {
@@ -50,24 +67,28 @@ export default function NewPlayer(props: IProps) {
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
         <DialogTitle>Новый игрок</DialogTitle>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            props.handleSubmit(name);
-            setName('');
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <DialogContent>
-            <TextField
-              label="Имя"
-              onChange={event => setName(event.target.value)}
-              value={name}
-              variant="outlined"
-              autoFocus
-            />
+            <div>
+              <TextField
+                label="Имя"
+                onChange={event => setName(event.target.value)}
+                value={name}
+                variant="outlined"
+                autoFocus
+              />
+            </div>
+            <div className={classes.wondersSelect}>
+              <WonderSelect
+                value={wonder}
+                selectedWonders={props.wonders}
+                onSelect={setWonder}
+                variant="outlined"
+              />
+            </div>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" type="submit" disabled={isAddButtonDisabled()}>
+            <Button color="primary" type="submit" disabled={!isAddButtonEnabled()}>
               Добавить
             </Button>
           </DialogActions>
