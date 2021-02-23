@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 export interface IProps {
   name: string;
+  wonder?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,6 +40,11 @@ export default function Scores(props: IProps) {
       </Avatar>
       <div className={styles.name}>
         <Typography variant="body2">{props.name}</Typography>
+        {props.wonder ? (
+          <Typography variant="caption" color="textSecondary">
+            {props.wonder}
+          </Typography>
+        ) : null}
       </div>
     </div>
   );

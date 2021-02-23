@@ -24,6 +24,7 @@ export type ScienceParts = {
 
 export interface IPlayer {
   name: string;
+  wonder: string;
   score: IScore;
 }
 
@@ -56,3 +57,5 @@ export interface IAddonConfig {
 }
 
 export type TAddonsConfig = IAddonConfig[];
+
+export type TWonders = string[];

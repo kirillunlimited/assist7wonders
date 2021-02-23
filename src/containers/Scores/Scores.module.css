@@ -1,6 +1,10 @@
 .td:first-child {
-  width: 100%;
   padding-left: 0;
+}
+
+.td.empty {
+  width: 100%;
+  padding: 0;
 }
 
 .td:last-child {

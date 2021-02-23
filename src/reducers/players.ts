@@ -1,5 +1,7 @@
 import { IAddons, TPlayers, TScoreKey } from '../types';
 import ADDONS from '../config/addons';
+import { WONDERS } from '../config/wonders';
+import { shuffleWonders } from '../utils/wonders';
 
 const scoreTemplate = {
   military: 0,
@@ -23,6 +25,7 @@ const DELETE = 'DELETE';
 const UPDATE = 'UPDATE';
 const RESET = 'RESET';
 const SET_ADDON = 'SET_ADDON';
+const SET_WONDER = 'SET_WONDER';
 
 interface IInitAction {
   type: typeof INIT;
@@ -31,7 +34,10 @@ interface IInitAction {
 
 interface IAddAction {
   type: typeof ADD;
-  payload: string;
+  payload: {
+    name: string;
+    wonder: string;
+  };
 }
 
 interface IDeleteAction {
@@ -57,23 +63,35 @@ interface ISetAddonAction {
   payload: IAddons;
 }
 
+interface ISetWonderAction {
+  type: typeof SET_WONDER;
+  payload: {
+    name: string;
+    wonder: string;
+  };
+}
+
 export type TAction =
   | IInitAction
   | IAddAction
   | IDeleteAction
   | IUpdateAction
   | IResetAction
-  | ISetAddonAction;
+  | ISetAddonAction
+  | ISetWonderAction;
 
 const reducer = (state: TPlayers, action: TAction) => {
   switch (action.type) {
     case INIT:
       return [...action.payload];
     case ADD:
+      const { name, wonder } = action.payload;
+
       return [
         ...state,
         {
-          name: action.payload,
+          name,
+          wonder,
           score: {
             ...scoreTemplate,
           },
@@ -85,7 +103,7 @@ const reducer = (state: TPlayers, action: TAction) => {
           return player.name !== action.payload;
         }),
       ];
-    case UPDATE:
+    case UPDATE: {
       const { name, scoreKey, value } = action.payload;
 
       const player = state.find(player => player.name === name);
@@ -108,11 +126,14 @@ const reducer = (state: TPlayers, action: TAction) => {
         ];
       }
       return state;
+    }
     case RESET:
+      const shuffledWonders = shuffleWonders(WONDERS);
       return [
-        ...state.map(player => {
+        ...state.map((player, index) => {
           return {
             ...player,
+            wonder: shuffledWonders[index],
             score: {
               ...scoreTemplate,
             },
@@ -145,6 +166,22 @@ const reducer = (state: TPlayers, action: TAction) => {
           };
         }),
       ];
+    case 'SET_WONDER': {
+      const { name, wonder } = action.payload;
+
+      return [
+        ...state.map(player => {
+          if (player.name === name) {
+            return {
+              ...player,
+              wonder,
+            };
+          } else {
+            return player;
+          }
+        }),
+      ];
+    }
     default:
       return state;
   }

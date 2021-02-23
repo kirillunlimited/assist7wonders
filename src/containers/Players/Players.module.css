@@ -2,6 +2,10 @@
   padding-left: 0;
 }
 
+.td.wonder {
+  width: 100%;
+}
+
 .td:last-child {
   width: 100%;
   padding-right: 0;

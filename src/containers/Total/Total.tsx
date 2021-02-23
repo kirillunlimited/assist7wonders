@@ -11,6 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { ScoreRoutes } from '../../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   head: {
@@ -105,7 +106,12 @@ export default function Total() {
           {playersContext.state.map((player, index) => (
             <TableRow key={index}>
               <TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
-              <TableCell>{player.name}</TableCell>
+              <TableCell>
+                <Typography variant="body2">{player.name}</Typography>
+                <Typography variant="caption" color="textSecondary">
+                  {player.wonder}
+                </Typography>
+              </TableCell>
               {ScoreRoutes.map(
                 route =>
                   isScoreRouteAvailable(route) && (

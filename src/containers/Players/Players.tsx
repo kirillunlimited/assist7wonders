@@ -19,6 +19,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import WonderSelect from '../../components/WonderSelect/WonderSelect';
 
 const MESSAGES = {
   ADD_PLAYERS: 'Добавьте игроков',
@@ -35,8 +36,8 @@ export default function Players() {
   const playersContext = useContext(PlayersContext);
   const classes = useStyles();
 
-  function onNewPlayerSubmit(name: string) {
-    playersContext.dispatch({ type: 'ADD', payload: name });
+  function onNewPlayerSubmit(name: string, wonder: string) {
+    playersContext.dispatch({ type: 'ADD', payload: { name, wonder } });
   }
 
   function deletePlayer(name: string) {
@@ -60,6 +61,10 @@ export default function Players() {
     setIsDeleteConfirmOpened(false);
   }
 
+  function handleWonderChange(name: string, wonder: string) {
+    playersContext.dispatch({ type: 'SET_WONDER', payload: { name, wonder } });
+  }
+
   return (
     <div>
       {playersContext.state.length ? (
@@ -70,6 +75,13 @@ export default function Players() {
                 <TableRow key={player.name}>
                   <TableCell className={styles.td}>
                     <Profile name={player.name} />
+                  </TableCell>
+                  <TableCell className={`${styles.td} ${styles.wonder}`}>
+                    <WonderSelect
+                      value={player.wonder}
+                      selectedWonders={playersContext.state.map(player => player.wonder)}
+                      onSelect={wonder => handleWonderChange(player.name, wonder)}
+                    />
                   </TableCell>
                   <TableCell className={styles.td}>
                     <IconButton onClick={() => handleOpenConfirm(player.name)}>
@@ -116,6 +128,7 @@ export default function Players() {
 
       <NewPlayer
         names={playersContext.state.map(player => player.name)}
+        wonders={playersContext.state.map(player => player.wonder)}
         handleSubmit={onNewPlayerSubmit}
       />
     </div>
