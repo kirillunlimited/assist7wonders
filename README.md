@@ -6,12 +6,12 @@
 
 ## Features
 * ✅ Science score calculator with wildcards
+* ✅ Wonders selection and randomization functionality
 * ✅ "Cities" addon score counter
 * ✅ "Leaders" addon score counter
 * ✅ Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 
 ## Roadmap
-* Add wonders selection + randomization
 * Add i18n
 * Add players order change functionality
 * Add "Wonder pack" addon
