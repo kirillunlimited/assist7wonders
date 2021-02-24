@@ -20,11 +20,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import WonderSelect from '../../components/WonderSelect/WonderSelect';
-
-const MESSAGES = {
-  ADD_PLAYERS: 'Добавьте игроков',
-  ADD_MORE_PLAYERS: 'Добавьте больше игроков',
-};
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(() => ({
   subtitle: {
@@ -35,6 +31,7 @@ const useStyles = makeStyles(() => ({
 export default function Players() {
   const playersContext = useContext(PlayersContext);
   const classes = useStyles();
+  const { t } = useTranslation();
 
   function onNewPlayerSubmit(name: string, wonder: string) {
     playersContext.dispatch({ type: 'ADD', payload: { name, wonder } });
@@ -85,7 +82,7 @@ export default function Players() {
                   </TableCell>
                   <TableCell className={styles.td}>
                     <IconButton onClick={() => handleOpenConfirm(player.name)}>
-                      <Tooltip title="Удалить игрока">
+                      <Tooltip title={t('deletePlayer') || ''}>
                         <DeleteForever fontSize="large" color="secondary" />
                       </Tooltip>
                     </IconButton>
@@ -96,12 +93,12 @@ export default function Players() {
           </Table>
         </TableContainer>
       ) : (
-        <Typography variant="subtitle1">{MESSAGES.ADD_PLAYERS}</Typography>
+        <Typography variant="subtitle1">{t('addPlayers')}</Typography>
       )}
 
       {playersContext.state.length === 1 ? (
         <Typography variant="subtitle1" className={classes.subtitle}>
-          {MESSAGES.ADD_MORE_PLAYERS}
+          {t('addMorePlayers')}
         </Typography>
       ) : null}
 
@@ -110,18 +107,22 @@ export default function Players() {
         onClose={handleCloseConfirm}
         aria-labelledby="alert-dialog-title"
       >
-        <DialogTitle>Удаление игрока</DialogTitle>
+        <DialogTitle>{t('deletingPlayer')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Игрок <strong>{playerToDelete}</strong> будет удален, вы уверены?
+            <div
+              dangerouslySetInnerHTML={{
+                __html: t('deletingPlayerDescription', { name: playerToDelete }),
+              }}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConfirm} color="primary">
-            Нет
+            {t('no')}
           </Button>
           <Button onClick={handleDeleteConfirm} color="primary" autoFocus>
-            Да
+            {t('yes')}
           </Button>
         </DialogActions>
       </Dialog>

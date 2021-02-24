@@ -5,6 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { WONDERS } from '../../config/wonders';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   value: string;
@@ -21,6 +22,7 @@ const useStyles = makeStyles(() => ({
 
 export default function WonderSelect(props: IProps) {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   function isValueSelected(wonder: string) {
     return props.selectedWonders.includes(wonder);
@@ -32,8 +34,8 @@ export default function WonderSelect(props: IProps) {
 
   return (
     <FormControl variant={props.variant} className={classes.formControl}>
-      <InputLabel>Wonder</InputLabel>
-      <Select label="Wonder" value={props.value} onChange={onChange}>
+      <InputLabel>{t('wonder')}</InputLabel>
+      <Select label={t('wonder')} value={props.value} onChange={onChange}>
         {WONDERS.sort().map(wonder => (
           <MenuItem key={wonder} value={wonder} disabled={isValueSelected(wonder)}>
             {wonder}

@@ -10,6 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import WonderSelect from '../WonderSelect/WonderSelect';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   names: string[];
@@ -33,6 +34,7 @@ export default function NewPlayer(props: IProps) {
   const [name, setName] = useState('');
   const [wonder, setWonder] = useState('');
   const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const { t } = useTranslation();
 
   function isAddButtonDisabled() {
     return Boolean(
@@ -55,7 +57,7 @@ export default function NewPlayer(props: IProps) {
 
   return (
     <div>
-      <Tooltip title="Новый игрок">
+      <Tooltip title={t('newPlayer') || ''}>
         <Fab
           className={classes.newPlayerButton}
           aria-label="add"
@@ -66,12 +68,12 @@ export default function NewPlayer(props: IProps) {
       </Tooltip>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
-        <DialogTitle>Новый игрок</DialogTitle>
+        <DialogTitle>{t('newPlayer')}</DialogTitle>
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <div>
               <TextField
-                label="Имя"
+                label={t('name')}
                 onChange={event => setName(event.target.value)}
                 value={name}
                 variant="outlined"
@@ -89,7 +91,7 @@ export default function NewPlayer(props: IProps) {
           </DialogContent>
           <DialogActions>
             <Button color="primary" type="submit" disabled={isAddButtonDisabled()}>
-              Добавить
+              {t('add')}
             </Button>
           </DialogActions>
         </form>

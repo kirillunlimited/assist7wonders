@@ -32,9 +32,7 @@ export type TPlayers = IPlayer[];
 
 export interface IRoute {
   path: string;
-  key: string;
-  label?: string;
-  title?: string;
+  id: string;
   exact?: boolean;
   component: Function;
   routes?: TRoutes;
@@ -51,8 +49,7 @@ export interface IAddons {
 }
 
 export interface IAddonConfig {
-  key: keyof IAddons;
-  label: string;
+  id: keyof IAddons;
   scores: TScoreKey[];
 }
 

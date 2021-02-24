@@ -26,7 +26,7 @@ export default function Scores(props: IProps) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
-  const route = ScoreRoutes.find(route => route.key === props.key);
+  const route = ScoreRoutes.find(route => route.id === props.key);
 
   function getSum(player: IPlayer): number {
     return route && route.sum ? route.sum(player.score) : 0;

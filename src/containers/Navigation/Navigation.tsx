@@ -6,6 +6,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   routes: TRoutes;
@@ -17,6 +18,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
+      maxWidth: '160px',
     },
   },
   indicator: {
@@ -50,8 +52,8 @@ export default function Navigation(props: IProps) {
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
-
   const [filteredRoutes, setFilteredRoutes] = useState(props.routes);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setFilteredRoutes(getFilteredRoutes(props.routes, props.players, props.addons));
@@ -64,9 +66,9 @@ export default function Navigation(props: IProps) {
       } else {
         return (
           <Tab
-            key={route.key}
+            key={route.id}
             className={classes.tab}
-            label={route.label}
+            label={t(route.id)}
             component={Link}
             value={route.path}
             to={route.path}

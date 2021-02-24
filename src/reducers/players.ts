@@ -142,7 +142,7 @@ const reducer = (state: TPlayers, action: TAction) => {
       ];
     case SET_ADDON:
       const disabledAddons = ADDONS.filter(addon => {
-        return !action.payload[addon.key];
+        return !action.payload[addon.id];
       });
 
       const scoresDisabledByAddons = disabledAddons.reduce(
