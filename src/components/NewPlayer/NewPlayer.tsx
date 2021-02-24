@@ -37,9 +37,7 @@ export default function NewPlayer(props: IProps) {
   const { t } = useTranslation();
 
   function isAddButtonDisabled() {
-    return Boolean(
-      !name || props.names.includes(name) || !wonder || props.wonders.includes(wonder)
-    );
+    return Boolean(!name || isNameValid(name) || !wonder || props.wonders.includes(wonder));
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -53,6 +51,10 @@ export default function NewPlayer(props: IProps) {
 
   function toggleDialog(value: boolean) {
     setIsDialogOpened(value);
+  }
+
+  function isNameValid(name: string) {
+    return props.names.map(name => name.toLowerCase()).includes(name.toLowerCase());
   }
 
   return (
@@ -74,18 +76,20 @@ export default function NewPlayer(props: IProps) {
             <div>
               <TextField
                 label={t('name')}
-                onChange={event => setName(event.target.value)}
                 value={name}
                 variant="outlined"
                 autoFocus
+                error={isNameValid(name)}
+                helperText={isNameValid(name) ? t('playerAlreadyExists') : ''}
+                onChange={event => setName(event.target.value)}
               />
             </div>
             <div className={classes.wondersSelect}>
               <WonderSelect
                 value={wonder}
                 selectedWonders={props.wonders}
-                onSelect={setWonder}
                 variant="outlined"
+                onSelect={setWonder}
               />
             </div>
           </DialogContent>

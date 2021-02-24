@@ -30,6 +30,7 @@ export default function MainMenu() {
 
   function handleChange(language: string) {
     i18n.changeLanguage(language);
+    handleCloseContextMenu();
   }
 
   return (
