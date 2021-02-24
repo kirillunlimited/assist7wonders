@@ -54,7 +54,7 @@
       "debt": "Debt",
       "deletePlayer": "Delete player",
       "deletingPlayer": "Deleting player",
-      "deletingPlayerDescription": "The player {{name}} will be deleted. Are you sure?",
+      "deletingPlayerDescription": "The player <strong>{{name}}</strong> will be deleted. Are you sure?",
       "en": "English",
       "guild": "Guild",
       "language": "Language",
