@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import WonderSelect from '../WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
+import { shuffleWonders } from '../../utils/wonders';
+import { WONDERS } from '../../config/wonders';
 
 interface IProps {
   names: string[];
@@ -36,6 +38,13 @@ export default function NewPlayer(props: IProps) {
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const { t } = useTranslation();
 
+  useEffect(() => {
+    if (isDialogOpened) {
+      setWonder(getRandomWonder());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.wonders]);
+
   function isAddButtonDisabled() {
     return Boolean(!name || isNameValid(name) || !wonder || props.wonders.includes(wonder));
   }
@@ -46,11 +55,22 @@ export default function NewPlayer(props: IProps) {
 
     /* Reset */
     setName('');
-    setWonder('');
   }
 
-  function toggleDialog(value: boolean) {
-    setIsDialogOpened(value);
+  function getRandomWonder() {
+    return shuffleWonders(WONDERS).filter(wonder => !props.wonders.includes(wonder))[0] || '';
+  }
+
+  function toggleDialog(show: boolean) {
+    setIsDialogOpened(show);
+
+    if (show) {
+      /* Set random wonder on open */
+      setWonder(getRandomWonder());
+    } else {
+      /* Reset wonder on close */
+      setWonder('');
+    }
   }
 
   function isNameValid(name: string) {
