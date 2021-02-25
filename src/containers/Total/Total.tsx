@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { ScoreRoutes } from '../../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles({
   head: {
@@ -40,10 +41,10 @@ const useStyles = makeStyles({
 export default function Total() {
   const playersContext = useContext(PlayersContext);
   const addonsContext = useContext(AddonsContext);
-
   const classes = useStyles();
-
   const [winner, setWinner] = useState('');
+  const { t } = useTranslation();
+
   useEffect(() => {
     setWinner(getWinner(playersContext.state));
   }, [playersContext.state]);
@@ -83,7 +84,7 @@ export default function Total() {
         <TableHead className={classes.head}>
           <TableRow>
             <TableCell />
-            <TableCell className={classes.headerCell}>Игрок</TableCell>
+            <TableCell className={classes.headerCell}>{t('player')}</TableCell>
             <TableCell
               className={`${classes.headerCell} ${classes.scoresHead}`}
               colSpan={
@@ -97,7 +98,7 @@ export default function Total() {
                 ).length
               }
             >
-              Очки
+              {t('scores')}
             </TableCell>
             <TableCell className={`${classes.headerCell} ${classes.scoresHead}`}>Σ</TableCell>
           </TableRow>
@@ -116,13 +117,11 @@ export default function Total() {
                 route =>
                   isScoreRouteAvailable(route) && (
                     <TableCell
-                      key={route.key}
+                      key={route.id}
                       className={classes.score}
                       style={{ backgroundColor: route.color }}
                     >
-                      {route.sum
-                        ? route.sum(player.score)
-                        : player.score[route.key as keyof IScore]}
+                      {route.sum ? route.sum(player.score) : player.score[route.id as keyof IScore]}
                     </TableCell>
                   )
               )}

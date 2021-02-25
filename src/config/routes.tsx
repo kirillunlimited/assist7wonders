@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { getTreasuryTotal, getScienceTotal } from '../utils/score';
 import { isScoresAvailable } from './addons';
 import { makeStyles } from '@material-ui/core/styles';
+import { useTranslation } from 'react-i18next';
 
 interface IRouteContexts {
   contexts: {
@@ -16,11 +17,6 @@ interface IRouteContexts {
     addons: IAddons;
   };
 }
-
-const MESSAGES = {
-  NOT_ENOUGH_PLAYERS: 'Недостаточно игроков: добавьте не менее 2 игроков',
-  ADDON_IS_OFF: 'Дополнение отключено',
-};
 
 const useStyles = makeStyles({
   title: {
@@ -36,9 +32,7 @@ const useStyles = makeStyles({
 export const ScoreRoutes: TRoutes = [
   {
     path: '/scores/military',
-    key: 'military',
-    label: 'Military',
-    title: 'Military',
+    id: 'military',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -56,9 +50,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/treasury',
-    key: 'treasury',
-    label: 'Treasury',
-    title: 'Treasury',
+    id: 'treasury',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -78,9 +70,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/wonders',
-    key: 'wonders',
-    label: 'Wonders',
-    title: 'Wonders',
+    id: 'wonders',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -98,9 +88,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/civilian',
-    key: 'civilian',
-    label: 'Civilian',
-    title: 'Civilian',
+    id: 'civilian',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -118,9 +106,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/commerce',
-    key: 'commerce',
-    label: 'Commerce',
-    title: 'Commerce',
+    id: 'commerce',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -138,9 +124,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/guild',
-    key: 'guild',
-    label: 'Guild',
-    title: 'Guild',
+    id: 'guild',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -158,9 +142,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/science',
-    key: 'science',
-    label: 'Science',
-    title: 'Science',
+    id: 'science',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -180,9 +162,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/cities',
-    key: 'cities',
-    label: 'Cities',
-    title: 'Cities',
+    id: 'cities',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -200,9 +180,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/debt',
-    key: 'debt',
-    label: 'Debt',
-    title: 'Debt',
+    id: 'debt',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -221,9 +199,7 @@ export const ScoreRoutes: TRoutes = [
   },
   {
     path: '/scores/leaders',
-    key: 'leaders',
-    label: 'Leaders',
-    title: 'Leaders',
+    id: 'leaders',
     exact: true,
     component: ({ players, addons }: { players: TPlayers; addons: IAddons }) =>
       RenderScores(
@@ -244,23 +220,19 @@ export const ScoreRoutes: TRoutes = [
 const ROUTES: TRoutes = [
   {
     path: '/',
-    key: 'players',
-    label: 'Игроки',
-    title: 'Игроки',
+    id: 'players',
     exact: true,
     component: Players,
   },
   {
     path: '/scores',
-    key: 'scores',
+    id: 'scores',
     component: RenderRoutes,
     routes: ScoreRoutes,
   },
   {
     path: '/total',
-    key: 'total',
-    label: 'Total',
-    title: 'Total',
+    id: 'total',
     exact: true,
     component: ({ players }: { players: TPlayers }) => RenderRoute(Total, players),
     available: ({ players }: { players: TPlayers }) => isRouteAvailable(players),
@@ -279,16 +251,16 @@ export function RenderRoutes({
   addons: IAddons;
 }) {
   const classes = useStyles();
-
+  const { t } = useTranslation();
   return (
     <Switch>
       {routes.map(route => (
-        <RouteWithSubRoutes {...route} key={route.key} contexts={{ players, addons }} />
+        <RouteWithSubRoutes {...route} key={route.id} contexts={{ players, addons }} />
       ))}
       <Route
         component={() => (
           <Typography variant="h1" className={classes.title}>
-            Страница не найдена
+            {t('pageNotFound')}
           </Typography>
         )}
       />
@@ -299,12 +271,13 @@ export function RenderRoutes({
 function RouteWithSubRoutes(payload: IRoute & IRouteContexts) {
   const { players, addons } = payload.contexts;
   const classes = useStyles();
+  const { t } = useTranslation();
 
   return (
     <div>
-      {payload.title && (
+      {payload.exact && (
         <Typography variant="h1" className={classes.title}>
-          {payload.title}
+          {t(payload.id)}
         </Typography>
       )}
       <Route
@@ -333,21 +306,23 @@ function RenderScores(
   players: TPlayers,
   addons: IAddons
 ) {
+  const { t } = useTranslation();
   return isRouteAvailable(players) ? (
     isScoresAvailable(scores, addons) ? (
       Scores(props)
     ) : (
-      <Typography variant="subtitle1">{MESSAGES.ADDON_IS_OFF}</Typography>
+      <Typography variant="subtitle1">{t('addonIsDisabled')}</Typography>
     )
   ) : (
-    <Typography variant="subtitle1">{MESSAGES.NOT_ENOUGH_PLAYERS}</Typography>
+    <Typography variant="subtitle1">{t('notEnoughPlayers')}</Typography>
   );
 }
 
 function RenderRoute(Component: Function, players: TPlayers) {
+  const { t } = useTranslation();
   return isRouteAvailable(players) ? (
     <Component />
   ) : (
-    <Typography variant="subtitle1">{MESSAGES.NOT_ENOUGH_PLAYERS}</Typography>
+    <Typography variant="subtitle1">{t('notEnoughPlayers')}</Typography>
   );
 }

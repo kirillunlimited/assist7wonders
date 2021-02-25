@@ -2,13 +2,11 @@ import { IAddons, TAddonsConfig, TScoreKey } from '../types';
 
 const ADDONS: TAddonsConfig = [
   {
-    key: 'cities',
-    label: 'Cities',
+    id: 'cities',
     scores: ['cities', 'debt'],
   },
   {
-    key: 'leaders',
-    label: 'Leaders',
+    id: 'leaders',
     scores: ['leaders'],
   },
 ];
@@ -21,7 +19,7 @@ export function isScoresAvailable(scores: TScoreKey[], addons: IAddons) {
     const activeAddons = (Object.keys(addons) as Array<keyof IAddons>).filter(
       addon => addons[addon]
     );
-    return activeAddons.includes(addon.key);
+    return activeAddons.includes(addon.id);
   }
 
   return true;
