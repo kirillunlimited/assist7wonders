@@ -109,13 +109,11 @@ export default function Players() {
       >
         <DialogTitle>{t('deletingPlayer')}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: t('deletingPlayerDescription', { name: playerToDelete }),
-              }}
-            />
-          </DialogContentText>
+          <DialogContentText
+            dangerouslySetInnerHTML={{
+              __html: t('deletingPlayerDescription', { name: playerToDelete }),
+            }}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConfirm} color="primary">
