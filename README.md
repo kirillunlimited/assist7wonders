@@ -6,18 +6,20 @@
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
 
 ## Features
-* ✅ Science score calculator with wildcards
-* ✅ Wonders selection and randomization functionality
-* ✅ "Cities" addon score counter
-* ✅ "Leaders" addon score counter
-* ✅ i18n: English and Russian support
-* ✅ Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
+* 🧪 Science score calculator with wildcards
+* 🧩 Addons support:
+  * 🦸 Leaders
+  * 🏙️ Cities
+* 👨‍👩‍👧‍👦 Players management:
+  * 🏛 Select or randomize wonders
+  * 🔄 Change order of the players with drag & drop
+* 🌍 English and Russian support
+* 📱 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 
 ## Roadmap
-* Add players order change functionality
-* Add "Wonder pack" addon
-* Add "Babel" addon
-* Add "Armada" addon
+* 🗿 Add "Wonder pack" addon
+* 🗼 Add "Babel" addon
+* 🛥️ Add "Armada" addon
 
 ## Build and development
 
