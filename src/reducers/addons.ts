@@ -5,11 +5,11 @@ export const addonsTemplate: IAddons = {
   leaders: false,
 };
 
-const INIT = 'INIT';
+const SET = 'SET';
 const TOGGLE = 'TOGGLE';
 
-interface IInitAction {
-  type: typeof INIT;
+interface ISetAction {
+  type: typeof SET;
   payload: IAddons;
 }
 
@@ -21,11 +21,11 @@ interface IToggleAction {
   };
 }
 
-export type TAction = IInitAction | IToggleAction;
+export type TAction = ISetAction | IToggleAction;
 
 const reducer = (state: IAddons, action: TAction) => {
   switch (action.type) {
-    case INIT:
+    case SET:
       return {
         ...action.payload,
       };

@@ -21,12 +21,21 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import WonderSelect from '../../components/WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { TPlayers } from '../../types';
 
 const useStyles = makeStyles(() => ({
   subtitle: {
     marginTop: '1em',
   },
 }));
+
+const reorder = (list: TPlayers, startIndex: number, endIndex: number): TPlayers => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
 
 export default function Players() {
   const playersContext = useContext(PlayersContext);
@@ -62,36 +71,66 @@ export default function Players() {
     playersContext.dispatch({ type: 'SET_WONDER', payload: { name, wonder } });
   }
 
+  function onDragEnd(result: DropResult): void {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedPlayers = reorder(
+      playersContext.state,
+      result.source.index,
+      result.destination.index
+    );
+
+    playersContext.dispatch({ type: 'SET', payload: reorderedPlayers });
+  }
+
   return (
     <div>
       {playersContext.state.length ? (
-        <TableContainer>
-          <Table>
-            <TableBody>
-              {playersContext.state.map(player => (
-                <TableRow key={player.name}>
-                  <TableCell className={styles.td}>
-                    <Profile name={player.name} />
-                  </TableCell>
-                  <TableCell className={`${styles.td} ${styles.wonder}`}>
-                    <WonderSelect
-                      value={player.wonder}
-                      selectedWonders={playersContext.state.map(player => player.wonder)}
-                      onSelect={wonder => handleWonderChange(player.name, wonder)}
-                    />
-                  </TableCell>
-                  <TableCell className={styles.td}>
-                    <IconButton onClick={() => handleOpenConfirm(player.name)}>
-                      <Tooltip title={t('deletePlayer') || ''}>
-                        <DeleteForever fontSize="large" color="secondary" />
-                      </Tooltip>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {provided => (
+              <TableContainer {...provided.droppableProps} ref={provided.innerRef}>
+                <Table>
+                  <TableBody>
+                    {playersContext.state.map((player, index) => (
+                      <Draggable key={player.name} draggableId={player.name} index={index}>
+                        {provided => (
+                          <TableRow
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <TableCell className={styles.td}>
+                              <Profile name={player.name} />
+                            </TableCell>
+                            <TableCell className={`${styles.td} ${styles.wonder}`}>
+                              <WonderSelect
+                                value={player.wonder}
+                                selectedWonders={playersContext.state.map(player => player.wonder)}
+                                onSelect={wonder => handleWonderChange(player.name, wonder)}
+                              />
+                            </TableCell>
+                            <TableCell className={styles.td}>
+                              <IconButton onClick={() => handleOpenConfirm(player.name)}>
+                                <Tooltip title={t('deletePlayer') || ''}>
+                                  <DeleteForever fontSize="large" color="secondary" />
+                                </Tooltip>
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </Droppable>
+        </DragDropContext>
       ) : (
         <Typography variant="subtitle1">{t('addPlayers')}</Typography>
       )}

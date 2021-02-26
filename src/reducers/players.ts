@@ -19,7 +19,7 @@ const scoreTemplate = {
   leaders: 0,
 };
 
-const INIT = 'INIT';
+const SET = 'SET';
 const ADD = 'ADD';
 const DELETE = 'DELETE';
 const UPDATE = 'UPDATE';
@@ -27,8 +27,8 @@ const RESET = 'RESET';
 const SET_ADDON = 'SET_ADDON';
 const SET_WONDER = 'SET_WONDER';
 
-interface IInitAction {
-  type: typeof INIT;
+interface ISetAction {
+  type: typeof SET;
   payload: TPlayers;
 }
 
@@ -72,7 +72,7 @@ interface ISetWonderAction {
 }
 
 export type TAction =
-  | IInitAction
+  | ISetAction
   | IAddAction
   | IDeleteAction
   | IUpdateAction
@@ -82,7 +82,7 @@ export type TAction =
 
 const reducer = (state: TPlayers, action: TAction) => {
   switch (action.type) {
-    case INIT:
+    case SET:
       return [...action.payload];
     case ADD:
       const { name, wonder } = action.payload;
