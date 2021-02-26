@@ -1,12 +1,12 @@
 .player {
   display: flex;
   align-items: center;
-  min-width: 148px;
+  min-width: 124px;
 }
 
 .player.sm {
   flex-direction: column;
-  min-width: 100px;
+  min-width: 76px;
 }
 
 .name {
