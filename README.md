@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kirillunlimited/assist7wonders.svg?branch=master)](https://travis-ci.com/kirillunlimited/assist7wonders)
+[![License](https://img.shields.io/github/license/kirillunlimited/assist7wonders)](https://github.com/kirillunlimited/assist7wonders/blob/master/LICENSE.md)
 
 # 7 Wonders assistant app
 
