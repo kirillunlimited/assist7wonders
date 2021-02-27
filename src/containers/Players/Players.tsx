@@ -98,12 +98,11 @@ export default function Players() {
                     {playersContext.state.map((player, index) => (
                       <Draggable key={player.name} draggableId={player.name} index={index}>
                         {provided => (
-                          <TableRow
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <TableCell className={styles.td}>
+                          <TableRow ref={provided.innerRef} {...provided.draggableProps}>
+                            <TableCell
+                              className={`${styles.td} ${styles.player}`}
+                              {...provided.dragHandleProps}
+                            >
                               <Profile name={player.name} />
                             </TableCell>
                             <TableCell className={`${styles.td} ${styles.wonder}`}>
@@ -113,7 +112,7 @@ export default function Players() {
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
                             </TableCell>
-                            <TableCell className={styles.td}>
+                            <TableCell className={`${styles.td} ${styles.delete}`}>
                               <IconButton onClick={() => handleOpenConfirm(player.name)}>
                                 <Tooltip title={t('deletePlayer') || ''}>
                                   <DeleteForever fontSize="large" color="secondary" />
