@@ -18,11 +18,17 @@
 .env.test.local
 .env.production.local
 
+# package manager
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# ide
 .idea
 
+# firebase
 .firebase
 .firebaserc
+
+# cache
+.eslintcache
