@@ -50,8 +50,8 @@ export default function App() {
   }, [addons]);
 
   function restoreGame(): void {
-    playersDispatch({ type: 'INIT', payload: getPlayersFromStorage() });
-    addonsDispatch({ type: 'INIT', payload: getAddonsFromStorage() });
+    playersDispatch({ type: 'SET', payload: getPlayersFromStorage() });
+    addonsDispatch({ type: 'SET', payload: getAddonsFromStorage() });
     setIsReady(true);
   }
 

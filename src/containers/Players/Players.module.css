@@ -1,13 +1,14 @@
-.td:first-child {
-  padding-left: 0;
+.td.player {
+  padding: 0;
+  cursor: move;
 }
 
 .td.wonder {
   width: 100%;
 }
 
-.td:last-child {
+.td.delete {
   width: 100%;
-  padding-right: 0;
+  padding: 0;
   text-align: right;
 }
