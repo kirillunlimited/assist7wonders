@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,12 +11,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import WonderSelect from '../WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
-import { shuffleWonders } from '../../utils/wonders';
-import { WONDERS } from '../../config/wonders';
+import { shuffleWonders } from '../../utils/game';
 
 interface IProps {
   names: string[];
   wonders: string[];
+  selectedWonders: string[];
   handleSubmit: (name: string, wonder: string) => void;
 }
 
@@ -38,15 +38,21 @@ export default function NewPlayer(props: IProps) {
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const { t } = useTranslation();
 
+  const getRandomWonder = useCallback(() => {
+    return (
+      shuffleWonders(props.wonders).filter(wonder => !props.selectedWonders.includes(wonder))[0] ||
+      ''
+    );
+  }, [props.wonders, props.selectedWonders]);
+
   useEffect(() => {
     if (isDialogOpened) {
       setWonder(getRandomWonder());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.wonders]);
+  }, [getRandomWonder]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function isAddButtonDisabled() {
-    return Boolean(!name || isNameValid(name) || !wonder || props.wonders.includes(wonder));
+    return Boolean(!name || isNameValid(name) || !wonder || props.selectedWonders.includes(wonder));
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -55,10 +61,6 @@ export default function NewPlayer(props: IProps) {
 
     /* Reset */
     setName('');
-  }
-
-  function getRandomWonder() {
-    return shuffleWonders(WONDERS).filter(wonder => !props.wonders.includes(wonder))[0] || '';
   }
 
   function toggleDialog(show: boolean) {
@@ -107,7 +109,8 @@ export default function NewPlayer(props: IProps) {
             <div className={classes.wondersSelect}>
               <WonderSelect
                 value={wonder}
-                selectedWonders={props.wonders}
+                wonders={props.wonders}
+                selectedWonders={props.selectedWonders}
                 variant="outlined"
                 onSelect={setWonder}
               />

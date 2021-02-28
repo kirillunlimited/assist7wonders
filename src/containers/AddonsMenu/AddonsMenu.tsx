@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import Tooltip from '@material-ui/core/Tooltip';
-import { AddonsContext } from '../App/App';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
-import { IAddons } from '../../types';
-import ADDONS from '../../config/addons';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
+import { GameContext } from '../App/App';
+import { addons } from '../../config/game';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function MainMenu() {
-  const addonsContext = useContext(AddonsContext);
+  const gameContext = useContext(GameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const { t } = useTranslation();
@@ -31,10 +30,13 @@ export default function MainMenu() {
     setAnchorEl(null);
   }
 
-  function handleMenuItemClick(event: React.MouseEvent, addon: keyof IAddons) {
-    addonsContext.dispatch({
-      type: 'TOGGLE',
-      payload: { addon, value: !addonsContext.state[addon] },
+  function handleMenuItemClick(event: React.MouseEvent, addon: string, isAdd: boolean) {
+    const selectedAddons = gameContext.state.addons;
+    gameContext.dispatch({
+      type: 'INIT',
+      payload: isAdd
+        ? { addons: [...selectedAddons, addon] }
+        : { addons: selectedAddons.filter(selectedAddon => selectedAddon !== addon) },
     });
   }
 
@@ -51,13 +53,18 @@ export default function MainMenu() {
         open={Boolean(anchorEl)}
         onClose={handleCloseContextMenu}
       >
-        {ADDONS.map(addon => (
-          <MenuItem key={addon.id} onClick={e => handleMenuItemClick(e, addon.id)}>
+        {addons.map(addon => (
+          <MenuItem
+            key={addon.id}
+            onClick={e =>
+              handleMenuItemClick(e, addon.id, !gameContext.state.addons.includes(addon.id))
+            }
+          >
             <Checkbox
               classes={{
                 root: classes.checkbox,
               }}
-              checked={addonsContext.state[addon.id]}
+              checked={gameContext.state.addons.includes(addon.id)}
             />
             {t(addon.id)}
           </MenuItem>

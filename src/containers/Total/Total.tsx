@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { TPlayers, IRoute, IScore } from '../../types';
+import { IPlayerScore } from '../../types';
 import { getTotal } from '../../utils/score';
 import { useState, useEffect, useContext } from 'react';
-import { AddonsContext, PlayersContext } from '../App/App';
+import { PlayersContext, GameContext } from '../App/App';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { ScoreRoutes } from '../../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
@@ -40,19 +39,15 @@ const useStyles = makeStyles({
 
 export default function Total() {
   const playersContext = useContext(PlayersContext);
-  const addonsContext = useContext(AddonsContext);
+  const gameContext = useContext(GameContext);
   const classes = useStyles();
   const [winner, setWinner] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
-    setWinner(getWinner(playersContext.state));
-  }, [playersContext.state]);
-
-  function getWinner(players: TPlayers): string {
-    const bestPlayer = players.reduce(
+    const bestPlayer = playersContext.state.reduce(
       (acc, player) => {
-        const playerSum = getTotal(player.score);
+        const playerSum = getTotal(player.score, gameContext.state.scores);
 
         if (acc.name === '' || playerSum > acc.score) {
           acc = {
@@ -64,19 +59,9 @@ export default function Total() {
       },
       { name: '', score: 0 }
     );
-
-    return bestPlayer ? bestPlayer.name : '';
-  }
-
-  function isScoreRouteAvailable(route: IRoute) {
-    return (
-      route.available &&
-      route.available({
-        players: playersContext.state,
-        addons: addonsContext.state,
-      })
-    );
-  }
+    const winner = bestPlayer ? bestPlayer.name : '';
+    setWinner(winner);
+  }, [playersContext.state, gameContext.state.scores]);
 
   return (
     <TableContainer>
@@ -87,16 +72,7 @@ export default function Total() {
             <TableCell className={classes.headerCell}>{t('player')}</TableCell>
             <TableCell
               className={`${classes.headerCell} ${classes.scoresHead}`}
-              colSpan={
-                ScoreRoutes.filter(
-                  route =>
-                    route.available &&
-                    route.available({
-                      players: playersContext.state,
-                      addons: addonsContext.state,
-                    })
-                ).length
-              }
+              colSpan={gameContext.state.scores.length}
             >
               {t('scores')}
             </TableCell>
@@ -113,19 +89,20 @@ export default function Total() {
                   {player.wonder}
                 </Typography>
               </TableCell>
-              {ScoreRoutes.map(
-                route =>
-                  isScoreRouteAvailable(route) && (
-                    <TableCell
-                      key={route.id}
-                      className={classes.score}
-                      style={{ backgroundColor: route.color }}
-                    >
-                      {route.sum ? route.sum(player.score) : player.score[route.id as keyof IScore]}
-                    </TableCell>
-                  )
-              )}
-              <TableCell className={classes.sum}>{getTotal(player.score)}</TableCell>
+              {gameContext.state.scores.map(score => (
+                <TableCell
+                  key={score.id}
+                  className={classes.score}
+                  style={{ backgroundColor: score.color }}
+                >
+                  {score.sum
+                    ? score.sum(player.score)
+                    : player.score[score.id as keyof IPlayerScore]}
+                </TableCell>
+              ))}
+              <TableCell className={classes.sum}>
+                {getTotal(player.score, gameContext.state.scores)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

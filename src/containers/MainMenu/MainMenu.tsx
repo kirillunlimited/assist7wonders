@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
-import { PlayersContext } from '../App/App';
+import { GameContext, PlayersContext } from '../App/App';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
 export default function MainMenu() {
   const classes = useStyles();
   const playersContext = useContext(PlayersContext);
+  const gameContext = useContext(GameContext);
   const [isConfirmOpened, setIsConfirmOpened] = useState(false);
   const { t } = useTranslation();
 
@@ -42,7 +43,7 @@ export default function MainMenu() {
   }
 
   function onResetGame() {
-    playersContext.dispatch({ type: 'RESET' });
+    playersContext.dispatch({ type: 'RESET', payload: gameContext.state });
     handleCloseConfirm();
   }
 
