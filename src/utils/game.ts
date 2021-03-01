@@ -3,11 +3,11 @@ import compass from '../icons/compass.png';
 import tablet from '../icons/tablet.png';
 import gear from '../icons/gear.png';
 import wildcards from '../icons/wildcard.png';
-import { addons, baseGame } from '../config/game';
+import { BASE_GAME, ADDONS } from '../config/game';
 import shuffle from 'lodash.shuffle';
 
 export const getAllScores = () => {
-  return [...baseGame.scores, addons.map(addon => addon.scores)].flat(2);
+  return [...BASE_GAME.scores, ADDONS.map(addon => addon.scores)].flat(2);
 };
 
 export const getAllCounters = () => {

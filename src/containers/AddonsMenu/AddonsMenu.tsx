@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
 import { GameContext } from '../App/App';
-import { addons } from '../../config/game';
+import { ADDONS } from '../../config/game';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -33,7 +33,7 @@ export default function MainMenu() {
   function handleMenuItemClick(event: React.MouseEvent, addon: string, isAdd: boolean) {
     const selectedAddons = gameContext.state.addons;
     gameContext.dispatch({
-      type: 'INIT',
+      type: 'UPDATE',
       payload: isAdd
         ? { addons: [...selectedAddons, addon] }
         : { addons: selectedAddons.filter(selectedAddon => selectedAddon !== addon) },
@@ -53,7 +53,7 @@ export default function MainMenu() {
         open={Boolean(anchorEl)}
         onClose={handleCloseContextMenu}
       >
-        {addons.map(addon => (
+        {ADDONS.map(addon => (
           <MenuItem
             key={addon.id}
             onClick={e =>

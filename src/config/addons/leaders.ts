@@ -1,6 +1,6 @@
 const leaders = {
   id: 'leaders',
-  maxPlayers: 8,
+  maxPlayers: 7,
   wonders: ['Rome'],
   scores: [
     {

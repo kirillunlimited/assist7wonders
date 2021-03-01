@@ -1,29 +1,21 @@
-import { TBaseGame, IGameScore } from '../types';
-import { baseGame, addons as configAddons } from '../config/game';
+import { TGame, IGameScore } from '../types';
+import { ADDONS, BASE_GAME } from '../config/game';
 
-const INIT = 'INIT';
-const SET_WONDERS = 'SET_WONDERS';
+const UPDATE = 'UPDATE';
 
-interface IInitAction {
-  type: typeof INIT;
+interface IUpdateAction {
+  type: typeof UPDATE;
   payload: {
     addons: string[];
   };
 }
 
-interface ISetWondersAction {
-  type: typeof SET_WONDERS;
-  payload: string[];
-}
+export type TAction = IUpdateAction;
 
-export type TAction = IInitAction | ISetWondersAction;
-
-const reducer = (state: TBaseGame, action: TAction) => {
+const reducer = (state: TGame, action: TAction) => {
   switch (action.type) {
-    case INIT:
-      const addons = configAddons.filter(configAddon =>
-        action.payload.addons.includes(configAddon.id)
-      );
+    case UPDATE:
+      const addons = ADDONS.filter(addon => action.payload.addons.includes(addon.id));
       const addonScores = addons.reduce((scores, addon) => {
         if (addon) {
           return [...scores, ...addon.scores];
@@ -36,16 +28,18 @@ const reducer = (state: TBaseGame, action: TAction) => {
         }
         return wonders;
       }, [] as string[]);
+
+      const maxPlayers = [BASE_GAME, ...addons].reduce((max, addon) => {
+        if (addon.maxPlayers > max) {
+          return addon.maxPlayers;
+        }
+        return max;
+      }, 0);
       return {
-        ...baseGame,
+        maxPlayers,
         addons: action.payload.addons,
-        wonders: [...baseGame.wonders, ...addonWonders],
-        scores: [...baseGame.scores, ...addonScores],
-      };
-    case SET_WONDERS:
-      return {
-        ...state,
-        wonders: action.payload,
+        wonders: [...BASE_GAME.wonders, ...addonWonders],
+        scores: [...BASE_GAME.scores, ...addonScores],
       };
     default:
       return state;

@@ -89,6 +89,9 @@ export default function Players() {
 
   return (
     <div>
+      <Typography variant="subtitle1">
+        {playersContext.state.length} / {gameContext.state.maxPlayers}
+      </Typography>
       {playersContext.state.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
@@ -169,6 +172,7 @@ export default function Players() {
         names={playersContext.state.map(player => player.name)}
         wonders={gameContext.state.wonders}
         selectedWonders={playersContext.state.map(player => player.wonder)}
+        isMax={playersContext.state.length >= gameContext.state.maxPlayers}
         handleSubmit={onNewPlayerSubmit}
       />
     </div>

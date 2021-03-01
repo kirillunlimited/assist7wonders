@@ -17,6 +17,7 @@ interface IProps {
   names: string[];
   wonders: string[];
   selectedWonders: string[];
+  isMax: boolean;
   handleSubmit: (name: string, wonder: string) => void;
 }
 
@@ -51,8 +52,8 @@ export default function NewPlayer(props: IProps) {
     }
   }, [getRandomWonder]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function isAddButtonDisabled() {
-    return Boolean(!name || isNameValid(name) || !wonder || props.selectedWonders.includes(wonder));
+  function isAddButtonEnabled() {
+    return !props.isMax && isNameValid(name) && isWonderValid(wonder);
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -75,8 +76,16 @@ export default function NewPlayer(props: IProps) {
     }
   }
 
-  function isNameValid(name: string) {
+  function isNameValid(name: string): boolean {
+    return Boolean(name && !isNameExists(name));
+  }
+
+  function isNameExists(name: string): boolean {
     return props.names.map(name => name.toLowerCase()).includes(name.toLowerCase());
+  }
+
+  function isWonderValid(wonder: string): boolean {
+    return Boolean(wonder && !props.selectedWonders.includes(wonder));
   }
 
   return (
@@ -101,8 +110,8 @@ export default function NewPlayer(props: IProps) {
                 value={name}
                 variant="outlined"
                 autoFocus
-                error={isNameValid(name)}
-                helperText={isNameValid(name) ? t('playerAlreadyExists') : ''}
+                error={isNameExists(name)}
+                helperText={isNameExists(name) ? t('playerAlreadyExists') : ''}
                 onChange={event => setName(event.target.value)}
               />
             </div>
@@ -117,7 +126,7 @@ export default function NewPlayer(props: IProps) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" type="submit" disabled={isAddButtonDisabled()}>
+            <Button color="primary" type="submit" disabled={!isAddButtonEnabled()}>
               {t('add')}
             </Button>
           </DialogActions>

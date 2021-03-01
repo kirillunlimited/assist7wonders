@@ -4,6 +4,12 @@ export interface ICoreGame {
   wonders: string[];
   scores: IGameScore[];
 }
+export type TGame = ICoreGame & {
+  addons: string[];
+};
+export type TAddonGame = ICoreGame & {
+  id: string;
+};
 export interface IGameScore {
   id: string;
   color: string;
@@ -14,12 +20,6 @@ export interface IGameScore {
   }[];
   sum?: (score: IPlayerScore) => number;
 }
-export type TBaseGame = ICoreGame & {
-  addons: string[];
-};
-export type TAddonGame = ICoreGame & {
-  id: string;
-};
 
 /** PLAYERS */
 export interface IPlayer {
@@ -40,5 +40,5 @@ export interface IRoute {
   routes?: IRoute[];
   color?: string;
   component: Function;
-  error?: ({ game, players }: { game: TBaseGame; players: IPlayer[] }) => string;
+  error?: ({ game, players }: { game: TGame; players: IPlayer[] }) => string;
 }

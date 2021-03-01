@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import './App.css';
 import Navigation from '../Navigation/Navigation';
-import { IPlayer, TBaseGame } from '../../types';
+import { IPlayer, TGame } from '../../types';
 import { Router } from '../Router/Router';
 import {
   savePlayersToStorage,
@@ -14,7 +14,7 @@ import gamesReducer, { TAction as TGameAction } from '../../reducers/game';
 import Layout from '../../components/Layout/Layout';
 import RouteWrapper from '../../components/RouteWrapper/RouteWrapper';
 import MainMenu from '../MainMenu/MainMenu';
-import { baseGame } from '../../config/game';
+import { GAME_BOILERPLATE } from '../../config/game';
 
 interface IPlayersContextProps {
   state: IPlayer[];
@@ -22,7 +22,7 @@ interface IPlayersContextProps {
 }
 
 interface IGameContextProps {
-  state: TBaseGame;
+  state: TGame;
   dispatch: (action: TGameAction) => void;
 }
 
@@ -30,7 +30,7 @@ export const PlayersContext = React.createContext({} as IPlayersContextProps);
 export const GameContext = React.createContext({} as IGameContextProps);
 
 export default function App() {
-  const [game, gameDispatch] = useReducer(gamesReducer, baseGame);
+  const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
   const [isReady, setIsReady] = useState(false);
 
@@ -49,9 +49,13 @@ export default function App() {
     setIsReady(true);
   }, []);
 
+  useEffect(() => {
+    playersDispatch({ type: 'SET', payload: players.slice(0, game.maxPlayers) });
+  }, [game.maxPlayers]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function initGame(): void {
     const addons = getAddonsFromStorage();
-    gameDispatch({ type: 'INIT', payload: { addons } });
+    gameDispatch({ type: 'UPDATE', payload: { addons } });
   }
 
   function initPlayers(): void {
