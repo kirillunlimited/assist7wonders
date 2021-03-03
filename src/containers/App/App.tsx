@@ -40,18 +40,14 @@ export default function App() {
 
   useEffect(() => {
     saveAddonsToStorage(game.addons);
-    playersDispatch({ type: 'REFRESH_WONDERS', payload: { wonders: game.wonders } });
-  }, [game.addons, game.wonders]);
+    playersDispatch({ type: 'GAME_UPDATE', payload: game });
+  }, [game]);
 
   useEffect(() => {
     initGame();
     initPlayers();
     setIsReady(true);
   }, []);
-
-  useEffect(() => {
-    playersDispatch({ type: 'SET', payload: players.slice(0, game.maxPlayers) });
-  }, [game.maxPlayers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function initGame(): void {
     const addons = getAddonsFromStorage();

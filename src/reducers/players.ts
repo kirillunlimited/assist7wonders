@@ -1,4 +1,4 @@
-import { IPlayer, TPlayerScoreKey, ICoreGame } from '../types';
+import { IPlayer, TPlayerScoreKey, ICoreGame, TGame } from '../types';
 import { getAllCounters, shuffleWonders } from '../utils/game';
 
 const counters = getAllCounters();
@@ -9,7 +9,7 @@ const DELETE = 'DELETE';
 const UPDATE = 'UPDATE';
 const RESET = 'RESET';
 const SET_WONDER = 'SET_WONDER';
-const REFRESH_WONDERS = 'REFRESH_WONDERS';
+const GAME_UPDATE = 'GAME_UPDATE';
 
 interface ISetAction {
   type: typeof SET;
@@ -51,11 +51,9 @@ interface ISetWonderAction {
   };
 }
 
-interface IRefreshWondersAction {
-  type: typeof REFRESH_WONDERS;
-  payload: {
-    wonders: string[];
-  };
+interface IGameUpdateAction {
+  type: typeof GAME_UPDATE;
+  payload: TGame;
 }
 
 export type TAction =
@@ -65,7 +63,32 @@ export type TAction =
   | IUpdateAction
   | IResetAction
   | ISetWonderAction
-  | IRefreshWondersAction;
+  | IGameUpdateAction;
+
+/** Slice extra players if new limit is less than before */
+const updatePlayersCount = (players: IPlayer[], maxPlayers: number): IPlayer[] => {
+  return players.slice(0, maxPlayers);
+};
+
+/** Change selected wonders if they are no longer available due to addons change */
+const updateSelectedWonders = (players: IPlayer[], wonders: string[]): IPlayer[] => {
+  const selectedWonders = players.map(player => player.wonder);
+  return [
+    ...players.map(player => {
+      if (!wonders.includes(player.wonder)) {
+        const shuffledWonders = shuffleWonders(wonders).filter(
+          wonder => !selectedWonders.includes(wonder)
+        );
+        return {
+          ...player,
+          wonder: shuffledWonders[0],
+        };
+      } else {
+        return player;
+      }
+    }),
+  ];
+};
 
 const reducer = (state: IPlayer[], action: TAction) => {
   switch (action.type) {
@@ -145,27 +168,9 @@ const reducer = (state: IPlayer[], action: TAction) => {
         }),
       ];
     }
-
-    /** Change selected wonders if they are no longer available due to addons change */
-    case REFRESH_WONDERS: {
-      const { wonders } = action.payload;
-      const selectedWonders = state.map(player => player.wonder);
-
-      return [
-        ...state.map(player => {
-          if (!wonders.includes(player.wonder)) {
-            const shuffledWonders = shuffleWonders(action.payload.wonders).filter(
-              wonder => !selectedWonders.includes(wonder)
-            );
-            return {
-              ...player,
-              wonder: shuffledWonders[0],
-            };
-          } else {
-            return player;
-          }
-        }),
-      ];
+    case GAME_UPDATE: {
+      const { maxPlayers, wonders } = action.payload;
+      return updateSelectedWonders(updatePlayersCount(state, maxPlayers), wonders);
     }
     default:
       return state;
