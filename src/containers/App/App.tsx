@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import './App.css';
 import Navigation from '../Navigation/Navigation';
-import { TPlayers, IAddons } from '../../types';
-import ROUTES, { RenderRoutes } from '../../config/routes';
+import { IPlayer, TGame } from '../../types';
+import { Router } from '../Router/Router';
 import {
   savePlayersToStorage,
   saveAddonsToStorage,
@@ -10,68 +10,71 @@ import {
   getAddonsFromStorage,
 } from '../../utils/storage';
 import playersReducer, { TAction as TPlayersAction } from '../../reducers/players';
-import addonsReducer, { TAction as TAddonsAction, addonsTemplate } from '../../reducers/addons';
+import gamesReducer, { TAction as TGameAction } from '../../reducers/game';
 import Layout from '../../components/Layout/Layout';
 import RouteWrapper from '../../components/RouteWrapper/RouteWrapper';
 import MainMenu from '../MainMenu/MainMenu';
+import { GAME_BOILERPLATE } from '../../config/game';
 
 interface IPlayersContextProps {
-  state: TPlayers;
+  state: IPlayer[];
   dispatch: (action: TPlayersAction) => void;
 }
 
-interface IAddonsContextProps {
-  state: IAddons;
-  dispatch: (action: TAddonsAction) => void;
+interface IGameContextProps {
+  state: TGame;
+  dispatch: (action: TGameAction) => void;
 }
 
 export const PlayersContext = React.createContext({} as IPlayersContextProps);
-export const AddonsContext = React.createContext({} as IAddonsContextProps);
+export const GameContext = React.createContext({} as IGameContextProps);
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
+  const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
-  const [addons, addonsDispatch] = useReducer(addonsReducer, addonsTemplate);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     savePlayersToStorage(players);
   }, [players]);
 
   useEffect(() => {
-    saveAddonsToStorage(addons);
-  }, [addons]);
+    saveAddonsToStorage(game.addons);
+    playersDispatch({ type: 'GAME_UPDATE', payload: game });
+  }, [game]);
 
   useEffect(() => {
-    restoreGame();
+    initGame();
+    initPlayers();
+    setIsReady(true);
   }, []);
 
-  useEffect(() => {
-    playersDispatch({ type: 'SET_ADDON', payload: addons });
-  }, [addons]);
+  function initGame(): void {
+    const addons = getAddonsFromStorage();
+    gameDispatch({ type: 'UPDATE', payload: { addons } });
+  }
 
-  function restoreGame(): void {
+  function initPlayers(): void {
     playersDispatch({ type: 'SET', payload: getPlayersFromStorage() });
-    addonsDispatch({ type: 'SET', payload: getAddonsFromStorage() });
-    setIsReady(true);
   }
 
   return (
     <div className="App">
-      <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
-        <AddonsContext.Provider value={{ state: addons, dispatch: addonsDispatch }}>
+      <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
+        <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
           {isReady && (
             <Layout>
               <>
-                <Navigation routes={ROUTES} players={players} addons={addons} />
+                <Navigation />
                 <MainMenu />
                 <RouteWrapper>
-                  <RenderRoutes routes={ROUTES} players={players} addons={addons} />
+                  <Router />
                 </RouteWrapper>
               </>
             </Layout>
           )}
-        </AddonsContext.Provider>
-      </PlayersContext.Provider>
+        </PlayersContext.Provider>
+      </GameContext.Provider>
     </div>
   );
 }

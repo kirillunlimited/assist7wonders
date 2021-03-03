@@ -1,18 +1,14 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { TRoutes, TPlayers, IAddons } from '../../types';
+import { IRoute } from '../../types';
 import { useLocation } from 'react-router-dom';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
-import { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
-
-interface IProps {
-  routes: TRoutes;
-  players: TPlayers;
-  addons: IAddons;
-}
+import { getRoutes } from '../../utils/router';
+import { useContext } from 'react';
+import { GameContext, PlayersContext } from '../App/App';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -30,41 +26,23 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function getFilteredRoutes(routes: TRoutes, players: TPlayers, addons: IAddons) {
-  return routes.reduce((routes: TRoutes, route) => {
-    const targetRoute = { ...route };
-
-    if (targetRoute.routes) {
-      // Nested routes
-      targetRoute.routes = getFilteredRoutes(targetRoute.routes, players, addons);
-    }
-    if (targetRoute.available && targetRoute.available({ players, addons }) === false) {
-      // Skip route
-      return routes;
-    }
-    routes.push(targetRoute);
-    return routes;
-  }, []);
-}
-
-export default function Navigation(props: IProps) {
+export default function Navigation() {
   const classes = useStyles();
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
-  const [filteredRoutes, setFilteredRoutes] = useState(props.routes);
+  const gameContext = useContext(GameContext);
+  const playersContext = useContext(PlayersContext);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    setFilteredRoutes(getFilteredRoutes(props.routes, props.players, props.addons));
-  }, [props.routes, props.players, props.addons]);
-
-  function renderTabs(routes: TRoutes): Array<React.ReactNode> {
+  function renderTabs(routes: IRoute[]): Array<React.ReactNode> {
     return routes.map(route => {
       if (route.routes) {
         return renderTabs(route.routes);
       } else {
-        return (
+        const error =
+          route.error && route.error({ game: gameContext.state, players: playersContext.state });
+        return error ? null : (
           <Tab
             key={route.id}
             className={classes.tab}
@@ -92,7 +70,7 @@ export default function Navigation(props: IProps) {
         variant={bigScreen ? 'standard' : 'scrollable'}
         scrollButtons="auto"
       >
-        {renderTabs(filteredRoutes)}
+        {renderTabs(getRoutes())}
       </Tabs>
     </AppBar>
   );

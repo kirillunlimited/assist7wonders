@@ -1,58 +1,44 @@
-export interface IScore {
-  military: number;
-  treasury: number;
-  wonders: number;
-  civilian: number;
-  commerce: number;
-  guild: number;
-  compass: number;
-  tablet: number;
-  gear: number;
-  wildcards: number;
-  cities: number;
-  debt: number;
-  leaders: number;
+/** GAME */
+export interface ICoreGame {
+  maxPlayers: number;
+  wonders: string[];
+  scores: IGameScore[];
+}
+export type TGame = ICoreGame & {
+  addons: string[];
+};
+export type TAddonGame = ICoreGame & {
+  id: string;
+};
+export interface IGameScore {
+  id: string;
+  color: string;
+  counters: {
+    id: string;
+    min?: number;
+    max?: number;
+  }[];
+  sum?: (score: IPlayerScore) => number;
 }
 
-export type TScoreKey = keyof IScore;
-
-export type ScienceParts = {
-  gear: number;
-  compass: number;
-  tablet: number;
-};
-
+/** PLAYERS */
 export interface IPlayer {
   name: string;
   wonder: string;
-  score: IScore;
+  score: IPlayerScore;
 }
+export interface IPlayerScore {
+  [key: string]: number | undefined;
+}
+export type TPlayerScoreKey = keyof IPlayerScore;
 
-export type TPlayers = IPlayer[];
-
+/** ROUTING */
 export interface IRoute {
-  path: string;
   id: string;
+  path: string;
   exact?: boolean;
-  component: Function;
-  routes?: TRoutes;
-  available?: Function;
+  routes?: IRoute[];
   color?: string;
-  sum?: Function;
+  component: Function;
+  error?: ({ game, players }: { game: TGame; players: IPlayer[] }) => string;
 }
-
-export type TRoutes = IRoute[];
-
-export interface IAddons {
-  cities: boolean;
-  leaders: boolean;
-}
-
-export interface IAddonConfig {
-  id: keyof IAddons;
-  scores: TScoreKey[];
-}
-
-export type TAddonsConfig = IAddonConfig[];
-
-export type TWonders = string[];

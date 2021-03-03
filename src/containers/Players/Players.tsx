@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import NewPlayer from '../../components/NewPlayer/NewPlayer';
 import { IconButton } from '@material-ui/core';
 import { DeleteForever } from '@material-ui/icons';
-import { PlayersContext } from '../App/App';
+import { GameContext, PlayersContext } from '../App/App';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,7 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import WonderSelect from '../../components/WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { TPlayers } from '../../types';
+import { IPlayer } from '../../types';
 
 const useStyles = makeStyles(() => ({
   subtitle: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const reorder = (list: TPlayers, startIndex: number, endIndex: number): TPlayers => {
+const reorder = (list: IPlayer[], startIndex: number, endIndex: number): IPlayer[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -39,6 +39,7 @@ const reorder = (list: TPlayers, startIndex: number, endIndex: number): TPlayers
 
 export default function Players() {
   const playersContext = useContext(PlayersContext);
+  const gameContext = useContext(GameContext);
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -88,6 +89,9 @@ export default function Players() {
 
   return (
     <div>
+      <Typography variant="subtitle1">
+        {playersContext.state.length} / {gameContext.state.maxPlayers}
+      </Typography>
       {playersContext.state.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
@@ -108,6 +112,7 @@ export default function Players() {
                             <TableCell className={`${styles.td} ${styles.wonder}`}>
                               <WonderSelect
                                 value={player.wonder}
+                                wonders={gameContext.state.wonders}
                                 selectedWonders={playersContext.state.map(player => player.wonder)}
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
@@ -165,7 +170,9 @@ export default function Players() {
 
       <NewPlayer
         names={playersContext.state.map(player => player.name)}
-        wonders={playersContext.state.map(player => player.wonder)}
+        wonders={gameContext.state.wonders}
+        selectedWonders={playersContext.state.map(player => player.wonder)}
+        isMax={playersContext.state.length >= gameContext.state.maxPlayers}
         handleSubmit={onNewPlayerSubmit}
       />
     </div>

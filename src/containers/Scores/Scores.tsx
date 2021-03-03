@@ -1,6 +1,6 @@
-import Score from '../../components/Score/Score';
+import Counter from '../../components/Counter/Counter';
 import React, { useContext } from 'react';
-import { TScoreKey, IPlayer } from '../../types';
+import { TPlayerScoreKey, IPlayer, IGameScore } from '../../types';
 import { PlayersContext } from '../App/App';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -9,27 +9,21 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Profile from '../../components/Profile/Profile';
 import styles from './Scores.module.css';
-import { ScoreRoutes } from '../../config/routes';
 import Chip from '@material-ui/core/Chip';
 
 export interface IProps {
-  key: string;
-  scores: TScoreKey[];
-  max?: number;
-  isSumVisible?: boolean;
+  score: IGameScore;
 }
 
 export default function Scores(props: IProps) {
   const playersContext = useContext(PlayersContext);
 
-  function onChange(name: string, scoreKey: TScoreKey, value: number) {
+  function onChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
-  const route = ScoreRoutes.find(route => route.id === props.key);
-
   function getSum(player: IPlayer): number {
-    return route && route.sum ? route.sum(player.score) : 0;
+    return props.score.sum ? props.score.sum(player.score) : 0;
   }
 
   return (
@@ -43,15 +37,16 @@ export default function Scores(props: IProps) {
               </TableCell>
               <TableCell className={`${styles.td} ${styles.empty}`} />
               <TableCell className={styles.td}>
-                {props.isSumVisible ? <Chip label={`Σ ${getSum(player)}`} /> : null}
-                {props.scores.map((scoreKey, index, arr) => (
-                  <Score
-                    key={scoreKey}
-                    scoreKey={scoreKey}
-                    title={arr.length > 1 ? scoreKey : ''}
-                    value={player.score[scoreKey]}
-                    handleChange={(value: number) => onChange(player.name, scoreKey, value)}
-                    max={props.max}
+                {props.score.sum ? <Chip label={`Σ ${getSum(player)}`} /> : null}
+                {props.score.counters.map((counter, index, arr) => (
+                  <Counter
+                    key={counter.id}
+                    counter={counter.id}
+                    title={arr.length > 1 ? counter.id : ''}
+                    value={player.score[counter.id] || 0}
+                    handleChange={(value: number) => onChange(player.name, counter.id, value)}
+                    min={counter.min}
+                    max={counter.max}
                   />
                 ))}
               </TableCell>
