@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 
 interface Props {
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 const useStyles = makeStyles(theme => ({
