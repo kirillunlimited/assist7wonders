@@ -1,9 +1,10 @@
+import { BASE_GAME, ADDONS } from '../config/game';
 import { getAllScores } from './game';
 import { IGameScore, IRoute } from '../types';
 import Scores from '../containers/Scores/Scores';
 
 export function getAllRoutes(routes: IRoute[]): IRoute[] {
-  const scores = getAllScores();
+  const scores = getAllScores([BASE_GAME, ...ADDONS]);
   return routes.map(route => {
     if (route.id === 'scores') {
       return {

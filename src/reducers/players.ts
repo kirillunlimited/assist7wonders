@@ -1,7 +1,8 @@
 import { IPlayer, TPlayerScoreKey, ICoreGame, TGame } from '../types';
 import { getAllCounters, shuffleWonders } from '../utils/game';
+import { BASE_GAME, ADDONS } from '../config/game';
 
-const counters = getAllCounters();
+const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 
 const SET = 'SET';
 const ADD = 'ADD';
