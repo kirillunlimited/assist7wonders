@@ -1,5 +1,6 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4b5baa33b48e4995b5adc37a65cae574)](https://app.codacy.com/gh/kirillunlimited/assist7wonders?utm_source=github.com&utm_medium=referral&utm_content=kirillunlimited/assist7wonders&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.org/kirillunlimited/assist7wonders.svg?branch=master)](https://travis-ci.com/kirillunlimited/assist7wonders)
+[![Coverage Status](https://coveralls.io/repos/github/kirillunlimited/assist7wonders/badge.svg?branch=testing)](https://coveralls.io/github/kirillunlimited/assist7wonders?branch=testing)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4b5baa33b48e4995b5adc37a65cae574)](https://app.codacy.com/gh/kirillunlimited/assist7wonders?utm_source=github.com&utm_medium=referral&utm_content=kirillunlimited/assist7wonders&utm_campaign=Badge_Grade_Settings)
 [![License](https://img.shields.io/github/license/kirillunlimited/assist7wonders)](https://github.com/kirillunlimited/assist7wonders/blob/master/LICENSE.md)
 
 # 7 Wonders assistant app
