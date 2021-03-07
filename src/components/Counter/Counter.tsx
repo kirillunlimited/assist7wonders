@@ -42,6 +42,7 @@ export default function Counter(props: Props) {
       ? props.min
       : event.target.value;
     const intValue = Math.floor(Number(value));
+    setLocalValue(String(intValue));
     props.handleChange(intValue);
   }
 
@@ -73,10 +74,6 @@ export default function Counter(props: Props) {
           onChange={onChange}
           onBlur={onBlur}
           value={localValue}
-          inputProps={{
-            max: props.max,
-            min: props.min,
-          }}
         />
         <IconButton
           data-testid="increment"

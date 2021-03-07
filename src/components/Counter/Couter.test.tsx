@@ -9,21 +9,21 @@ const defaultProps = {
 };
 
 describe('render', () => {
-  it('input renders correctly', () => {
+  it('should render correctly', () => {
     render(<Counter {...defaultProps} />);
     expect(screen.queryByTestId('increment')).toBeTruthy();
     expect(screen.queryByTestId('decrement')).toBeTruthy();
     expect(screen.queryByTestId('input')).toBeTruthy();
     expect(screen.queryByTestId('science')).toBeFalsy();
   });
-  it('science icon renders correctly', () => {
+  it('should render science icon', () => {
     render(<Counter {...defaultProps} counter="compass" />);
     expect(screen.queryByTestId('science')).toBeTruthy();
   });
 });
 
 describe('input value change', () => {
-  it('updates on change', () => {
+  it('should update on change', () => {
     let value = 0;
     const handleChange = jest.fn(x => {
       value = x;
@@ -35,7 +35,7 @@ describe('input value change', () => {
     fireEvent.blur(input!);
     expect(value).toBe(1);
   });
-  it('empty string is zero', () => {
+  it('should convert empty string to zero', () => {
     let value = 1;
     const handleChange = jest.fn(x => {
       value = x;
@@ -52,7 +52,7 @@ describe('input value change', () => {
     rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
     expect(input!.value).toBe('0');
   });
-  it('result value is rounded', () => {
+  it('should round value', () => {
     let value = 0;
     const handleChange = jest.fn(x => {
       value = x;
@@ -70,7 +70,7 @@ describe('input value change', () => {
     rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
     expect(input!.value).toBe('1');
   });
-  it('no updates on change if new value is bigger than max', async () => {
+  it('should not update on change if new value is bigger than max', () => {
     let value = 10;
     const max = 10;
     const handleChange = jest.fn(x => {
@@ -84,12 +84,12 @@ describe('input value change', () => {
     const input = screen.queryByTestId('input')!.querySelector('input');
     fireEvent.change(input!, { target: { value: 20 } });
     fireEvent.blur(input!);
-    expect(value).toBe(10); // ✅
+    expect(value).toBe(10);
 
     rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
-    expect(input!.value).toBe('10'); // ❌ Received: '20'
+    expect(input!.value).toBe('10');
   });
-  it('no updates on change if new value is less than min', () => {
+  it('should not update on change if new value is less than min', () => {
     let value = 0;
     const min = 0;
     const handleChange = jest.fn(x => {
@@ -108,8 +108,8 @@ describe('input value change', () => {
   });
 });
 
-describe('increment and decrement', () => {
-  it('updates on increment', async () => {
+describe('increment & decrement', () => {
+  it('should update on decrement', async () => {
     let value = 0;
     const handleChange = jest.fn(x => {
       value = x;
@@ -126,7 +126,7 @@ describe('increment and decrement', () => {
     const input = screen.queryByTestId('input')!.querySelector('input');
     expect(input!.value).toBe('1');
   });
-  it('updates on decrement', async () => {
+  it('should update on increment', async () => {
     let value = 0;
     const handleChange = jest.fn(x => {
       value = x;
@@ -142,7 +142,7 @@ describe('increment and decrement', () => {
     const input = screen.queryByTestId('input')!.querySelector('input');
     expect(input!.value).toBe('-1');
   });
-  it('disabled increment button is not clickable', async () => {
+  it('should not increment if increment button is disabled', async () => {
     let value = 10;
     const max = 10;
     const handleChange = jest.fn(x => {
@@ -153,7 +153,7 @@ describe('increment and decrement', () => {
     fireEvent.click(screen.queryByTestId('increment')!);
     await waitFor(() => expect(handleChange).not.toHaveBeenCalled());
   });
-  it('disabled decrement button is not clickable', async () => {
+  it('should not decrement if decrement button is disabled', async () => {
     let value = 0;
     const min = 0;
     const handleChange = jest.fn(x => {
