@@ -38,11 +38,10 @@ export default function Scores(props: IProps) {
               <TableCell className={`${styles.td} ${styles.empty}`} />
               <TableCell className={styles.td}>
                 {props.score.sum ? <Chip label={`Σ ${getSum(player)}`} /> : null}
-                {props.score.counters.map((counter, index, arr) => (
+                {props.score.counters.map(counter => (
                   <Counter
                     key={counter.id}
                     counter={counter.id}
-                    title={arr.length > 1 ? counter.id : ''}
                     value={player.score[counter.id] || 0}
                     handleChange={(value: number) => onChange(player.name, counter.id, value)}
                     min={counter.min}

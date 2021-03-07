@@ -9,7 +9,6 @@ import { isMinValue, isMaxValue } from '../../utils/score';
 export type Props = {
   counter: string;
   value: number;
-  title: string;
   handleChange: (value: number) => void;
   max?: number;
   min?: number;

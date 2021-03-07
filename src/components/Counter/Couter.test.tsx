@@ -5,7 +5,6 @@ import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 const defaultProps = {
   value: 0,
   counter: 'test',
-  title: 'Test',
   handleChange: jest.fn(),
 };
 
@@ -78,12 +77,17 @@ describe('input value change', () => {
       value = x;
     });
 
-    render(<Counter {...defaultProps} value={value} max={max} handleChange={handleChange} />);
+    const { rerender } = render(
+      <Counter {...defaultProps} value={value} max={max} handleChange={handleChange} />
+    );
 
     const input = screen.queryByTestId('input')!.querySelector('input');
     fireEvent.change(input!, { target: { value: 20 } });
     fireEvent.blur(input!);
-    expect(value).toBe(10);
+    expect(value).toBe(10); // ✅
+
+    rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
+    expect(input!.value).toBe('10'); // ❌ Received: '20'
   });
   it('no updates on change if new value is less than min', () => {
     let value = 0;
@@ -91,11 +95,16 @@ describe('input value change', () => {
     const handleChange = jest.fn(x => {
       value = x;
     });
-    render(<Counter {...defaultProps} value={value} min={min} handleChange={handleChange} />);
+    const { rerender } = render(
+      <Counter {...defaultProps} value={value} min={min} handleChange={handleChange} />
+    );
     const input = screen.queryByTestId('input')!.querySelector('input');
     fireEvent.change(input!, { target: { value: -10 } });
     fireEvent.blur(input!);
-    expect(value).toBe(0);
+    expect(value).toBe(0); // ✅
+
+    rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
+    expect(input!.value).toBe('0'); // ❌ Received: '0'
   });
 });
 
