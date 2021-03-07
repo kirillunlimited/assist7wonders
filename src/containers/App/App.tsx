@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import './App.css';
 import Navigation from '../Navigation/Navigation';
 import { IPlayer, TGame } from '../../types';
-import { Router } from '../Router/Router';
+import Router from '../Router/Router';
 import {
   savePlayersToStorage,
   saveAddonsToStorage,
@@ -15,6 +15,7 @@ import Layout from '../../components/Layout/Layout';
 import RouteWrapper from '../../components/RouteWrapper/RouteWrapper';
 import MainMenu from '../MainMenu/MainMenu';
 import { GAME_BOILERPLATE } from '../../config/game';
+import ROUTES from '../../config/routes';
 
 interface IPlayersContextProps {
   state: IPlayer[];
@@ -68,7 +69,7 @@ export default function App() {
                 <Navigation />
                 <MainMenu />
                 <RouteWrapper>
-                  <Router />
+                  <Router routes={ROUTES} />
                 </RouteWrapper>
               </>
             </Layout>

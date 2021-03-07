@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { GameContext, PlayersContext } from '../App/App';
-import { getRoutes } from '../../utils/router';
 
 const useStyles = makeStyles({
   title: {
@@ -18,12 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-export function Router() {
-  const routes = getRoutes();
-  return Routes({ routes });
-}
-
-export default function Routes({ routes }: { routes: IRoute[] }) {
+export default function Router({ routes }: { routes: IRoute[] }) {
   const classes = useStyles();
   const { t } = useTranslation();
   return (

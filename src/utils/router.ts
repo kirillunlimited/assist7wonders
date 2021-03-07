@@ -1,11 +1,10 @@
 import { getAllScores } from './game';
-import { ROUTES } from '../config/routes';
 import { IGameScore, IRoute } from '../types';
 import Scores from '../containers/Scores/Scores';
 
-export function getRoutes() {
+export function getAllRoutes(routes: IRoute[]): IRoute[] {
   const scores = getAllScores();
-  return ROUTES.map(route => {
+  return routes.map(route => {
     if (route.id === 'scores') {
       return {
         ...route,

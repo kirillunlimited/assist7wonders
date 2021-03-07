@@ -6,7 +6,7 @@ import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
-import { getRoutes } from '../../utils/router';
+import ROUTES from '../../config/routes';
 import { useContext } from 'react';
 import { GameContext, PlayersContext } from '../App/App';
 
@@ -70,7 +70,7 @@ export default function Navigation() {
         variant={bigScreen ? 'standard' : 'scrollable'}
         scrollButtons="auto"
       >
-        {renderTabs(getRoutes())}
+        {renderTabs(ROUTES)}
       </Tabs>
     </AppBar>
   );
