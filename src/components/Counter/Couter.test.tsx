@@ -101,10 +101,10 @@ describe('input value change', () => {
     const input = screen.queryByTestId('input')!.querySelector('input');
     fireEvent.change(input!, { target: { value: -10 } });
     fireEvent.blur(input!);
-    expect(value).toBe(0); // ✅
+    expect(value).toBe(0);
 
     rerender(<Counter {...defaultProps} value={value} handleChange={handleChange} />);
-    expect(input!.value).toBe('0'); // ❌ Received: '0'
+    expect(input!.value).toBe('0');
   });
 });
 

@@ -29,15 +29,23 @@ export default function WonderSelect(props: IProps) {
   }
 
   function onChange(event: React.ChangeEvent<{ value: unknown }>) {
-    props.onSelect(event.target.value as string);
+    const value = event.target.value as string;
+    if (!isValueSelected(value)) {
+      props.onSelect(value);
+    }
   }
 
   return (
     <FormControl variant={props.variant} className={classes.formControl}>
-      <InputLabel>{t('wonder')}</InputLabel>
-      <Select label={t('wonder')} value={props.value} onChange={onChange}>
-        {props.wonders.sort().map(wonder => (
-          <MenuItem key={wonder} value={wonder} disabled={isValueSelected(wonder)}>
+      <InputLabel data-testid="label">{t('wonder')}</InputLabel>
+      <Select data-testid="select" label={t('wonder')} value={props.value} onChange={onChange}>
+        {[...props.wonders].sort().map(wonder => (
+          <MenuItem
+            data-testid="item"
+            key={wonder}
+            value={wonder}
+            disabled={isValueSelected(wonder)}
+          >
             {wonder}
           </MenuItem>
         ))}
