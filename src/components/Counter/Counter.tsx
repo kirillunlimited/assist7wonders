@@ -2,20 +2,33 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { IconButton, Input } from '@material-ui/core';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import styles from './Counter.module.css';
 import { SCORE_ICONS } from '../../utils/game';
 import { isMinValue, isMaxValue } from '../../utils/score';
+import { makeStyles } from '@material-ui/core/styles';
 
 export type Props = {
   counter: string;
   value: number;
-  handleChange: (value: number) => void;
+  onChange: (value: number) => void;
   max?: number;
   min?: number;
 };
 
+const useStyles = makeStyles(() => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flexEnd',
+  },
+  scoreIcon: {
+    width: '36px',
+  },
+}));
+
 export default function Counter(props: Props) {
   const [localValue, setLocalValue] = useState(String(props.value));
+  const classes = useStyles();
 
   useEffect(() => {
     setLocalValue(String(props.value));
@@ -23,12 +36,12 @@ export default function Counter(props: Props) {
 
   function handleDecrement(): void {
     const value = isMinValue(props.value - 1, props.min) ? Number(props.min) : props.value - 1;
-    props.handleChange(value);
+    props.onChange(value);
   }
 
   function handleIncrement(): void {
     const value = isMaxValue(props.value + 1, props.max) ? Number(props.max) : props.value + 1;
-    props.handleChange(value);
+    props.onChange(value);
   }
 
   function onChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -43,22 +56,22 @@ export default function Counter(props: Props) {
       : event.target.value;
     const intValue = Math.floor(Number(value));
     setLocalValue(String(intValue));
-    props.handleChange(intValue);
+    props.onChange(intValue);
   }
 
   return (
-    <div className={styles.container}>
+    <div className={classes.container}>
       {SCORE_ICONS[props.counter] ? (
         <img
-          data-testid="science"
           src={SCORE_ICONS[props.counter]}
-          className={styles.scoreIcon}
+          className={classes.scoreIcon}
+          title="counter icon"
           alt={props.counter}
         />
       ) : null}
       <div>
         <IconButton
-          data-testid="decrement"
+          aria-label="decrement"
           onClick={handleDecrement}
           disabled={isMinValue(Number(localValue), props.min)}
         >
@@ -68,16 +81,14 @@ export default function Counter(props: Props) {
           />
         </IconButton>
         <Input
-          data-testid="input"
           style={{ width: 48 }}
           type="number"
+          value={localValue}
           onChange={onChange}
           onBlur={onBlur}
-          value={localValue}
         />
         <IconButton
-          data-testid="increment"
-          id="plus"
+          aria-label="increment"
           onClick={handleIncrement}
           disabled={isMaxValue(Number(localValue), props.max)}
         >

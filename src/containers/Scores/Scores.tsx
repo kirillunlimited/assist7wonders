@@ -18,7 +18,7 @@ export interface IProps {
 export default function Scores(props: IProps) {
   const playersContext = useContext(PlayersContext);
 
-  function onChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
+  function handleChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
@@ -43,7 +43,7 @@ export default function Scores(props: IProps) {
                     key={counter.id}
                     counter={counter.id}
                     value={player.score[counter.id] || 0}
-                    handleChange={(value: number) => onChange(player.name, counter.id, value)}
+                    onChange={(value: number) => handleChange(player.name, counter.id, value)}
                     min={counter.min}
                     max={counter.max}
                   />

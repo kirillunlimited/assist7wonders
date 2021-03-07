@@ -37,15 +37,10 @@ export default function WonderSelect(props: IProps) {
 
   return (
     <FormControl variant={props.variant} className={classes.formControl}>
-      <InputLabel data-testid="label">{t('wonder')}</InputLabel>
-      <Select data-testid="select" label={t('wonder')} value={props.value} onChange={onChange}>
+      <InputLabel role="label">{t('wonder')}</InputLabel>
+      <Select role="select" label={t('wonder')} value={props.value} onChange={onChange}>
         {[...props.wonders].sort().map(wonder => (
-          <MenuItem
-            data-testid="item"
-            key={wonder}
-            value={wonder}
-            disabled={isValueSelected(wonder)}
-          >
+          <MenuItem key={wonder} value={wonder} disabled={isValueSelected(wonder)}>
             {wonder}
           </MenuItem>
         ))}

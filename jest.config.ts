@@ -6,4 +6,5 @@ module.exports = {
     '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.ts',
   },
 };
+
 export {};

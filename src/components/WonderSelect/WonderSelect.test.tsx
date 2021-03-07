@@ -2,6 +2,7 @@ import React from 'react';
 import WonderSelect from './WonderSelect';
 import { render, fireEvent, waitFor, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; // "expect(...).toHaveAttribute is not a function" fix
+import '@testing-library/jest-dom';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => {
@@ -24,8 +25,8 @@ const defaultProps = {
 describe('render', () => {
   it('should render correctly', () => {
     render(<WonderSelect {...defaultProps} />);
-    expect(screen.queryByTestId('select')).toBeTruthy();
-    expect(screen.queryByTestId('label')).toBeTruthy();
+    expect(screen.getByRole('select')).toBeInTheDocument();
+    expect(screen.getByRole('label')).toBeInTheDocument();
 
     fireEvent.mouseDown(screen.getByRole('button'));
     const listbox = within(screen.getByRole('listbox'));
@@ -35,12 +36,12 @@ describe('render', () => {
     render(<WonderSelect {...defaultProps} />);
     fireEvent.mouseDown(screen.getByRole('button'));
     const listbox = within(screen.getByRole('listbox'));
-    const items = listbox.getAllByTestId('item').map(item => item.textContent);
+    const items = listbox.getAllByRole('option').map(item => item.textContent);
     expect(items).toEqual([...defaultProps.wonders].sort());
   });
 });
 
-describe('change', () => {
+describe('select', () => {
   it('should update selected value on change', async () => {
     let value = '';
     const onSelect = jest.fn(x => {
@@ -57,13 +58,8 @@ describe('change', () => {
     expect(value).toEqual('foo');
 
     rerender(<WonderSelect {...defaultProps} value={value} onSelect={onSelect} />);
-
-    const input = screen.queryByTestId('select')!.querySelector('input');
-    expect(input!.value).toBe('foo');
+    expect(screen.getByDisplayValue('foo')).toBeInTheDocument();
   });
-});
-
-describe('selected wonders', () => {
   it('should not allow to select selected option', async () => {
     let value = '';
     const selectedWonders = ['foo'];
