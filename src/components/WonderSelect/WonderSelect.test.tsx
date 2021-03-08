@@ -28,11 +28,16 @@ describe('render', () => {
     expect(screen.getByRole('select')).toBeInTheDocument();
     expect(screen.getByRole('label')).toBeInTheDocument();
   });
+  it('should render selected with value', () => {
+    const value = 'foo';
+    render(<WonderSelect {...defaultProps} value={value} />);
+    expect(screen.getByDisplayValue('foo')).toBeInTheDocument();
+  });
   it('should render options on click', () => {
     render(<WonderSelect {...defaultProps} />);
     fireEvent.mouseDown(screen.getByRole('button'));
     const listbox = within(screen.getByRole('listbox'));
-    expect(listbox.getByText(/foo/i)).toBeTruthy();
+    expect(listbox.getByText(/foo/i)).toBeInTheDocument();
   });
   it('should render sorted items', () => {
     render(<WonderSelect {...defaultProps} />);

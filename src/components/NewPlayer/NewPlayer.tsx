@@ -5,6 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 import Fab from '@material-ui/core/Fab';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,7 +21,7 @@ interface IProps {
   wonders: string[];
   selectedWonders: string[];
   isMax: boolean;
-  handleSubmit: (name: string, wonder: string) => void;
+  onSubmit: (name: string, wonder: string) => void;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +29,16 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     bottom: theme.spacing(4),
     right: theme.spacing(4),
+  },
+  title: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   },
   wondersSelect: {
     marginTop: theme.spacing(2),
@@ -50,7 +63,7 @@ export default function NewPlayer(props: IProps) {
     if (isDialogOpened) {
       setWonder(getRandomWonder());
     }
-  }, [getRandomWonder]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.selectedWonders]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function isAddButtonEnabled() {
     return !props.isMax && isNameValid(name) && isWonderValid(wonder);
@@ -58,7 +71,7 @@ export default function NewPlayer(props: IProps) {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    props.handleSubmit(name, wonder);
+    props.onSubmit(name, wonder);
 
     /* Reset */
     setName('');
@@ -101,17 +114,30 @@ export default function NewPlayer(props: IProps) {
       </Tooltip>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
-        <DialogTitle>{t('newPlayer')}</DialogTitle>
-        <form onSubmit={handleSubmit}>
+        <DialogTitle disableTypography className={classes.title}>
+          <Typography variant="h6"> {t('newPlayer')}</Typography>
+          <IconButton
+            className={classes.closeButton}
+            aria-label="close"
+            onClick={() => toggleDialog(false)}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <form aria-label="New Player" onSubmit={handleSubmit}>
           <DialogContent>
             <div>
               <TextField
+                aria-label="Name"
                 label={t('name')}
                 value={name}
                 variant="outlined"
                 autoFocus
                 error={isNameExists(name)}
                 helperText={isNameExists(name) ? t('playerAlreadyExists') : ''}
+                FormHelperTextProps={{
+                  'aria-label': 'Error message',
+                }}
                 onChange={event => setName(event.target.value)}
               />
             </div>
@@ -126,7 +152,7 @@ export default function NewPlayer(props: IProps) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" type="submit" disabled={!isAddButtonEnabled()}>
+            <Button role="submit" color="primary" type="submit" disabled={!isAddButtonEnabled()}>
               {t('add')}
             </Button>
           </DialogActions>

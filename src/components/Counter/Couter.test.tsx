@@ -118,7 +118,7 @@ describe('increment & decrement', () => {
     });
     const { rerender } = render(<Counter {...defaultProps} value={value} onChange={onChange} />);
 
-    fireEvent.click(screen.getByLabelText('increment')!);
+    fireEvent.click(screen.getByLabelText('increment'));
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith(1);
       expect(onChange).toHaveBeenCalledTimes(1);
@@ -133,7 +133,7 @@ describe('increment & decrement', () => {
       value = x;
     });
     const { rerender } = render(<Counter {...defaultProps} value={value} onChange={onChange} />);
-    fireEvent.click(screen.getByLabelText('decrement')!);
+    fireEvent.click(screen.getByLabelText('decrement'));
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith(-1);
       expect(onChange).toHaveBeenCalledTimes(1);
@@ -149,7 +149,7 @@ describe('increment & decrement', () => {
       value = x;
     });
     render(<Counter {...defaultProps} value={value} max={max} onChange={onChange} />);
-    fireEvent.click(screen.getByLabelText('increment')!);
+    fireEvent.click(screen.getByLabelText('increment'));
     await waitFor(() => expect(onChange).not.toHaveBeenCalled());
     expect(screen.getByDisplayValue('10')).toBeInTheDocument();
   });
@@ -160,7 +160,7 @@ describe('increment & decrement', () => {
       value = x;
     });
     render(<Counter {...defaultProps} value={value} min={min} onChange={onChange} />);
-    fireEvent.click(screen.getByLabelText('decrement')!);
+    fireEvent.click(screen.getByLabelText('decrement'));
     await waitFor(() => expect(onChange).not.toHaveBeenCalled());
     expect(screen.getByDisplayValue('0')).toBeInTheDocument();
   });

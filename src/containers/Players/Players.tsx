@@ -43,7 +43,7 @@ export default function Players() {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  function onNewPlayerSubmit(name: string, wonder: string) {
+  function handleSubmit(name: string, wonder: string) {
     playersContext.dispatch({ type: 'ADD', payload: { name, wonder } });
   }
 
@@ -173,7 +173,7 @@ export default function Players() {
         wonders={gameContext.state.wonders}
         selectedWonders={playersContext.state.map(player => player.wonder)}
         isMax={playersContext.state.length >= gameContext.state.maxPlayers}
-        handleSubmit={onNewPlayerSubmit}
+        onSubmit={handleSubmit}
       />
     </div>
   );
