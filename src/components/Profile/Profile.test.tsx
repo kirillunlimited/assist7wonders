@@ -1,6 +1,7 @@
 import React from 'react';
 import Profile from './Profile';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 describe('render', () => {
   it('should render portrait and name', () => {
