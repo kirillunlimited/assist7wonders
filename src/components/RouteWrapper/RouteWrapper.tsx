@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 
-interface IProps {
+interface Props {
   children: JSX.Element;
 }
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function RouteWrapper(props: IProps) {
+export default function RouteWrapper(props: Props) {
   const classes = useStyles();
 
   return (

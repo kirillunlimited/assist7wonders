@@ -6,7 +6,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { blue } from '@material-ui/core/colors';
 import { getAvatarText } from '../../utils/game';
 
-export interface IProps {
+interface Props {
   name: string;
 }
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function Scores(props: IProps) {
+export default function Scores(props: Props) {
   const classes = useStyles();
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));

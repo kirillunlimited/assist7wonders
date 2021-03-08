@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-interface IProps {
+interface Props {
   children: JSX.Element;
 }
 
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Layout(props: IProps) {
+export default function Layout(props: Props) {
   const classes = useStyles();
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));

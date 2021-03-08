@@ -1,5 +1,5 @@
 import React from 'react';
-import WonderSelect from './WonderSelect';
+import WonderSelect, { Props } from './WonderSelect';
 import { render, fireEvent, waitFor, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; // "expect(...).toHaveAttribute is not a function" fix
 import '@testing-library/jest-dom';
@@ -15,7 +15,7 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
-const defaultProps = {
+const defaultProps: Props = {
   value: '',
   wonders: ['foo', 'bar', 'baz'],
   selectedWonders: [],

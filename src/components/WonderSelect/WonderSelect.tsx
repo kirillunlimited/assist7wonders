@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useTranslation } from 'react-i18next';
 
-interface IProps {
+export interface Props {
   value: string;
   wonders: string[];
   selectedWonders: string[];
@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function WonderSelect(props: IProps) {
+export default function WonderSelect(props: Props) {
   const classes = useStyles();
   const { t } = useTranslation();
 

@@ -16,7 +16,7 @@ import WonderSelect from '../WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { shuffleWonders } from '../../utils/game';
 
-interface IProps {
+export interface Props {
   names: string[];
   wonders: string[];
   selectedWonders: string[];
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NewPlayer(props: IProps) {
+export default function NewPlayer(props: Props) {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [wonder, setWonder] = useState('');

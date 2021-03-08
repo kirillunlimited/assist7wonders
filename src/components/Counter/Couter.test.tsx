@@ -1,9 +1,9 @@
 import React from 'react';
-import Counter from './Counter';
+import Counter, { Props } from './Counter';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-const defaultProps = {
+const defaultProps: Props = {
   value: 0,
   counter: 'test',
   onChange: jest.fn(),
