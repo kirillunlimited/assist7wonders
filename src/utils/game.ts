@@ -33,3 +33,12 @@ export const getAllCounters = (games: TAddonGame[]) => {
 export function shuffleWonders(wonders: string[]): string[] {
   return shuffle(wonders);
 }
+
+/* Get first 2 capital letters of the name */
+export function getAvatarText(name: string): string {
+  return name
+    .split(' ')
+    .reduce((acc, word) => (word ? acc + word[0] : acc), '')
+    .substring(0, 2)
+    .toUpperCase();
+}

@@ -1,4 +1,4 @@
-import { getAllScores, getAllCounters, shuffleWonders } from './game';
+import { getAllScores, getAllCounters, shuffleWonders, getAvatarText } from './game';
 import { BASE_GAME } from '../config/game';
 
 describe('getAllScores', () => {
@@ -36,5 +36,15 @@ describe('shuffleWonders', () => {
   test('should contain the same elements', () => {
     const arr = ['a', 'b', 'c', 'd', 'e', 'f'];
     expect(shuffleWonders(arr).sort()).toEqual(arr);
+  });
+});
+
+describe('getAvatarText', () => {
+  test('should return 1 letter', () => {
+    expect(getAvatarText('Jean')).toEqual('J');
+  });
+  test('should return 2 letters', () => {
+    expect(getAvatarText('Jean Claud')).toEqual('JC');
+    expect(getAvatarText('Jean Claud Van Damme')).toEqual('JC');
   });
 });

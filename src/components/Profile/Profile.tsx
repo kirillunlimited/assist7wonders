@@ -1,14 +1,13 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import styles from './Profile.module.css';
+import Typography from '@material-ui/core/Typography';
 import { useTheme, makeStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { blue } from '@material-ui/core/colors';
-import Typography from '@material-ui/core/Typography';
+import { getAvatarText } from '../../utils/game';
 
 export interface IProps {
   name: string;
-  wonder?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -16,16 +15,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.getContrastText(blue[500]),
     backgroundColor: blue[500],
   },
+  player: {
+    display: 'flex',
+    alignItems: 'center',
+    minWidth: '124px',
+  },
+  playerSmall: {
+    flexDirection: 'column',
+    minWidth: '76px',
+  },
+  name: {
+    marginLeft: '0.5em',
+  },
+  nameSmall: {
+    margin: 0,
+    textAlign: 'center',
+  },
 }));
-
-/* Get first 2 capital letters of the name */
-const getAvatarText = (name: string) => {
-  return name
-    .split(' ')
-    .reduce((acc, word) => (word ? acc + word[0] : acc), '')
-    .substring(0, 2)
-    .toUpperCase();
-};
 
 export default function Scores(props: IProps) {
   const classes = useStyles();
@@ -34,17 +40,12 @@ export default function Scores(props: IProps) {
   const avatarText = getAvatarText(props.name);
 
   return (
-    <div className={`${styles.player} ${!bigScreen && styles.sm}`}>
+    <div className={`${classes.player} ${!bigScreen ? classes.playerSmall : ''}`}>
       <Avatar className={classes.avatar} alt={props.name}>
         {avatarText}
       </Avatar>
-      <div className={styles.name}>
+      <div className={`${classes.name} ${!bigScreen ? classes.nameSmall : ''}`}>
         <Typography variant="body2">{props.name}</Typography>
-        {props.wonder ? (
-          <Typography variant="caption" color="textSecondary">
-            {props.wonder}
-          </Typography>
-        ) : null}
       </div>
     </div>
   );
