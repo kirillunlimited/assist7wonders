@@ -18,7 +18,7 @@ export interface IProps {
 export default function Scores(props: IProps) {
   const playersContext = useContext(PlayersContext);
 
-  function onChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
+  function handleChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
@@ -33,18 +33,17 @@ export default function Scores(props: IProps) {
           {playersContext.state.map(player => (
             <TableRow key={player.name}>
               <TableCell className={styles.td}>
-                <Profile name={player.name} wonder={player.wonder} />
+                <Profile name={player.name} />
               </TableCell>
               <TableCell className={`${styles.td} ${styles.empty}`} />
               <TableCell className={styles.td}>
                 {props.score.sum ? <Chip label={`Σ ${getSum(player)}`} /> : null}
-                {props.score.counters.map((counter, index, arr) => (
+                {props.score.counters.map(counter => (
                   <Counter
                     key={counter.id}
                     counter={counter.id}
-                    title={arr.length > 1 ? counter.id : ''}
                     value={player.score[counter.id] || 0}
-                    handleChange={(value: number) => onChange(player.name, counter.id, value)}
+                    onChange={(value: number) => handleChange(player.name, counter.id, value)}
                     min={counter.min}
                     max={counter.max}
                   />

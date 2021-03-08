@@ -84,3 +84,11 @@ export function getScienceTotal(playerScore: IPlayerScore): number {
 export function getTreasuryTotal(playerScore: IPlayerScore): number {
   return playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
 }
+
+export function isMinValue(value: number, min?: number): boolean {
+  return min !== undefined && value <= min;
+}
+
+export function isMaxValue(value: number, max?: number): boolean {
+  return max !== undefined && value >= max;
+}

@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useTranslation } from 'react-i18next';
 
-interface IProps {
+export interface Props {
   value: string;
   wonders: string[];
   selectedWonders: string[];
@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function WonderSelect(props: IProps) {
+export default function WonderSelect(props: Props) {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -29,14 +29,17 @@ export default function WonderSelect(props: IProps) {
   }
 
   function onChange(event: React.ChangeEvent<{ value: unknown }>) {
-    props.onSelect(event.target.value as string);
+    const value = event.target.value as string;
+    if (!isValueSelected(value)) {
+      props.onSelect(value);
+    }
   }
 
   return (
     <FormControl variant={props.variant} className={classes.formControl}>
-      <InputLabel>{t('wonder')}</InputLabel>
-      <Select label={t('wonder')} value={props.value} onChange={onChange}>
-        {props.wonders.sort().map(wonder => (
+      <InputLabel role="label">{t('wonder')}</InputLabel>
+      <Select role="select" label={t('wonder')} value={props.value} onChange={onChange}>
+        {[...props.wonders].sort().map(wonder => (
           <MenuItem key={wonder} value={wonder} disabled={isValueSelected(wonder)}>
             {wonder}
           </MenuItem>
