@@ -7,6 +7,7 @@ const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 const SET = 'SET';
 const ADD = 'ADD';
 const DELETE = 'DELETE';
+const RESTORE = 'RESTORE';
 const UPDATE = 'UPDATE';
 const RESET = 'RESET';
 const SET_WONDER = 'SET_WONDER';
@@ -28,6 +29,14 @@ interface AddAction {
 interface DeleteAction {
   type: typeof DELETE;
   payload: string;
+}
+
+interface RestoreAction {
+  type: typeof RESTORE;
+  payload: {
+    player: Player | null;
+    index: number;
+  };
 }
 
 interface UpdateAction {
@@ -61,6 +70,7 @@ export type Action =
   | SetAction
   | AddAction
   | DeleteAction
+  | RestoreAction
   | UpdateAction
   | ResetAction
   | SetWonderAction
@@ -115,6 +125,13 @@ const reducer = (state: Player[], action: Action) => {
           return player.name !== action.payload;
         }),
       ];
+    case RESTORE:
+      const { player, index } = action.payload;
+
+      if (player && index >= 0) {
+        return [...state.slice(0, index), player, ...state.slice(index)];
+      }
+      return state;
     case UPDATE: {
       const { name, scoreKey, value } = action.payload;
 

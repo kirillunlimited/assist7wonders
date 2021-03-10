@@ -11,11 +11,7 @@ import TableCell from '@material-ui/core/TableCell';
 import styles from './Players.module.css';
 import Profile from '../../components/Profile/Profile';
 import Tooltip from '@material-ui/core/Tooltip';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,6 +19,7 @@ import WonderSelect from '../../components/WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Player } from '../../types';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const useStyles = makeStyles(() => ({
   subtitle: {
@@ -40,6 +37,11 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
 export default function Players() {
   const playersContext = useContext(PlayersContext);
   const gameContext = useContext(GameContext);
+  const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
+  const [deletedPlayer, setDeletedPlayer] = useState({
+    player: null,
+    index: -1,
+  } as { player: Player | null; index: number });
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -47,24 +49,34 @@ export default function Players() {
     playersContext.dispatch({ type: 'ADD', payload: { name, wonder } });
   }
 
-  function deletePlayer(name: string) {
-    playersContext.dispatch({ type: 'DELETE', payload: name });
+  function handleDeletePlayer(name: string) {
+    let playerIndex = -1;
+    const deletedPlayer = playersContext.state.find((player, index) => {
+      if (player.name === name) {
+        playerIndex = index;
+        return true;
+      }
+      return false;
+    });
+    if (deletedPlayer) {
+      setDeletedPlayer({
+        player: deletedPlayer,
+        index: playerIndex,
+      });
+      setIsDeleteConfirmOpened(true);
+      playersContext.dispatch({ type: 'DELETE', payload: name });
+    }
   }
 
-  const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
-  const [playerToDelete, setPlayerToDelete] = useState('');
-
-  function handleOpenConfirm(name: string) {
-    setPlayerToDelete(name);
-    setIsDeleteConfirmOpened(true);
+  function handleRestorePlayer() {
+    setIsDeleteConfirmOpened(false);
+    playersContext.dispatch({ type: 'RESTORE', payload: deletedPlayer });
   }
 
-  function handleDeleteConfirm() {
-    deletePlayer(playerToDelete);
-    handleCloseConfirm();
-  }
-
-  function handleCloseConfirm() {
+  function handleCloseConfirm(event: React.SyntheticEvent | React.MouseEvent, reason?: string) {
+    if (reason === 'clickaway') {
+      return;
+    }
     setIsDeleteConfirmOpened(false);
   }
 
@@ -118,7 +130,7 @@ export default function Players() {
                               />
                             </TableCell>
                             <TableCell className={`${styles.td} ${styles.delete}`}>
-                              <IconButton onClick={() => handleOpenConfirm(player.name)}>
+                              <IconButton onClick={() => handleDeletePlayer(player.name)}>
                                 <Tooltip title={t('deletePlayer') || ''}>
                                   <DeleteForever fontSize="large" color="secondary" />
                                 </Tooltip>
@@ -145,28 +157,37 @@ export default function Players() {
         </Typography>
       ) : null}
 
-      <Dialog
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
         open={isDeleteConfirmOpened}
+        autoHideDuration={6000}
         onClose={handleCloseConfirm}
-        aria-labelledby="alert-dialog-title"
-      >
-        <DialogTitle>{t('deletingPlayer')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText
+        message={
+          <span
             dangerouslySetInnerHTML={{
-              __html: t('deletingPlayerDescription', { name: playerToDelete }),
+              __html: t('deletingPlayerDescription', { name: deletedPlayer?.player?.name }),
             }}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseConfirm} color="primary">
-            {t('no')}
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="primary" autoFocus>
-            {t('yes')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        }
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleRestorePlayer}>
+              {t('restore')}
+            </Button>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseConfirm}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
 
       <NewPlayer
         names={playersContext.state.map(player => player.name)}
