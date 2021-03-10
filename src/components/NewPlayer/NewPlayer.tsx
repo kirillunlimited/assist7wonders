@@ -16,13 +16,13 @@ import WonderSelect from '../WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { shuffleWonders } from '../../utils/game';
 
-export interface Props {
+export type Props = {
   names: string[];
   wonders: string[];
   selectedWonders: string[];
   isMax: boolean;
   onSubmit: (name: string, wonder: string) => void;
-}
+};
 
 const useStyles = makeStyles(theme => ({
   newPlayerButton: {

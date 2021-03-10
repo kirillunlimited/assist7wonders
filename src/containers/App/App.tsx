@@ -17,18 +17,18 @@ import MainMenu from '../MainMenu/MainMenu';
 import { GAME_BOILERPLATE } from '../../config/game';
 import ROUTES from '../../config/routes';
 
-interface IPlayersContextProps {
+type PlayersContextProps = {
   state: Player[];
   dispatch: (action: PlayersAction) => void;
-}
+};
 
-interface IGameContextProps {
+type GameContextProps = {
   state: Game;
   dispatch: (action: GameAction) => void;
-}
+};
 
-export const PlayersContext = React.createContext({} as IPlayersContextProps);
-export const GameContext = React.createContext({} as IGameContextProps);
+export const PlayersContext = React.createContext({} as PlayersContextProps);
+export const GameContext = React.createContext({} as GameContextProps);
 
 export default function App() {
   const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);

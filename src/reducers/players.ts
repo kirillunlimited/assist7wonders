@@ -13,58 +13,58 @@ const RESET = 'RESET';
 const SET_WONDER = 'SET_WONDER';
 const GAME_UPDATE = 'GAME_UPDATE';
 
-interface SetAction {
+type SetAction = {
   type: typeof SET;
   payload: Player[];
-}
+};
 
-interface AddAction {
+type AddAction = {
   type: typeof ADD;
   payload: {
     name: string;
     wonder: string;
   };
-}
+};
 
-interface DeleteAction {
+type DeleteAction = {
   type: typeof DELETE;
   payload: string;
-}
+};
 
-interface RestoreAction {
+type RestoreAction = {
   type: typeof RESTORE;
   payload: {
     player: Player | null;
     index: number;
   };
-}
+};
 
-interface UpdateAction {
+type UpdateAction = {
   type: typeof UPDATE;
   payload: {
     name: string;
     scoreKey: PlayerScoreKey;
     value: number;
   };
-}
+};
 
-interface ResetAction {
+type ResetAction = {
   type: typeof RESET;
   payload: CoreGame;
-}
+};
 
-interface SetWonderAction {
+type SetWonderAction = {
   type: typeof SET_WONDER;
   payload: {
     name: string;
     wonder: string;
   };
-}
+};
 
-interface GameUpdateAction {
+type GameUpdateAction = {
   type: typeof GAME_UPDATE;
   payload: Game;
-}
+};
 
 export type Action =
   | SetAction

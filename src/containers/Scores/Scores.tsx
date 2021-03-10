@@ -11,11 +11,11 @@ import Profile from '../../components/Profile/Profile';
 import styles from './Scores.module.css';
 import Chip from '@material-ui/core/Chip';
 
-export interface IProps {
+type Props = {
   score: GameScore;
-}
+};
 
-export default function Scores(props: IProps) {
+export default function Scores(props: Props) {
   const playersContext = useContext(PlayersContext);
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {

@@ -6,13 +6,13 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useTranslation } from 'react-i18next';
 
-export interface Props {
+export type Props = {
   value: string;
   wonders: string[];
   selectedWonders: string[];
   variant?: 'filled' | 'standard' | 'outlined' | undefined;
   onSelect: (wonder: string) => void;
-}
+};
 
 const useStyles = makeStyles(() => ({
   formControl: {

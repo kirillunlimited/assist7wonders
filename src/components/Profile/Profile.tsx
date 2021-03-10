@@ -6,9 +6,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { blue } from '@material-ui/core/colors';
 import { getAvatarText } from '../../utils/game';
 
-interface Props {
+type Props = {
   name: string;
-}
+};
 
 const useStyles = makeStyles((theme: Theme) => ({
   avatar: {

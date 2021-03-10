@@ -3,12 +3,12 @@ import { ADDONS, BASE_GAME } from '../config/game';
 
 const UPDATE = 'UPDATE';
 
-interface UpdateAction {
+type UpdateAction = {
   type: typeof UPDATE;
   payload: {
     addons: string[];
   };
-}
+};
 
 export type Action = UpdateAction;
 

@@ -3,9 +3,9 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-}
+};
 
 const useStyles = makeStyles(theme => ({
   layout: {
