@@ -1,16 +1,16 @@
 /** GAME */
-export interface ICoreGame {
+export type CoreGame = {
   maxPlayers: number;
   wonders: string[];
-  scores: IGameScore[];
-}
-export type TGame = ICoreGame & {
+  scores: GameScore[];
+};
+export type Game = CoreGame & {
   addons: string[];
 };
-export type TAddonGame = ICoreGame & {
+export type AddonGame = CoreGame & {
   id: string;
 };
-export interface IGameScore {
+export type GameScore = {
   id: string;
   color: string;
   counters: {
@@ -18,27 +18,27 @@ export interface IGameScore {
     min?: number;
     max?: number;
   }[];
-  sum?: (score: IPlayerScore) => number;
-}
+  sum?: (score: PlayerScore) => number;
+};
 
 /** PLAYERS */
-export interface IPlayer {
+export type Player = {
   name: string;
   wonder: string;
-  score: IPlayerScore;
-}
-export interface IPlayerScore {
+  score: PlayerScore;
+};
+export type PlayerScore = {
   [key: string]: number | undefined;
-}
-export type TPlayerScoreKey = keyof IPlayerScore;
+};
+export type PlayerScoreKey = keyof PlayerScore;
 
 /** ROUTING */
-export interface IRoute {
+export type Route = {
   id: string;
   path: string;
   exact?: boolean;
-  routes?: IRoute[];
+  routes?: Route[];
   color?: string;
   component: Function;
-  error?: ({ game, players }: { game: TGame; players: IPlayer[] }) => string;
-}
+  error?: ({ game, players }: { game: Game; players: Player[] }) => string;
+};

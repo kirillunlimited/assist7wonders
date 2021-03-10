@@ -1,9 +1,9 @@
 import { BASE_GAME, ADDONS } from '../config/game';
 import { getAllScores } from './game';
-import { IGameScore, IRoute } from '../types';
+import { GameScore, Route } from '../types';
 import Scores from '../containers/Scores/Scores';
 
-export function getAllRoutes(routes: IRoute[]): IRoute[] {
+export function getAllRoutes(routes: Route[]): Route[] {
   const scores = getAllScores([BASE_GAME, ...ADDONS]);
   return routes.map(route => {
     if (route.id === 'scores') {
@@ -17,7 +17,7 @@ export function getAllRoutes(routes: IRoute[]): IRoute[] {
   });
 }
 
-function convertScoresToRoutes(scores: IGameScore[] = [], parentPath: string): IRoute[] {
+function convertScoresToRoutes(scores: GameScore[] = [], parentPath: string): Route[] {
   return scores.map(score => ({
     ...score,
     path: parentPath + '/' + score.id,

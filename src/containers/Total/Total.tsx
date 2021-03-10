@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPlayerScore } from '../../types';
+import { PlayerScore } from '../../types';
 import { getTotal } from '../../utils/score';
 import { useState, useEffect, useContext } from 'react';
 import { PlayersContext, GameContext } from '../App/App';
@@ -97,7 +97,7 @@ export default function Total() {
                 >
                   {score.sum
                     ? score.sum(player.score)
-                    : player.score[score.id as keyof IPlayerScore]}
+                    : player.score[score.id as keyof PlayerScore]}
                 </TableCell>
               ))}
               <TableCell className={classes.sum}>

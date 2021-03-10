@@ -1,10 +1,10 @@
-import { IRoute, IPlayer } from '../types';
+import { Route, Player } from '../types';
 import Players from '../containers/Players/Players';
 import Total from '../containers/Total/Total';
 import Router from '../containers/Router/Router';
 import { getAllRoutes } from '../utils/router';
 
-const routes: IRoute[] = [
+const routes: Route[] = [
   {
     path: '/',
     id: 'players',
@@ -21,7 +21,7 @@ const routes: IRoute[] = [
     id: 'total',
     exact: true,
     component: Total,
-    error: ({ players }: { players: IPlayer[] }) => (players.length <= 1 ? 'notEnoughPlayers' : ''),
+    error: ({ players }: { players: Player[] }) => (players.length <= 1 ? 'notEnoughPlayers' : ''),
   },
 ];
 

@@ -1,4 +1,4 @@
-import { IRoute } from '../../types';
+import { Route as RouteType } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Router({ routes }: { routes: IRoute[] }) {
+export default function Router({ routes }: { routes: RouteType[] }) {
   const classes = useStyles();
   const { t } = useTranslation();
   return (
@@ -36,7 +36,7 @@ export default function Router({ routes }: { routes: IRoute[] }) {
   );
 }
 
-function RouteWithSubRoutes(route: IRoute) {
+function RouteWithSubRoutes(route: RouteType) {
   const classes = useStyles();
   const gameContext = useContext(GameContext);
   const playersContext = useContext(PlayersContext);

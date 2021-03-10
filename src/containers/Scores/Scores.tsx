@@ -1,6 +1,6 @@
 import Counter from '../../components/Counter/Counter';
 import React, { useContext } from 'react';
-import { TPlayerScoreKey, IPlayer, IGameScore } from '../../types';
+import { PlayerScoreKey, Player, GameScore } from '../../types';
 import { PlayersContext } from '../App/App';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -12,17 +12,17 @@ import styles from './Scores.module.css';
 import Chip from '@material-ui/core/Chip';
 
 export interface IProps {
-  score: IGameScore;
+  score: GameScore;
 }
 
 export default function Scores(props: IProps) {
   const playersContext = useContext(PlayersContext);
 
-  function handleChange(name: string, scoreKey: TPlayerScoreKey, value: number) {
+  function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
-  function getSum(player: IPlayer): number {
+  function getSum(player: Player): number {
     return props.score.sum ? props.score.sum(player.score) : 0;
   }
 

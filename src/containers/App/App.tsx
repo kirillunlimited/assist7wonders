@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import './App.css';
 import Navigation from '../Navigation/Navigation';
-import { IPlayer, TGame } from '../../types';
+import { Player, Game } from '../../types';
 import Router from '../Router/Router';
 import {
   savePlayersToStorage,
@@ -9,8 +9,8 @@ import {
   getPlayersFromStorage,
   getAddonsFromStorage,
 } from '../../utils/storage';
-import playersReducer, { TAction as TPlayersAction } from '../../reducers/players';
-import gamesReducer, { TAction as TGameAction } from '../../reducers/game';
+import playersReducer, { Action as PlayersAction } from '../../reducers/players';
+import gamesReducer, { Action as GameAction } from '../../reducers/game';
 import Layout from '../../components/Layout/Layout';
 import RouteWrapper from '../../components/RouteWrapper/RouteWrapper';
 import MainMenu from '../MainMenu/MainMenu';
@@ -18,13 +18,13 @@ import { GAME_BOILERPLATE } from '../../config/game';
 import ROUTES from '../../config/routes';
 
 interface IPlayersContextProps {
-  state: IPlayer[];
-  dispatch: (action: TPlayersAction) => void;
+  state: Player[];
+  dispatch: (action: PlayersAction) => void;
 }
 
 interface IGameContextProps {
-  state: TGame;
-  dispatch: (action: TGameAction) => void;
+  state: Game;
+  dispatch: (action: GameAction) => void;
 }
 
 export const PlayersContext = React.createContext({} as IPlayersContextProps);

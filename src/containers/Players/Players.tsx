@@ -22,7 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import WonderSelect from '../../components/WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { IPlayer } from '../../types';
+import { Player } from '../../types';
 
 const useStyles = makeStyles(() => ({
   subtitle: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const reorder = (list: IPlayer[], startIndex: number, endIndex: number): IPlayer[] => {
+const reorder = (list: Player[], startIndex: number, endIndex: number): Player[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);

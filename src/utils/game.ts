@@ -1,22 +1,22 @@
-import { TAddonGame, TPlayerScoreKey } from '../types';
+import { AddonGame, PlayerScoreKey } from '../types';
 import compass from '../icons/compass.png';
 import tablet from '../icons/tablet.png';
 import gear from '../icons/gear.png';
 import wildcards from '../icons/wildcard.png';
 import shuffle from 'lodash.shuffle';
 
-export const SCORE_ICONS: { [key in TPlayerScoreKey]?: string } = {
+export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
   compass,
   tablet,
   gear,
   wildcards,
 };
 
-export const getAllScores = (games: TAddonGame[]) => {
+export const getAllScores = (games: AddonGame[]) => {
   return games.map(addon => addon.scores).flat(2);
 };
 
-export const getAllCounters = (games: TAddonGame[]) => {
+export const getAllCounters = (games: AddonGame[]) => {
   const scores = getAllScores(games);
   return scores.reduce((counters, score) => {
     const result: { [key: string]: number } = {};

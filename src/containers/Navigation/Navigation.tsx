@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { IRoute } from '../../types';
+import { Route } from '../../types';
 import { useLocation } from 'react-router-dom';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -35,7 +35,7 @@ export default function Navigation() {
   const playersContext = useContext(PlayersContext);
   const { t } = useTranslation();
 
-  function renderTabs(routes: IRoute[]): Array<React.ReactNode> {
+  function renderTabs(routes: Route[]): Array<React.ReactNode> {
     return routes.map(route => {
       if (route.routes) {
         return renderTabs(route.routes);
