@@ -1,20 +1,21 @@
-import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Button, TextField } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Fab from '@material-ui/core/Fab';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  Fab,
+  Tooltip,
+} from '@material-ui/core';
+import { Close, PersonAdd } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import WonderSelect from '../WonderSelect/WonderSelect';
+import WonderSelect from './WonderSelect';
 import { useTranslation } from 'react-i18next';
-import { shuffleWonders } from '../../utils/game';
+import { shuffleWonders } from '../utils/game';
 
 export type Props = {
   names: string[];
@@ -109,7 +110,7 @@ export default function NewPlayer(props: Props) {
           aria-label="add"
           onClick={() => toggleDialog(true)}
         >
-          <PersonAddIcon />
+          <PersonAdd />
         </Fab>
       </Tooltip>
 
@@ -121,7 +122,7 @@ export default function NewPlayer(props: Props) {
             aria-label="close"
             onClick={() => toggleDialog(false)}
           >
-            <CloseIcon />
+            <Close />
           </IconButton>
         </DialogTitle>
         <form aria-label="New Player" onSubmit={handleSubmit}>

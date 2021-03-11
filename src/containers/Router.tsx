@@ -1,10 +1,10 @@
-import { Route as RouteType } from '../../types';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import React, { useContext } from 'react';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { GameContext, PlayersContext } from '../App/App';
+import { Route as RouteType } from '../types';
+import { GameContext, PlayersContext } from './App';
 
 const useStyles = makeStyles({
   title: {

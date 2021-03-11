@@ -1,10 +1,8 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
+import { Avatar, Typography, useMediaQuery } from '@material-ui/core';
 import { useTheme, makeStyles, Theme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { blue } from '@material-ui/core/colors';
-import { getAvatarText } from '../../utils/game';
+import { getAvatarText } from '../utils/game';
 
 type Props = {
   name: string;

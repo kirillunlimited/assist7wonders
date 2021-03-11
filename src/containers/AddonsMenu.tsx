@@ -1,20 +1,16 @@
 import React, { useState, useContext } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import ExtensionIcon from '@material-ui/icons/Extension';
-import Tooltip from '@material-ui/core/Tooltip';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import { useTranslation } from 'react-i18next';
+import { IconButton, Tooltip, Menu, MenuItem, Checkbox } from '@material-ui/core';
+import { Extension } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { GameContext } from '../App/App';
-import { ADDONS } from '../../config/game';
+import { useTranslation } from 'react-i18next';
+import { ADDONS } from '../config/game';
+import { GameContext } from './App';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   checkbox: {
     marginLeft: '-11px',
   },
-}));
+});
 
 export default function MainMenu() {
   const gameContext = useContext(GameContext);
@@ -44,7 +40,7 @@ export default function MainMenu() {
     <div>
       <Tooltip title={t('addons') || ''}>
         <IconButton color="inherit" onClick={handleOpenContextMenu}>
-          <ExtensionIcon />
+          <Extension />
         </IconButton>
       </Tooltip>
       <Menu

@@ -1,22 +1,35 @@
-import Counter from '../../components/Counter/Counter';
 import React, { useContext } from 'react';
-import { PlayerScoreKey, Player, GameScore } from '../../types';
-import { PlayersContext } from '../App/App';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
-import Profile from '../../components/Profile/Profile';
-import styles from './Scores.module.css';
-import Chip from '@material-ui/core/Chip';
+import { TableContainer, Table, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Profile from '../components/Profile';
+import Counter from '../components/Counter';
+import { PlayerScoreKey, Player, GameScore } from '../types';
+import { PlayersContext } from './App';
 
 type Props = {
   score: GameScore;
 };
 
+const useStyles = makeStyles({
+  td: {
+    '&:first-child': {
+      paddingLeft: 0,
+    },
+    '&:last-child': {
+      paddingRight: 0,
+      whiteSpace: 'nowrap',
+      textAlign: 'center',
+    },
+  },
+  empty: {
+    width: '100%',
+    padding: 0,
+  },
+});
+
 export default function Scores(props: Props) {
   const playersContext = useContext(PlayersContext);
+  const classes = useStyles();
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
@@ -32,11 +45,11 @@ export default function Scores(props: Props) {
         <TableBody>
           {playersContext.state.map(player => (
             <TableRow key={player.name}>
-              <TableCell className={styles.td}>
+              <TableCell className={classes.td}>
                 <Profile name={player.name} />
               </TableCell>
-              <TableCell className={`${styles.td} ${styles.empty}`} />
-              <TableCell className={styles.td}>
+              <TableCell className={`${classes.td} ${classes.empty}`} />
+              <TableCell className={classes.td}>
                 {props.score.sum ? <Chip label={`Σ ${getSum(player)}`} /> : null}
                 {props.score.counters.map(counter => (
                   <Counter

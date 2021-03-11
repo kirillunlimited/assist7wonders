@@ -4,3 +4,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+html {
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}

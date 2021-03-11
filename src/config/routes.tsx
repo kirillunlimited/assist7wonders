@@ -1,7 +1,7 @@
 import { Route, Player } from '../types';
-import Players from '../containers/Players/Players';
-import Total from '../containers/Total/Total';
-import Router from '../containers/Router/Router';
+import Players from '../containers/Players';
+import Total from '../containers/Total';
+import Router from '../containers/Router';
 import { getAllRoutes } from '../utils/router';
 
 const routes: Route[] = [

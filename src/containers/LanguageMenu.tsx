@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import LanguageIcon from '@material-ui/icons/Language';
-import Tooltip from '@material-ui/core/Tooltip';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Radio from '@material-ui/core/Radio';
+import { IconButton, Tooltip, Menu, MenuItem, Radio, RadioGroup } from '@material-ui/core';
+import { Language } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { RadioGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   radio: {
     marginLeft: '-11px',
   },
-}));
+});
 
 export default function MainMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,7 +32,7 @@ export default function MainMenu() {
     <div>
       <Tooltip title={t('language') || ''}>
         <IconButton color="inherit" onClick={handleOpenContextMenu}>
-          <LanguageIcon />
+          <Language />
         </IconButton>
       </Tooltip>
       <Menu

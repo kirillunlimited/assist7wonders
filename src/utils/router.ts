@@ -1,7 +1,7 @@
 import { BASE_GAME, ADDONS } from '../config/game';
 import { getAllScores } from './game';
 import { GameScore, Route } from '../types';
-import Scores from '../containers/Scores/Scores';
+import Scores from '../containers/Scores';
 
 export function getAllRoutes(routes: Route[]): Route[] {
   const scores = getAllScores([BASE_GAME, ...ADDONS]);

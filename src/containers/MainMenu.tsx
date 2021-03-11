@@ -1,24 +1,26 @@
 import React, { useState, useContext } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Tooltip from '@material-ui/core/Tooltip';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Tooltip,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from '@material-ui/core';
+import { Refresh } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { GameContext, PlayersContext } from '../App/App';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
-import AddonsMenu from './../AddonsMenu/AddonsMenu';
-import LanguageMenu from './../LanguageMenu/LanguageMenu';
+import AddonsMenu from './AddonsMenu';
+import LanguageMenu from './LanguageMenu';
 import { useTranslation } from 'react-i18next';
-import logo from '../../img/logo.png';
-import logo2x from '../../img/logo2x.png';
+import { GameContext, PlayersContext } from './App';
+import logo from '../img/logo.png';
+import logo2x from '../img/logo2x.png';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   logoWrapper: {
     flexGrow: 1,
     textAlign: 'left',
@@ -27,7 +29,7 @@ const useStyles = makeStyles(() => ({
     display: 'block',
     maxHeight: '48px',
   },
-}));
+});
 
 export default function MainMenu() {
   const classes = useStyles();
@@ -57,7 +59,7 @@ export default function MainMenu() {
         </div>
         <Tooltip title={t('newGame') as string}>
           <IconButton onClick={handleOpenConfirm} color="inherit">
-            <RefreshIcon />
+            <Refresh />
           </IconButton>
         </Tooltip>
         <Dialog

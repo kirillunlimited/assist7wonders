@@ -1,31 +1,43 @@
 import React, { useContext, useState } from 'react';
-import NewPlayer from '../../components/NewPlayer/NewPlayer';
-import { IconButton } from '@material-ui/core';
-import { DeleteForever } from '@material-ui/icons';
-import { GameContext, PlayersContext } from '../App/App';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import styles from './Players.module.css';
-import Profile from '../../components/Profile/Profile';
-import Tooltip from '@material-ui/core/Tooltip';
-import CloseIcon from '@material-ui/icons/Close';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {
+  IconButton,
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Tooltip,
+  Button,
+  Typography,
+  Snackbar,
+} from '@material-ui/core';
+import NewPlayer from '../components/NewPlayer';
+import Profile from '../components/Profile';
+import WonderSelect from '../components/WonderSelect';
+import { DeleteForever, Close } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import WonderSelect from '../../components/WonderSelect/WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { Player } from '../../types';
-import Snackbar from '@material-ui/core/Snackbar';
+import { Player } from '../types';
+import { GameContext, PlayersContext } from './App';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   subtitle: {
     marginTop: '1em',
   },
-}));
+  player: {
+    padding: 0,
+    cursor: 'move',
+  },
+  wonder: {
+    width: '100%',
+  },
+  delete: {
+    width: '100%',
+    padding: 0,
+    textAlign: 'right',
+  },
+});
 
 const reorder = (list: Player[], startIndex: number, endIndex: number): Player[] => {
   const result = Array.from(list);
@@ -115,13 +127,10 @@ export default function Players() {
                       <Draggable key={player.name} draggableId={player.name} index={index}>
                         {provided => (
                           <TableRow ref={provided.innerRef} {...provided.draggableProps}>
-                            <TableCell
-                              className={`${styles.td} ${styles.player}`}
-                              {...provided.dragHandleProps}
-                            >
+                            <TableCell className={classes.player} {...provided.dragHandleProps}>
                               <Profile name={player.name} />
                             </TableCell>
-                            <TableCell className={`${styles.td} ${styles.wonder}`}>
+                            <TableCell className={classes.wonder}>
                               <WonderSelect
                                 value={player.wonder}
                                 wonders={gameContext.state.wonders}
@@ -129,7 +138,7 @@ export default function Players() {
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
                             </TableCell>
-                            <TableCell className={`${styles.td} ${styles.delete}`}>
+                            <TableCell className={classes.delete}>
                               <IconButton onClick={() => handleDeletePlayer(player.name)}>
                                 <Tooltip title={t('deletePlayer') || ''}>
                                   <DeleteForever fontSize="large" color="secondary" />
@@ -183,7 +192,7 @@ export default function Players() {
               color="inherit"
               onClick={handleCloseConfirm}
             >
-              <CloseIcon fontSize="small" />
+              <Close fontSize="small" />
             </IconButton>
           </React.Fragment>
         }

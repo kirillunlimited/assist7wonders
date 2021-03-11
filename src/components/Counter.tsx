@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton, Input } from '@material-ui/core';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { SCORE_ICONS } from '../../utils/game';
-import { isMinValue, isMaxValue } from '../../utils/score';
 import { makeStyles } from '@material-ui/core/styles';
+import { SCORE_ICONS } from '../utils/game';
+import { isMinValue, isMaxValue } from '../utils/score';
 
 export type Props = {
   counter: string;
@@ -14,7 +13,7 @@ export type Props = {
   min?: number;
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -24,7 +23,7 @@ const useStyles = makeStyles(() => ({
   scoreIcon: {
     width: '36px',
   },
-}));
+});
 
 export default function Counter(props: Props) {
   const [localValue, setLocalValue] = useState(String(props.value));

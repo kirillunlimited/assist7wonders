@@ -1,9 +1,6 @@
-import * as React from 'react';
+import React from 'react';
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import { useTranslation } from 'react-i18next';
 
 export type Props = {
@@ -14,11 +11,11 @@ export type Props = {
   onSelect: (wonder: string) => void;
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   formControl: {
     width: '100%',
   },
-}));
+});
 
 export default function WonderSelect(props: Props) {
   const classes = useStyles();

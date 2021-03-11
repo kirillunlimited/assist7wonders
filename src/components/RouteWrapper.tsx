@@ -1,7 +1,5 @@
-import * as React from 'react';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
+import React from 'react';
+import { Box, Container, Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 type Props = {

@@ -1,14 +1,11 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Route } from '../../types';
-import { useLocation } from 'react-router-dom';
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import React, { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AppBar, Tabs, Tab, useMediaQuery } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
-import ROUTES from '../../config/routes';
-import { useContext } from 'react';
-import { GameContext, PlayersContext } from '../App/App';
+import ROUTES from '../config/routes';
+import { Route } from '../types';
+import { GameContext, PlayersContext } from './App';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
