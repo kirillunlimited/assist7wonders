@@ -4,7 +4,9 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/kirillunlimited/assist7wonders)
 [![License](https://img.shields.io/github/license/kirillunlimited/assist7wonders)](https://github.com/kirillunlimited/assist7wonders/blob/master/LICENSE.md)
 
-# 7 Wonders assistant app
+[![https://assist7wonders.web.app](./src/img/logo2x.png)](https://assist7wonders.web.app)
+
+# 7 Wonders Assistant
 
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
 

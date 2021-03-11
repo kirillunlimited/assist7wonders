@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,14 +15,17 @@ import Button from '@material-ui/core/Button';
 import AddonsMenu from './../AddonsMenu/AddonsMenu';
 import LanguageMenu from './../LanguageMenu/LanguageMenu';
 import { useTranslation } from 'react-i18next';
+import logo from '../../img/logo.png';
+import logo2x from '../../img/logo2x.png';
 
 const useStyles = makeStyles(() => ({
-  title: {
+  logoWrapper: {
     flexGrow: 1,
-    fontWeight: 'bold',
-    fontSize: '24px',
     textAlign: 'left',
-    padding: '0 12px',
+  },
+  logo: {
+    display: 'block',
+    maxHeight: '48px',
   },
 }));
 
@@ -50,9 +52,9 @@ export default function MainMenu() {
   return (
     <AppBar>
       <Toolbar>
-        <Typography variant="body1" className={classes.title}>
-          {t('7wonders')}
-        </Typography>
+        <div className={classes.logoWrapper}>
+          <img className={classes.logo} src={logo} alt={t('7wonders')} srcSet={`${logo2x} 2x`} />
+        </div>
         <Tooltip title={t('newGame') as string}>
           <IconButton onClick={handleOpenConfirm} color="inherit">
             <RefreshIcon />

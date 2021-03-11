@@ -1,8 +1,8 @@
 import { AddonGame, PlayerScoreKey } from '../types';
-import compass from '../icons/compass.png';
-import tablet from '../icons/tablet.png';
-import gear from '../icons/gear.png';
-import wildcards from '../icons/wildcard.png';
+import compass from '../img/compass.png';
+import tablet from '../img/tablet.png';
+import gear from '../img/gear.png';
+import wildcards from '../img/wildcard.png';
 import shuffle from 'lodash.shuffle';
 
 export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
