@@ -4,12 +4,6 @@ const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
 const WILDCARD_SCIENCE_KEY = 'wildcards';
 const TREASURY_KEY = 'treasury';
 
-const scienceMemo: {
-  [key: string]: number;
-} = {
-  '0:0:0:0': 0,
-};
-
 export function getTotal(playerScore: IPlayerScore, gameScores: IGameScore[]): number {
   const gameCounters = gameScores.map(score => score.counters).flat();
   const validPlayerScore = gameCounters.reduce((result, counter) => {
@@ -34,43 +28,29 @@ export function getFlatTotal(playerScore: IPlayerScore): number {
   }, 0);
 }
 
-function getScienceSum(scienceScores: number[]): number {
-  const memoKey: string = [...scienceScores.sort(), 0].join(':');
-
-  if (memoKey in scienceMemo) {
-    return scienceMemo[memoKey];
-  }
-
+function getScienceScore(scienceScores: number[]): number {
   const min = Math.min(...scienceScores);
   const sum = scienceScores.reduce((sum, score) => sum + score ** 2, 0);
   return sum + min * 7;
 }
 
 function getWildcardPossibilities(scienceScores: number[], wildcards: number): number {
-  const memoKey: string = [...scienceScores.sort(), wildcards].join(':');
-
-  if (memoKey in scienceMemo) {
-    return scienceMemo[memoKey];
+  const score = getScienceScore(scienceScores);
+  if(wildcards === 0) {
+    return score;
   }
 
-  if (wildcards <= 0) {
-    scienceMemo[memoKey] = getScienceSum(scienceScores);
-    return scienceMemo[memoKey];
+  const [compasses, tablets, gears] = scienceScores;
+  let maxScore = score;
+  for(let dc = 0; dc <= wildcards; dc++) 
+  for(let dt = 0; dt <= wildcards-dc; dt++) {
+    const dg = wildcards - dc - dt;
+    const s = getScienceScore([compasses+dc, tablets+dt, gears+dg]);
+    if(s > maxScore) {
+      maxScore = s;
+    }
   }
-
-  const possibilities = scienceScores.reduce((acc, score, index) => {
-    return [
-      ...acc,
-      getWildcardPossibilities(
-        [...scienceScores.slice(0, index), score + 1, ...scienceScores.slice(index + 1)],
-        wildcards - 1
-      ),
-    ];
-  }, [] as number[]);
-
-  scienceMemo[memoKey] = Math.max(...possibilities);
-
-  return scienceMemo[memoKey];
+  return maxScore;
 }
 
 export function getScienceTotal(playerScore: IPlayerScore): number {
