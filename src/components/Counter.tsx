@@ -53,7 +53,7 @@ export default function Counter(props: Props) {
       : isMinValue(Number(event.target.value), props.min)
       ? props.min
       : event.target.value;
-    const intValue = Math.floor(Number(value));
+    const intValue = Math.round(Number(value));
     setLocalValue(String(intValue));
     props.onChange(intValue);
   }

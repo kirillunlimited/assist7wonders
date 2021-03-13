@@ -67,10 +67,10 @@ describe('input value change', () => {
     const input = screen.getByDisplayValue('0');
     fireEvent.change(input!, { target: { value: 1.9 } });
     fireEvent.blur(input!);
-    expect(value).toBe(1);
+    expect(value).toBe(2);
 
     rerender(<Counter {...defaultProps} value={value} onChange={onChange} />);
-    expect(screen.getByDisplayValue('1')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('2')).toBeInTheDocument();
   });
   it('should not update on change if new value is bigger than max', () => {
     let value = 10;
