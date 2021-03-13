@@ -57,7 +57,7 @@ export default function Navigation() {
   }
 
   return (
-    <AppBar className={classes.appBar} position="static">
+    <AppBar component="nav" className={classes.appBar} position="static">
       <Tabs
         orientation={bigScreen ? 'vertical' : 'horizontal'}
         classes={{
