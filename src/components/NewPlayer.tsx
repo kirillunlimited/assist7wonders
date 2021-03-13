@@ -8,8 +8,6 @@ import {
   DialogTitle,
   IconButton,
   Typography,
-  Fab,
-  Tooltip,
 } from '@material-ui/core';
 import { Close, PersonAdd } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,10 +24,8 @@ export type Props = {
 };
 
 const useStyles = makeStyles(theme => ({
-  newPlayerButton: {
-    position: 'fixed',
-    bottom: theme.spacing(4),
-    right: theme.spacing(4),
+  button: {
+    marginTop: theme.spacing(2),
   },
   title: {
     margin: 0,
@@ -65,6 +61,12 @@ export default function NewPlayer(props: Props) {
       setWonder(getRandomWonder());
     }
   }, [props.selectedWonders]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (props.isMax) {
+      toggleDialog(false);
+    }
+  }, [props.isMax]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function isAddButtonEnabled() {
     return !props.isMax && isNameValid(name) && isWonderValid(wonder);
@@ -104,15 +106,17 @@ export default function NewPlayer(props: Props) {
 
   return (
     <div>
-      <Tooltip title={t('newPlayer') || ''}>
-        <Fab
-          className={classes.newPlayerButton}
-          aria-label="add"
-          onClick={() => toggleDialog(true)}
-        >
-          <PersonAdd />
-        </Fab>
-      </Tooltip>
+      <Button
+        className={classes.button}
+        disabled={props.isMax}
+        startIcon={<PersonAdd />}
+        variant="contained"
+        color="primary"
+        aria-label="add"
+        onClick={() => toggleDialog(true)}
+      >
+        {t('newPlayerButton')}
+      </Button>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
         <DialogTitle disableTypography className={classes.title}>

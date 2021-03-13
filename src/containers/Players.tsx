@@ -113,7 +113,7 @@ export default function Players() {
 
   return (
     <div>
-      <Typography variant="subtitle1">
+      <Typography variant="subtitle1" component="p">
         {playersContext.state.length} / {gameContext.state.maxPlayers}
       </Typography>
       {playersContext.state.length ? (
@@ -156,15 +156,21 @@ export default function Players() {
             )}
           </Droppable>
         </DragDropContext>
-      ) : (
-        <Typography variant="subtitle1">{t('addPlayers')}</Typography>
-      )}
+      ) : null}
 
-      {playersContext.state.length === 1 ? (
-        <Typography variant="subtitle1" className={classes.subtitle}>
-          {t('addMorePlayers')}
+      {playersContext.state.length < 2 ? (
+        <Typography variant="subtitle1" className={classes.subtitle} component="p">
+          {t('addMinPlayers')}
         </Typography>
       ) : null}
+
+      <NewPlayer
+        names={playersContext.state.map(player => player.name)}
+        wonders={gameContext.state.wonders}
+        selectedWonders={playersContext.state.map(player => player.wonder)}
+        isMax={playersContext.state.length >= gameContext.state.maxPlayers}
+        onSubmit={handleSubmit}
+      />
 
       <Snackbar
         anchorOrigin={{
@@ -182,7 +188,7 @@ export default function Players() {
           />
         }
         action={
-          <React.Fragment>
+          <>
             <Button color="secondary" size="small" onClick={handleRestorePlayer}>
               {t('restore')}
             </Button>
@@ -194,16 +200,8 @@ export default function Players() {
             >
               <Close fontSize="small" />
             </IconButton>
-          </React.Fragment>
+          </>
         }
-      />
-
-      <NewPlayer
-        names={playersContext.state.map(player => player.name)}
-        wonders={gameContext.state.wonders}
-        selectedWonders={playersContext.state.map(player => player.wonder)}
-        isMax={playersContext.state.length >= gameContext.state.maxPlayers}
-        onSubmit={handleSubmit}
       />
     </div>
   );
