@@ -115,7 +115,7 @@ export default function NewPlayer(props: Props) {
         aria-label="add"
         onClick={() => toggleDialog(true)}
       >
-        {t('newPlayerButton')}
+        {t('newPlayer')}
       </Button>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
