@@ -33,20 +33,6 @@ describe('render', () => {
     render(<NewPlayer {...defaultProps} />);
     expect(screen.getByLabelText('add')).toBeInTheDocument();
   });
-  it('should render modal on add button click', () => {
-    render(<NewPlayer {...defaultProps} />);
-    const dialog = open();
-    expect(dialog).toBeInTheDocument();
-  });
-  it('should render form on add button click', () => {
-    render(<NewPlayer {...defaultProps} />);
-    open();
-    expect(screen.getByLabelText('New Player')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
-    expect(screen.getByRole('select')).toBeInTheDocument();
-    expect(screen.getByRole('submit')).toBeInTheDocument();
-    expect(screen.getByLabelText('close')).toBeInTheDocument();
-  });
   it('should render preselected wonder', () => {
     render(<NewPlayer {...defaultProps} />);
     open();
@@ -60,6 +46,23 @@ describe('render', () => {
     const input = screen.getByLabelText('New Player').querySelector('input');
     fireEvent.change(input!, { target: { value: 'John' } });
     expect(screen.getByLabelText('Error message')).toBeInTheDocument();
+  });
+  it('should render disabled add button if limit is reached', () => {
+    render(<NewPlayer {...defaultProps} isMax={true} />);
+    expect(screen.getByLabelText('add')).toBeDisabled();
+  });
+});
+
+describe('toggle', () => {
+  it('should open modal on add button click', () => {
+    render(<NewPlayer {...defaultProps} />);
+    const dialog = open();
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByLabelText('New Player')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByRole('select')).toBeInTheDocument();
+    expect(screen.getByRole('submit')).toBeInTheDocument();
+    expect(screen.getByLabelText('close')).toBeInTheDocument();
   });
   it('should close dialog on close button click', async () => {
     render(<NewPlayer {...defaultProps} />);
@@ -80,14 +83,25 @@ describe('render', () => {
       expect(dialog).not.toBeInTheDocument();
     });
   });
+  it('should close modal if limit is reached', async () => {
+    const { rerender } = render(<NewPlayer {...defaultProps} />);
+    const dialog = open();
+
+    rerender(<NewPlayer {...defaultProps} isMax={true} />);
+
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+    });
+  });
 });
 
 describe('add new player', () => {
   it('should add new player and clear input', async () => {
     let names: string[] = [...defaultProps.names];
     let selectedWonders = [defaultProps.selectedWonders[0]];
-    const onSubmit = jest.fn(name => {
+    const onSubmit = jest.fn((name, wonder) => {
       names = [...names, name];
+      selectedWonders = [...selectedWonders, wonder];
     });
     const { rerender } = render(<NewPlayer {...defaultProps} names={names} onSubmit={onSubmit} />);
     open();
@@ -97,7 +111,6 @@ describe('add new player', () => {
     fireEvent.click(screen.getByRole('submit'));
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(names).toEqual([...defaultProps.names, 'Max']);
-    selectedWonders = [...selectedWonders, wonder];
 
     rerender(
       <NewPlayer
