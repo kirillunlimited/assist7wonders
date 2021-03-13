@@ -14,7 +14,7 @@ import { PlayerScore } from '../types';
 import { getTotal } from '../utils/score';
 import { PlayersContext, GameContext } from './App';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   head: {
     backgroundColor: '#eee',
   },
@@ -26,6 +26,7 @@ const useStyles = makeStyles({
   },
   score: {
     color: '#FFF',
+    padding: theme.spacing(0, 1),
     textAlign: 'center',
   },
   sum: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
     lineHeight: 0,
     paddingRight: 0,
   },
-});
+}));
 
 export default function Total() {
   const playersContext = useContext(PlayersContext);
