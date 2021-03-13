@@ -11,14 +11,15 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
-      maxWidth: '160px',
     },
   },
   indicator: {
     backgroundColor: '#FFF',
   },
   tab: {
+    maxWidth: '160px',
     opacity: 1,
+    lineHeight: 1.4,
     textShadow: '0px 1px 0 #999',
   },
 }));
