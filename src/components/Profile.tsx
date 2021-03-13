@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Typography, useMediaQuery } from '@material-ui/core';
-import { useTheme, makeStyles, Theme } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import { getAvatarText } from '../utils/game';
 
@@ -8,7 +8,7 @@ type Props = {
   name: string;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(theme => ({
   avatar: {
     color: theme.palette.getContrastText(blue[500]),
     backgroundColor: blue[500],
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '76px',
   },
   name: {
-    marginLeft: '0.5em',
+    marginLeft: theme.spacing(1),
   },
   nameSmall: {
     margin: 0,

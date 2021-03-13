@@ -6,16 +6,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Route as RouteType } from '../types';
 import { GameContext, PlayersContext } from './App';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   title: {
     fontSize: '30px',
     fontWeight: 'bold',
-    marginBottom: '0.5em',
+    marginBottom: theme.spacing(1),
     '&:last-child': {
       marginBottom: 0,
     },
   },
-});
+}));
 
 export default function Router({ routes }: { routes: RouteType[] }) {
   const classes = useStyles();

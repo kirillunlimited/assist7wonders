@@ -21,9 +21,9 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { Player } from '../types';
 import { GameContext, PlayersContext } from './App';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   subtitle: {
-    marginTop: '1em',
+    marginTop: theme.spacing(2),
   },
   player: {
     padding: 0,
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     padding: 0,
     textAlign: 'right',
   },
-});
+}));
 
 const reorder = (list: Player[], startIndex: number, endIndex: number): Player[] => {
   const result = Array.from(list);
