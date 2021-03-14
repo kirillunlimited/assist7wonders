@@ -21,12 +21,13 @@
 * 🌍 Localization:
   * 🇬🇧 English
   * 🇷🇺 Russian
-* 📱 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
+* 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 
 ## Roadmap
 * 🗿 Add "Wonder pack" addon
 * 🗼 Add "Babel" addon
 * 🛥️ Add "Armada" addon
+* 📱 PWA
 
 ## Build and development
 
