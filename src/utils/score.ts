@@ -1,10 +1,10 @@
-import { IPlayerScore, IGameScore } from '../types';
+import { PlayerScore, GameScore } from '../types';
 
 const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
 const WILDCARD_SCIENCE_KEY = 'wildcards';
 const TREASURY_KEY = 'treasury';
 
-export function getTotal(playerScore: IPlayerScore, gameScores: IGameScore[]): number {
+export function getTotal(playerScore: PlayerScore, gameScores: GameScore[]): number {
   const gameCounters = gameScores.map(score => score.counters).flat();
   const validPlayerScore = gameCounters.reduce((result, counter) => {
     return {
@@ -19,7 +19,7 @@ export function getTotal(playerScore: IPlayerScore, gameScores: IGameScore[]): n
   );
 }
 
-export function getFlatTotal(playerScore: IPlayerScore): number {
+export function getFlatTotal(playerScore: PlayerScore): number {
   return Object.keys(playerScore).reduce((sum, key) => {
     if (!SCIENCE_KEYS.includes(key) && key !== WILDCARD_SCIENCE_KEY && key !== TREASURY_KEY) {
       sum += playerScore[key] || 0;
@@ -42,7 +42,7 @@ function getWildcardPossibilities(scienceScores: number[], wildcards: number): n
 
   const [compasses, tablets, gears] = scienceScores;
   let maxScore = score;
-  for(let dc = 0; dc <= wildcards; dc++) 
+  for(let dc = 0; dc <= wildcards; dc++)
   for(let dt = 0; dt <= wildcards-dc; dt++) {
     const dg = wildcards - dc - dt;
     const s = getScienceScore([compasses+dc, tablets+dt, gears+dg]);
@@ -53,7 +53,7 @@ function getWildcardPossibilities(scienceScores: number[], wildcards: number): n
   return maxScore;
 }
 
-export function getScienceTotal(playerScore: IPlayerScore): number {
+export function getScienceTotal(playerScore: PlayerScore): number {
   const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
     return [...scienceScores, playerScore[key] || 0];
   }, [] as number[]);
@@ -61,7 +61,7 @@ export function getScienceTotal(playerScore: IPlayerScore): number {
   return getWildcardPossibilities(scienceScores, wildcards);
 }
 
-export function getTreasuryTotal(playerScore: IPlayerScore): number {
+export function getTreasuryTotal(playerScore: PlayerScore): number {
   return playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
 }
 

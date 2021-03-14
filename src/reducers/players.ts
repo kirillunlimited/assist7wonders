@@ -1,4 +1,4 @@
-import { IPlayer, TPlayerScoreKey, ICoreGame, TGame } from '../types';
+import { Player, PlayerScoreKey, CoreGame, Game } from '../types';
 import { getAllCounters, shuffleWonders } from '../utils/game';
 import { BASE_GAME, ADDONS } from '../config/game';
 
@@ -7,72 +7,82 @@ const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 const SET = 'SET';
 const ADD = 'ADD';
 const DELETE = 'DELETE';
+const RESTORE = 'RESTORE';
 const UPDATE = 'UPDATE';
 const RESET = 'RESET';
 const SET_WONDER = 'SET_WONDER';
 const GAME_UPDATE = 'GAME_UPDATE';
 
-interface ISetAction {
+type SetAction = {
   type: typeof SET;
-  payload: IPlayer[];
-}
+  payload: Player[];
+};
 
-interface IAddAction {
+type AddAction = {
   type: typeof ADD;
   payload: {
     name: string;
     wonder: string;
   };
-}
+};
 
-interface IDeleteAction {
+type DeleteAction = {
   type: typeof DELETE;
   payload: string;
-}
+};
 
-interface IUpdateAction {
+type RestoreAction = {
+  type: typeof RESTORE;
+  payload: {
+    player: Player | null;
+    index: number;
+  };
+};
+
+type UpdateAction = {
   type: typeof UPDATE;
   payload: {
     name: string;
-    scoreKey: TPlayerScoreKey;
+    scoreKey: PlayerScoreKey;
     value: number;
   };
-}
+};
 
-interface IResetAction {
+type ResetAction = {
   type: typeof RESET;
-  payload: ICoreGame;
-}
+  payload: CoreGame;
+};
 
-interface ISetWonderAction {
+type SetWonderAction = {
   type: typeof SET_WONDER;
   payload: {
     name: string;
     wonder: string;
   };
-}
+};
 
-interface IGameUpdateAction {
+type GameUpdateAction = {
   type: typeof GAME_UPDATE;
-  payload: TGame;
-}
+  payload: Game;
+};
 
-export type TAction =
-  | ISetAction
-  | IAddAction
-  | IDeleteAction
-  | IUpdateAction
-  | IResetAction
-  | ISetWonderAction
-  | IGameUpdateAction;
+export type Action =
+  | SetAction
+  | AddAction
+  | DeleteAction
+  | RestoreAction
+  | UpdateAction
+  | ResetAction
+  | SetWonderAction
+  | GameUpdateAction;
 
 /** Slice extra players if new limit is less than before */
-const updatePlayersCount = (players: IPlayer[], maxPlayers: number): IPlayer[] => {
+const updatePlayersCount = (players: Player[], maxPlayers: number): Player[] => {
   return players.slice(0, maxPlayers);
 };
 
 /** Change selected wonders if they are no longer available due to addons change */
-const updateSelectedWonders = (players: IPlayer[], wonders: string[]): IPlayer[] => {
+const updateSelectedWonders = (players: Player[], wonders: string[]): Player[] => {
   const selectedWonders = players.map(player => player.wonder);
   return [
     ...players.map(player => {
@@ -91,7 +101,7 @@ const updateSelectedWonders = (players: IPlayer[], wonders: string[]): IPlayer[]
   ];
 };
 
-const reducer = (state: IPlayer[], action: TAction) => {
+const reducer = (state: Player[], action: Action) => {
   switch (action.type) {
     case SET:
       return [...action.payload];
@@ -115,6 +125,13 @@ const reducer = (state: IPlayer[], action: TAction) => {
           return player.name !== action.payload;
         }),
       ];
+    case RESTORE:
+      const { player, index } = action.payload;
+
+      if (player && index >= 0) {
+        return [...state.slice(0, index), player, ...state.slice(index)];
+      }
+      return state;
     case UPDATE: {
       const { name, scoreKey, value } = action.payload;
 

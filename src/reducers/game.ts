@@ -1,18 +1,18 @@
-import { TGame, IGameScore } from '../types';
+import { Game, GameScore } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
 
 const UPDATE = 'UPDATE';
 
-interface IUpdateAction {
+type UpdateAction = {
   type: typeof UPDATE;
   payload: {
     addons: string[];
   };
-}
+};
 
-export type TAction = IUpdateAction;
+export type Action = UpdateAction;
 
-const reducer = (state: TGame, action: TAction) => {
+const reducer = (state: Game, action: Action) => {
   switch (action.type) {
     case UPDATE:
       const addons = ADDONS.filter(addon => action.payload.addons.includes(addon.id));
@@ -21,7 +21,7 @@ const reducer = (state: TGame, action: TAction) => {
           return [...scores, ...addon.scores];
         }
         return scores;
-      }, [] as IGameScore[]);
+      }, [] as GameScore[]);
       const addonWonders = addons.reduce((wonders, addon) => {
         if (addon) {
           return [...wonders, ...addon.wonders];

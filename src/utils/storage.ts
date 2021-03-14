@@ -1,5 +1,5 @@
 import { debounce } from 'debounce';
-import { IPlayer } from '../types';
+import { Player } from '../types';
 
 const SAVE_TIMEOUT = 500;
 
@@ -7,7 +7,7 @@ const saveToStorage = (key: string, data: Object) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const savePlayersToStorage = debounce((players: IPlayer[]) => {
+export const savePlayersToStorage = debounce((players: Player[]) => {
   saveToStorage('players', players);
 }, SAVE_TIMEOUT);
 
@@ -15,7 +15,7 @@ export const saveAddonsToStorage = debounce((addons: string[]) => {
   saveToStorage('addons', addons);
 }, SAVE_TIMEOUT);
 
-export function getPlayersFromStorage(): IPlayer[] {
+export function getPlayersFromStorage(): Player[] {
   const playersString = localStorage.getItem('players');
 
   if (playersString) {

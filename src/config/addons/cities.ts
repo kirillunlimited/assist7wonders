@@ -19,6 +19,7 @@ const cities = {
       counters: [
         {
           id: 'cities',
+          min: 0,
         },
       ],
     },
