@@ -15,6 +15,7 @@
 * 🧩 Addons support:
   * 🦸 Leaders
   * 🏙️ Cities
+  * 🛥️ Armada
 * 👨‍👩‍👧‍👦 Players management:
   * 🏛 Select & randomize wonders
   * 🔄 Change order of the players with drag & drop
@@ -26,7 +27,6 @@
 ## Roadmap
 * 🗿 Add "Wonder pack" addon
 * 🗼 Add "Babel" addon
-* 🛥️ Add "Armada" addon
 * 📱 PWA
 
 ## Build and development
