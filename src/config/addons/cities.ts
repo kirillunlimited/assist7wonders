@@ -1,5 +1,5 @@
 const cities = {
-  id: 'cities',
+  name: 'Cities',
   maxPlayers: 8,
   wonders: ['Petra', 'Byzantium'],
   scores: [

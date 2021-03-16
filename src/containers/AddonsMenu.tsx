@@ -51,18 +51,18 @@ export default function MainMenu() {
       >
         {ADDONS.map(addon => (
           <MenuItem
-            key={addon.id}
+            key={addon.name}
             onClick={e =>
-              handleMenuItemClick(e, addon.id, !gameContext.state.addons.includes(addon.id))
+              handleMenuItemClick(e, addon.name, !gameContext.state.addons.includes(addon.name))
             }
           >
             <Checkbox
               classes={{
                 root: classes.checkbox,
               }}
-              checked={gameContext.state.addons.includes(addon.id)}
+              checked={gameContext.state.addons.includes(addon.name)}
             />
-            {t(addon.id)}
+            {t(addon.name)}
           </MenuItem>
         ))}
       </Menu>

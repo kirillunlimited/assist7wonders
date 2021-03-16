@@ -1,7 +1,7 @@
 import { getScienceTotal, getTreasuryTotal } from '../../utils/score';
 
 const base = {
-  id: 'base',
+  name: '7 Wonders',
   maxPlayers: 7,
   wonders: ['Rhodes', 'Alexandria', 'Ephesus', 'Babylon', 'Olympia', 'Halicarnassus', 'Giza'],
   scores: [

@@ -6,7 +6,6 @@
       "addons": "Дополнения",
       "addMinPlayers": "Для начала игры требуется не менее 2 игроков",
       "addonIsDisabled": "Дополнение отключено",
-      "armada": "Армада",
       "cities": "Города",
       "civilian": "Городские постройки",
       "commerce": "Торговые постройки",
@@ -38,7 +37,6 @@
       "total": "Итоги",
       "treasury": "Сокровища",
       "wonder": "Чудо света",
-      "wonderPack": "Новые чудеса",
       "wonders": "Чудеса света",
       "yes": "Да"
     }
@@ -50,7 +48,6 @@
       "addons": "Addons",
       "addMinPlayers": "At least 2 players are required to start the game",
       "addonIsDisabled": "Addon in disabled",
-      "armada": "Armada",
       "cities": "Cities",
       "civilian": "Civilian",
       "commerce": "Commerce",
@@ -82,7 +79,6 @@
       "total": "Total",
       "treasury": "Treasury",
       "wonder": "Wonder",
-      "wonderPack": "Wonder pack",
       "wonders": "Wonders",
       "yes": "Yes"
     }

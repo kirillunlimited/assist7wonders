@@ -1,5 +1,5 @@
 const armada = {
-  id: 'armada',
+  name: 'Armada',
   maxPlayers: 7,
   wonders: [],
   scores: [
