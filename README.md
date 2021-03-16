@@ -16,6 +16,7 @@
   * 🦸 Leaders
   * 🏙️ Cities
   * 🛥️ Armada
+  * 🗿 Wonder pack
 * 👨‍👩‍👧‍👦 Players management:
   * 🏛 Select & randomize wonders
   * 🔄 Change order of the players with drag & drop
@@ -25,7 +26,6 @@
 * 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 
 ## Roadmap
-* 🗿 Add "Wonder pack" addon
 * 🗼 Add "Babel" addon
 * 📱 PWA
 

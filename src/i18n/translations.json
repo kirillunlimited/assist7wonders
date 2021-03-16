@@ -38,6 +38,7 @@
       "total": "Итоги",
       "treasury": "Сокровища",
       "wonder": "Чудо света",
+      "wonderPack": "Новые чудеса",
       "wonders": "Чудеса света",
       "yes": "Да"
     }
@@ -81,6 +82,7 @@
       "total": "Total",
       "treasury": "Treasury",
       "wonder": "Wonder",
+      "wonderPack": "Wonder pack",
       "wonders": "Wonders",
       "yes": "Yes"
     }
