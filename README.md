@@ -11,10 +11,10 @@
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
 
 ## Features
-* 🧪 Science score calculator with wildcards
 * 🧩 Addons support:
   * 🦸 Leaders
   * 🏙️ Cities
+  * 🗼 Babel
   * 🛥️ Armada
   * 🗿 Wonder pack
 * 👨‍👩‍👧‍👦 Players management:
@@ -23,11 +23,9 @@
 * 🌍 Localization:
   * 🇬🇧 English
   * 🇷🇺 Russian
+* 🧪 Science score calculator with wildcards
 * 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
-
-## Roadmap
-* 🗼 Add "Babel" addon
-* 📱 PWA
+* 📱 PWA support
 
 ## Build and development
 
