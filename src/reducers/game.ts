@@ -15,7 +15,7 @@ export type Action = UpdateAction;
 const reducer = (state: Game, action: Action) => {
   switch (action.type) {
     case UPDATE:
-      const addons = ADDONS.filter(addon => action.payload.addons.includes(addon.id));
+      const addons = ADDONS.filter(addon => action.payload.addons.includes(addon.name));
       const addonScores = addons.reduce((scores, addon) => {
         if (addon) {
           return [...scores, ...addon.scores];

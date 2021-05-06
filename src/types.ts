@@ -8,7 +8,7 @@ export type Game = CoreGame & {
   addons: string[];
 };
 export type AddonGame = CoreGame & {
-  id: string;
+  name: string;
 };
 export type GameScore = {
   id: string;
