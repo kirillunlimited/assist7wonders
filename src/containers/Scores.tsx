@@ -5,6 +5,7 @@ import Profile from '../components/Profile';
 import Counter from '../components/Counter';
 import { PlayerScoreKey, Player, GameScore } from '../types';
 import { PlayersContext } from './App';
+import { getNeighborScores } from '../utils/game';
 
 type Props = {
   score: GameScore;
@@ -35,22 +36,26 @@ export default function Scores(props: Props) {
     playersContext.dispatch({ type: 'UPDATE', payload: { name, scoreKey, value } });
   }
 
-  function getSum(player: Player): number {
-    return props.score.sum ? props.score.sum(player.score) : 0;
+  function getSum(player: Player, players: Player[], playerIndex: number): number {
+    return props.score.sum
+      ? props.score.sum(player.score, getNeighborScores(players, playerIndex))
+      : 0;
   }
 
   return (
     <TableContainer>
       <Table>
         <TableBody>
-          {playersContext.state.map(player => (
+          {playersContext.state.map((player, playerIndex) => (
             <TableRow key={player.name}>
               <TableCell className={classes.td}>
                 <Profile name={player.name} />
               </TableCell>
               <TableCell className={`${classes.td} ${classes.empty}`} />
               <TableCell className={classes.td}>
-                {props.score.sum ? <Chip label={`Σ ${getSum(player)}`} /> : null}
+                {props.score.sum ? (
+                  <Chip label={`Σ ${getSum(player, playersContext.state, playerIndex)}`} />
+                ) : null}
                 {props.score.counters.map(counter => (
                   <Counter
                     key={counter.id}

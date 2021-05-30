@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { PlayerScore } from '../types';
 import { getTotal } from '../utils/score';
 import { PlayersContext, GameContext } from './App';
+import { getNeighborScores } from '../utils/game';
 
 const useStyles = makeStyles(theme => ({
   head: {
@@ -48,8 +49,12 @@ export default function Total() {
 
   useEffect(() => {
     const bestPlayer = playersContext.state.reduce(
-      (acc, player) => {
-        const playerSum = getTotal(player.score, gameContext.state.scores);
+      (acc, player, playerIndex) => {
+        const playerSum = getTotal(
+          player.score,
+          gameContext.state.scores,
+          getNeighborScores(playersContext.state, playerIndex)
+        );
 
         if (acc.name === '' || playerSum > acc.score) {
           acc = {
@@ -98,12 +103,16 @@ export default function Total() {
                   style={{ backgroundColor: score.color }}
                 >
                   {score.sum
-                    ? score.sum(player.score)
+                    ? score.sum(player.score, getNeighborScores(playersContext.state, index))
                     : player.score[score.id as keyof PlayerScore]}
                 </TableCell>
               ))}
               <TableCell className={classes.sum}>
-                {getTotal(player.score, gameContext.state.scores)}
+                {getTotal(
+                  player.score,
+                  gameContext.state.scores,
+                  getNeighborScores(playersContext.state, index)
+                )}
               </TableCell>
             </TableRow>
           ))}

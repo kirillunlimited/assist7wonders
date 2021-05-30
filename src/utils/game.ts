@@ -1,4 +1,4 @@
-import { AddonGame, PlayerScoreKey } from '../types';
+import { AddonGame, Player, PlayerScoreKey, PlayerScore } from '../types';
 import compass from '../img/compass.png';
 import tablet from '../img/tablet.png';
 import gear from '../img/gear.png';
@@ -41,4 +41,10 @@ export function getAvatarText(name: string): string {
     .reduce((acc, word) => (word ? acc + word[0] : acc), '')
     .substring(0, 2)
     .toUpperCase();
+}
+
+export function getNeighborScores(players: Player[], currentPlayerIndex: number): PlayerScore[] {
+  const leftNeighbor = (players[currentPlayerIndex - 1] || players[players.length - 1]).score;
+  const rightNeighbor = (players[currentPlayerIndex + 1] || players[0]).score;
+  return [leftNeighbor, rightNeighbor];
 }

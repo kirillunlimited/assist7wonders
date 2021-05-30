@@ -18,7 +18,7 @@ export type GameScore = {
     min?: number;
     max?: number;
   }[];
-  sum?: (score: PlayerScore) => number;
+  sum?: (score: PlayerScore, neighborScores: PlayerScore[]) => number;
 };
 
 /** PLAYERS */
