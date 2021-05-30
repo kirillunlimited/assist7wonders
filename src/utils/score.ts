@@ -2,7 +2,7 @@ import { PlayerScore, GameScore } from '../types';
 
 const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
 const WILDCARD_SCIENCE_KEY = 'wildcards';
-const MASK_SCIENCE_KEY = 'mask';
+const MASK_SCIENCE_KEY = 'masks';
 const TREASURY_KEY = 'treasury';
 
 export function getTotal(

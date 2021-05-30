@@ -87,7 +87,7 @@ const base = {
           max: 10,
         },
         {
-          id: 'mask',
+          id: 'masks',
           min: 0,
           max: 10,
         },
