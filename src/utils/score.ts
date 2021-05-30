@@ -1,32 +1,28 @@
-import { PlayerScore, GameScore } from '../types';
+import { PlayerScore } from '../types';
 
 const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
 const WILDCARD_SCIENCE_KEY = 'wildcards';
 const MASK_SCIENCE_KEY = 'masks';
 const TREASURY_KEY = 'treasury';
 
-export function getTotal(
-  playerScore: PlayerScore,
-  gameScores: GameScore[],
-  neighborScores: PlayerScore[]
-): number {
-  const gameCounters = gameScores.map(score => score.counters).flat();
-  const validPlayerScore = gameCounters.reduce((result, counter) => {
-    return {
-      ...result,
-      [counter.id]: playerScore[counter.id],
-    };
-  }, {});
+const EXCLUDE_FLAT_SUM_KEYS = [
+  ...SCIENCE_KEYS,
+  WILDCARD_SCIENCE_KEY,
+  MASK_SCIENCE_KEY,
+  TREASURY_KEY,
+];
+
+export function getTotal(playerScore: PlayerScore, neighborScores: PlayerScore[]): number {
   return (
-    getFlatTotal(validPlayerScore) +
-    getScienceTotal(validPlayerScore, neighborScores) +
-    getTreasuryTotal(validPlayerScore)
+    getFlatTotal(playerScore) +
+    getScienceTotal(playerScore, neighborScores) +
+    getTreasuryTotal(playerScore)
   );
 }
 
 export function getFlatTotal(playerScore: PlayerScore): number {
   return Object.keys(playerScore).reduce((sum, key) => {
-    if (!SCIENCE_KEYS.includes(key) && key !== WILDCARD_SCIENCE_KEY && key !== TREASURY_KEY) {
+    if (!EXCLUDE_FLAT_SUM_KEYS.includes(key)) {
       sum += playerScore[key] || 0;
     }
     return sum;

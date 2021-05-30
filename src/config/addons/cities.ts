@@ -1,3 +1,5 @@
+import { getScienceTotal } from '../../utils/score';
+
 const cities = {
   name: 'Cities',
   maxPlayers: 8,
@@ -22,6 +24,18 @@ const cities = {
           min: 0,
         },
       ],
+    },
+    {
+      id: 'science',
+      color: '#006118',
+      counters: [
+        {
+          id: 'masks',
+          min: 0,
+          max: 10,
+        },
+      ],
+      sum: getScienceTotal,
     },
   ],
 };

@@ -1,5 +1,6 @@
 import { Game, GameScore } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
+import { mergeScores } from '../utils/game';
 
 const UPDATE = 'UPDATE';
 
@@ -39,7 +40,7 @@ const reducer = (state: Game, action: Action) => {
         maxPlayers,
         addons: action.payload.addons,
         wonders: [...BASE_GAME.wonders, ...addonWonders],
-        scores: [...BASE_GAME.scores, ...addonScores],
+        scores: mergeScores([...BASE_GAME.scores, ...addonScores]),
       };
     default:
       return state;

@@ -86,11 +86,6 @@ const base = {
           min: 0,
           max: 10,
         },
-        {
-          id: 'masks',
-          min: 0,
-          max: 10,
-        },
       ],
       sum: getScienceTotal,
     },
