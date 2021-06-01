@@ -79,7 +79,7 @@ export default function Total() {
           style={{ backgroundColor: score.color }}
         >
           {score.sum
-            ? score.sum(playerScore, getNeighborScores(playersContext.state, playerIndex))
+            ? score.sum(playerScore, getNeighborScores(playersContext.state, playerIndex)).result
             : playerScore[score.id as keyof PlayerScore]}
         </TableCell>
       );

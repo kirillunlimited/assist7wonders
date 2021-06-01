@@ -1,8 +1,8 @@
-import { PlayerScore } from '../types';
+import { PlayerScore, GameScoreSumResult } from '../types';
 
-const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
-const WILDCARD_SCIENCE_KEY = 'wildcards';
-const MASK_SCIENCE_KEY = 'masks';
+const SCIENCE_KEYS = ['gear', 'compass', 'tablet'];
+const WILDCARD_SCIENCE_KEY = 'wildcard';
+const MASK_SCIENCE_KEY = 'mask';
 const TREASURY_KEY = 'treasury';
 
 const EXCLUDE_FLAT_SUM_KEYS = [
@@ -15,8 +15,8 @@ const EXCLUDE_FLAT_SUM_KEYS = [
 export function getTotal(playerScore: PlayerScore, neighborScores: PlayerScore[]): number {
   return (
     getFlatTotal(playerScore) +
-    getScienceTotal(playerScore, neighborScores) +
-    getTreasuryTotal(playerScore)
+    getScienceTotal(playerScore, neighborScores).result +
+    getTreasuryTotal(playerScore).result
   );
 }
 
@@ -29,80 +29,10 @@ export function getFlatTotal(playerScore: PlayerScore): number {
   }, 0);
 }
 
-function getScienceScore(scienceScores: number[]): number {
-  const min = Math.min(...scienceScores);
-  const sum = scienceScores.reduce((sum, score) => sum + score ** 2, 0);
-  return sum + min * 7;
-}
-
-function getMaskPossibilities(
-  scienceScores: number[],
-  neighborScienceScores: number[][],
-  masks: number
-): number {
-  const score = getScienceScore(scienceScores);
-  if (masks === 0) {
-    return score;
-  }
-
-  const [compasses, tablets, gears] = scienceScores;
-  let maxScore = score;
-
-  const [nc, nt, ng] = neighborScienceScores.reduce(
-    (acc, neighborScore) => {
-      neighborScore.forEach((score, index) => {
-        acc[index] += score;
-      });
-      return acc;
-    },
-    [0, 0, 0] as number[]
-  );
-
-  const maxCompasses = Math.min(masks, nc);
-  for (let dc = 0; dc <= maxCompasses; dc++) {
-    const maxTablets = Math.min(masks - dc, nt);
-    for (let dt = 0; dt <= maxTablets; dt++) {
-      const dg = Math.min(masks - dc - dt, ng);
-      const s = getScienceScore([compasses + dc, tablets + dt, gears + dg]);
-      if (s > maxScore) {
-        maxScore = s;
-      }
-    }
-  }
-  return maxScore;
-}
-
-function getAllPossibilities(
-  scienceScores: number[],
-  neighborScienceScores: number[][],
-  wildcards: number,
-  masks: number
-): number {
-  const score = getScienceScore(scienceScores);
-  if (wildcards === 0 && masks === 0) {
-    return score;
-  }
-
-  const [compasses, tablets, gears] = scienceScores;
-  let maxScore = score;
-
-  for (let dc = 0; dc <= wildcards; dc++) {
-    for (let dt = 0; dt <= wildcards - dc; dt++) {
-      const dg = wildcards - dc - dt;
-      const s = getMaskPossibilities(
-        [compasses + dc, tablets + dt, gears + dg],
-        neighborScienceScores,
-        masks
-      );
-      if (s > maxScore) {
-        maxScore = s;
-      }
-    }
-  }
-  return maxScore;
-}
-
-export function getScienceTotal(playerScore: PlayerScore, neighborScores: PlayerScore[]): number {
+export function getScienceTotal(
+  playerScore: PlayerScore,
+  neighborScores: PlayerScore[]
+): GameScoreSumResult {
   const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
     return [...scienceScores, playerScore[key] || 0];
   }, [] as number[]);
@@ -113,11 +43,113 @@ export function getScienceTotal(playerScore: PlayerScore, neighborScores: Player
       return [...acc, neighborScore[key] || 0];
     }, [] as number[]);
   });
-  return getAllPossibilities(scienceScores, neighborScienceScores, wildcards, masks);
+
+  /**
+   * ARMADA -> AGANICE -> WILDCARDS -> MASKS ->
+   */
+
+  const wildcardPossibilities = getWildcardPossibilities(scienceScores, wildcards);
+  const maskPossibilities = getMaskPossibilities(
+    wildcardPossibilities,
+    neighborScienceScores,
+    masks
+  );
+  const { result, possibility } = getBestSciencePossibility(maskPossibilities);
+  const calculations = getScienceCalculations(possibility, result);
+  return { result, calculations };
 }
 
-export function getTreasuryTotal(playerScore: PlayerScore): number {
-  return playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
+function getWildcardPossibilities(scienceScores: number[], wildcards: number): number[][] {
+  if (wildcards === 0) {
+    return [scienceScores];
+  }
+
+  const [gear, compass, tablet] = scienceScores;
+  const possibilities: number[][] = [];
+
+  for (let dg = 0; dg <= wildcards; dg++) {
+    for (let dc = 0; dc <= wildcards - dg; dc++) {
+      const dt = wildcards - dg - dc;
+      possibilities.push([gear + dg, compass + dc, tablet + dt]);
+    }
+  }
+  return possibilities;
+}
+
+function getMaskPossibilities(
+  scienceScores: number[][],
+  neighborScienceScores: number[][],
+  masks: number
+): number[][] {
+  if (masks === 0) {
+    return scienceScores;
+  }
+
+  const [ng, nc, nt] = neighborScienceScores.reduce(
+    (acc, neighborScore) => {
+      neighborScore.forEach((score, index) => {
+        acc[index] += score;
+      });
+      return acc;
+    },
+    [0, 0, 0] as number[]
+  );
+
+  const possibilities: number[][] = [];
+  scienceScores.forEach(score => {
+    const [gear, compass, tablet] = score;
+    const maxGear = Math.min(masks, ng);
+    for (let dg = 0; dg <= maxGear; dg++) {
+      const maxCompass = Math.min(masks - dg, nc);
+      for (let dc = 0; dc <= maxCompass; dc++) {
+        const dt = Math.min(masks - dg - dc, nt);
+        possibilities.push([gear + dg, compass + dc, tablet + dt]);
+      }
+    }
+  });
+
+  return possibilities;
+}
+
+export function getBestSciencePossibility(
+  possibilities: number[][]
+): { result: number; possibility: number[] } {
+  return possibilities.reduce(
+    (bestPossibility, possibility) => {
+      const result = getScienceScore(possibility);
+      if (result > bestPossibility.result) {
+        return {
+          result,
+          possibility,
+        };
+      }
+      return bestPossibility;
+    },
+    {
+      result: 0,
+      possibility: [0, 0, 0],
+    } as { result: number; possibility: number[] }
+  );
+}
+
+function getScienceScore(scienceScores: number[]): number {
+  const min = Math.min(...scienceScores);
+  const sum = scienceScores.reduce((sum, score) => sum + score ** 2, 0);
+  return sum + min * 7;
+}
+
+function getScienceCalculations(scienceScores: number[], result: number): string {
+  const min = Math.min(...scienceScores);
+  const sum = scienceScores.reduce((sum, score) => `${sum}${score}<sup>2</sup> + `, '');
+  return `${sum}${min} × 7 = <strong>${result}</strong>`;
+}
+
+export function getTreasuryTotal(playerScore: PlayerScore): GameScoreSumResult {
+  const result = playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
+  return {
+    result,
+    calculations: `Σ <strong>${result.toString()}</strong>`,
+  };
 }
 
 export function isMinValue(value: number, min?: number): boolean {
