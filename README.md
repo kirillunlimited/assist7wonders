@@ -11,30 +11,35 @@
 [https://assist7wonders.web.app](https://assist7wonders.web.app)
 
 ## Features
-* 🧩 Addons support:
-  * 🦸 Leaders
-  * 🏙️ Cities
-  * 🗼 Babel
-  * 🛥️ Armada
-  * 🗿 Wonder pack
-* 👨‍👩‍👧‍👦 Players management:
-  * 🏛 Select & randomize wonders
-  * 🔄 Change order of the players with drag & drop
-* 🌍 Localization:
-  * 🇬🇧 English
-  * 🇷🇺 Russian
-* 🧪 Science score calculator with wildcards
-* 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
-* 📱 PWA support
+
+- 🧩 Addons support:
+  - 🦸 Leaders
+  - 🏙️ Cities
+  - 🗼 Babel
+  - 🛥️ Armada
+  - 🗿 Wonder pack
+- 👨‍👩‍👧‍👦 Players management:
+  - 🏛 Select & randomize wonders
+  - 🔄 Change order of the players with drag & drop
+- 🌍 Localization:
+  - 🇬🇧 English
+  - 🇷🇺 Russian
+  - 🇮🇹 Italian (translated by [tommaso_ferrari](https://boardgamegeek.com/user/tommaso_ferrari))
+- 🧪 Science score calculator with wildcards
+- 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
+- 📱 PWA support
 
 ## Build and development
 
 ### `yarn start`
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `yarn test`
+
 Launches the test runner in the interactive watch mode.
 
 ### `yarn build`
+
 Builds the app for production to the `build` folder.
