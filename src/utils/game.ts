@@ -1,17 +1,19 @@
 import { AddonGame, Player, PlayerScoreKey, PlayerScore, GameScore } from '../types';
 import compass from '../img/compass.png';
-import tablet from '../img/tablet.png';
-import gear from '../img/gear.png';
-import wildcard from '../img/wildcard.png';
-import mask from '../img/mask.png';
+import tablets from '../img/tablets.png';
+import gears from '../img/gears.png';
+import wildcards from '../img/wildcards.png';
+import masks from '../img/masks.png';
+import mostcards from '../img/mostcards.png';
 import shuffle from 'lodash.shuffle';
 
 export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
   compass,
-  tablet,
-  gear,
-  wildcard,
-  mask,
+  tablets,
+  gears,
+  wildcards,
+  masks,
+  mostcards,
 };
 
 export const getAllScores = (games: AddonGame[]): GameScore[] => {

@@ -1,11 +1,4 @@
-import {
-  getFlatTotal,
-  getScienceTotal,
-  getTotal,
-  getTreasuryTotal,
-  isMaxValue,
-  isMinValue,
-} from './score';
+import { getFlatTotal, getTotal, getTreasuryTotal, isMaxValue, isMinValue } from './score';
 
 describe('getTotal', () => {
   test('should return zero', () => {
@@ -19,8 +12,8 @@ describe('getTotal', () => {
           commerce: 0,
           guild: 0,
           compass: 0,
-          tablet: 0,
-          gear: 0,
+          tablets: 0,
+          gears: 0,
           wildcards: 0,
         },
         []
@@ -38,8 +31,8 @@ describe('getTotal', () => {
           commerce: 1,
           guild: 1,
           compass: 1,
-          tablet: 1,
-          gear: 1,
+          tablets: 1,
+          gears: 1,
           wildcards: 1,
         },
         []
@@ -59,8 +52,8 @@ describe('getFlatTotal', () => {
         commerce: 0,
         guild: 0,
         compass: 0,
-        tablet: 0,
-        gear: 0,
+        tablets: 0,
+        gears: 0,
         wildcards: 0,
       })
     ).toEqual(0);
@@ -76,8 +69,8 @@ describe('getFlatTotal', () => {
         commerce: 10,
         guild: 2,
         compass: 0,
-        tablet: 0,
-        gear: 0,
+        tablets: 0,
+        gears: 0,
         wildcards: 0,
       })
     ).toEqual(22);
@@ -90,8 +83,8 @@ describe('getFlatTotal', () => {
         commerce: 0,
         guild: 5,
         compass: 0,
-        tablet: 0,
-        gear: 0,
+        tablets: 0,
+        gears: 0,
         wildcards: 0,
       })
     ).toEqual(15);
@@ -107,8 +100,8 @@ describe('getFlatTotal', () => {
         commerce: 0,
         guild: 0,
         compass: 0,
-        tablet: 0,
-        gear: 0,
+        tablets: 0,
+        gears: 0,
         wildcards: 0,
       })
     ).toEqual(-3);
@@ -124,8 +117,8 @@ describe('getFlatTotal', () => {
         commerce: 1,
         guild: 1,
         compass: 0,
-        tablet: 0,
-        gear: 0,
+        tablets: 0,
+        gears: 0,
         wildcards: 0,
       })
     ).toEqual(5);
@@ -141,119 +134,11 @@ describe('getFlatTotal', () => {
         commerce: 1,
         guild: 1,
         compass: 1,
-        tablet: 1,
-        gear: 1,
+        tablets: 1,
+        gears: 1,
         wildcards: 0,
       })
     ).toEqual(5);
-  });
-});
-
-describe('getScienceTotal', () => {
-  test('should ignore normal points', () => {
-    expect(
-      getScienceTotal(
-        {
-          military: 3,
-          treasury: 0,
-          wonders: 10,
-          civilian: 5,
-          commerce: 0,
-          guild: 0,
-          compass: 0,
-          tablet: 0,
-          gear: 0,
-          wildcards: 0,
-        },
-        []
-      )
-    ).toEqual(0);
-  });
-
-  test('should count sum of science points without wildcards', () => {
-    expect(
-      getScienceTotal(
-        {
-          compass: 2,
-          tablet: 2,
-          gear: 2,
-          wildcards: 0,
-        },
-        []
-      )
-    ).toEqual(26);
-    expect(
-      getScienceTotal(
-        {
-          compass: 1,
-          tablet: 2,
-          gear: 3,
-          wildcards: 0,
-        },
-        []
-      )
-    ).toEqual(21);
-  });
-
-  test('should count science points with 1 wildcard', () => {
-    expect(
-      getScienceTotal(
-        {
-          compass: 1,
-          tablet: 2,
-          gear: 3,
-          wildcards: 1,
-        },
-        []
-      )
-    ).toEqual(31);
-    expect(
-      getScienceTotal(
-        {
-          compass: 2,
-          tablet: 2,
-          gear: 3,
-          wildcards: 1,
-        },
-        []
-      )
-    ).toEqual(38);
-  });
-
-  test('should count science points with 2 wildcards', () => {
-    expect(
-      getScienceTotal(
-        {
-          compass: 1,
-          tablet: 2,
-          gear: 3,
-          wildcards: 2,
-        },
-        []
-      )
-    ).toEqual(38);
-    expect(
-      getScienceTotal(
-        {
-          compass: 2,
-          tablet: 2,
-          gear: 2,
-          wildcards: 2,
-        },
-        []
-      )
-    ).toEqual(38);
-    expect(
-      getScienceTotal(
-        {
-          compass: 2,
-          tablet: 2,
-          gear: 3,
-          wildcards: 2,
-        },
-        []
-      )
-    ).toEqual(48);
   });
 });
 
@@ -268,10 +153,10 @@ describe('getTreasuryTotal', () => {
         commerce: 1,
         guild: 0,
         compass: 1,
-        tablet: 0,
-        gear: 1,
+        tablets: 0,
+        gears: 1,
         wildcards: 0,
-      })
+      }).result
     ).toEqual(0);
     expect(
       getTreasuryTotal({
@@ -282,10 +167,10 @@ describe('getTreasuryTotal', () => {
         commerce: 1,
         guild: 0,
         compass: 1,
-        tablet: 0,
-        gear: 1,
+        tablets: 0,
+        gears: 1,
         wildcards: 0,
-      })
+      }).result
     ).toEqual(1);
     expect(
       getTreasuryTotal({
@@ -296,10 +181,10 @@ describe('getTreasuryTotal', () => {
         commerce: 0,
         guild: 1,
         compass: 0,
-        tablet: 1,
-        gear: 0,
+        tablets: 1,
+        gears: 0,
         wildcards: 0,
-      })
+      }).result
     ).toEqual(2);
   });
 });

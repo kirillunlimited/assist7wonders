@@ -1,4 +1,5 @@
-import { getScienceTotal, getTreasuryTotal } from '../../utils/score';
+import { getTreasuryTotal } from '../../utils/score';
+import { getScienceTotal } from '../../utils/science';
 
 const base = {
   name: '7 Wonders',
@@ -70,7 +71,7 @@ const base = {
       color: '#006118',
       counters: [
         {
-          id: 'gear',
+          id: 'gears',
           min: 0,
         },
         {
@@ -78,11 +79,11 @@ const base = {
           min: 0,
         },
         {
-          id: 'tablet',
+          id: 'tablets',
           min: 0,
         },
         {
-          id: 'wildcard',
+          id: 'wildcards',
           min: 0,
           max: 10,
         },

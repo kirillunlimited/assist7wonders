@@ -1,4 +1,4 @@
-import { getScienceTotal } from '../../utils/score';
+import { getScienceTotal } from '../../utils/science';
 
 const cities = {
   name: 'Cities',
@@ -30,7 +30,7 @@ const cities = {
       color: '#006118',
       counters: [
         {
-          id: 'mask',
+          id: 'masks',
           min: 0,
           max: 10,
         },
