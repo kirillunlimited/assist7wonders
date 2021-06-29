@@ -2,16 +2,16 @@ import { AddonGame, Player, PlayerScoreKey, PlayerScore, GameScore } from '../ty
 import compass from '../img/compass.png';
 import tablet from '../img/tablet.png';
 import gear from '../img/gear.png';
-import wildcards from '../img/wildcard.png';
-import masks from '../img/mask.png';
+import wildcard from '../img/wildcard.png';
+import mask from '../img/mask.png';
 import shuffle from 'lodash.shuffle';
 
 export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
   compass,
   tablet,
   gear,
-  wildcards,
-  masks,
+  wildcard,
+  mask,
 };
 
 export const getAllScores = (games: AddonGame[]): GameScore[] => {

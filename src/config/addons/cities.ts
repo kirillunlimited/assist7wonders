@@ -30,7 +30,7 @@ const cities = {
       color: '#006118',
       counters: [
         {
-          id: 'masks',
+          id: 'mask',
           min: 0,
           max: 10,
         },

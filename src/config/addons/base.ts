@@ -82,7 +82,7 @@ const base = {
           min: 0,
         },
         {
-          id: 'wildcards',
+          id: 'wildcard',
           min: 0,
           max: 10,
         },
