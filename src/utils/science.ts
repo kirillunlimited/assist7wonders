@@ -16,14 +16,21 @@ export function getScienceTotal(
   const mostcards = playerScore[MOSTCARD_SCIENCE_KEY] || 0;
   const wildcards = playerScore[WILDCARD_SCIENCE_KEY] || 0;
   const masks = playerScore[MASK_SCIENCE_KEY] || 0;
-  const neighborScienceScores = neighborScores.map(neighborScore => {
-    return SCIENCE_KEYS.reduce((acc, key) => {
-      return [...acc, neighborScore[key] || 0];
-    }, [] as number[]);
-  });
+  const neighborScienceScores = neighborScores.reduce(
+    (result, neighborScore) => {
+      const scienceScore = SCIENCE_KEYS.reduce((acc, key) => {
+        return [...acc, neighborScore[key] || 0];
+      }, [] as number[]);
+      scienceScore.forEach((score, index) => {
+        result[index] += score;
+      });
+      return result;
+    },
+    [0, 0, 0] as number[]
+  );
 
   /**
-   * MOSTCARDS -> AGANICE -> WILDCARDS -> MASKS
+   * MOSTCARDS -> SWAPCARDS -> WILDCARDS -> MASKS
    */
 
   const mostcardPossibilities = getMostcardPossibilities(scienceScores, mostcards);
@@ -39,7 +46,7 @@ export function getScienceTotal(
 }
 
 /** From Armada addon */
-export function getMostcardPossibilities(scienceScores: number[], mostcards: number) {
+export function getMostcardPossibilities(scienceScores: number[], mostcards: number): number[][] {
   if (mostcards === 0) {
     return [scienceScores];
   }
@@ -67,8 +74,6 @@ export function getMostcardPossibilities(scienceScores: number[], mostcards: num
   return possibilities;
 }
 
-export function getAganicePossibilities() {}
-
 export function getWildcardPossibilities(scienceScores: number[][], wildcards: number): number[][] {
   if (wildcards === 0) {
     return scienceScores;
@@ -91,24 +96,16 @@ export function getWildcardPossibilities(scienceScores: number[][], wildcards: n
 /** From Cities addon */
 export function getMaskPossibilities(
   scienceScores: number[][],
-  neighborScienceScores: number[][],
+  neighborScienceScores: number[],
   masks: number
 ): number[][] {
   if (masks === 0) {
     return scienceScores;
   }
 
-  const [ng, nc, nt] = neighborScienceScores.reduce(
-    (acc, neighborScore) => {
-      neighborScore.forEach((score, index) => {
-        acc[index] += score;
-      });
-      return acc;
-    },
-    [0, 0, 0] as number[]
-  );
-
   const possibilities: number[][] = [];
+  const [ng, nc, nt] = neighborScienceScores;
+
   scienceScores.forEach(score => {
     const [gears, compass, tablets] = score;
     const maxGear = Math.min(masks, ng);
