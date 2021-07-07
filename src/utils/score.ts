@@ -2,6 +2,7 @@ import { PlayerScore, GameScoreSumResult } from '../types';
 import { getScienceTotal } from './science';
 
 export const SCIENCE_KEYS = ['gears', 'compass', 'tablets'];
+export const SWAPCARD_SCIENCE_KEY = 'swapcards';
 export const MOSTCARD_SCIENCE_KEY = 'mostcards';
 export const WILDCARD_SCIENCE_KEY = 'wildcards';
 export const MASK_SCIENCE_KEY = 'masks';
@@ -9,6 +10,8 @@ const TREASURY_KEY = 'treasury';
 
 const EXCLUDE_FLAT_SUM_KEYS = [
   ...SCIENCE_KEYS,
+  SWAPCARD_SCIENCE_KEY,
+  MOSTCARD_SCIENCE_KEY,
   WILDCARD_SCIENCE_KEY,
   MASK_SCIENCE_KEY,
   TREASURY_KEY,

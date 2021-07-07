@@ -1,6 +1,7 @@
 import { PlayerScore, GameScoreSumResult } from '../types';
 import {
   SCIENCE_KEYS,
+  SWAPCARD_SCIENCE_KEY,
   MOSTCARD_SCIENCE_KEY,
   WILDCARD_SCIENCE_KEY,
   MASK_SCIENCE_KEY,
@@ -13,6 +14,7 @@ export function getScienceTotal(
   const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
     return [...scienceScores, playerScore[key] || 0];
   }, [] as number[]);
+  const swapcards = playerScore[SWAPCARD_SCIENCE_KEY] || 0;
   const mostcards = playerScore[MOSTCARD_SCIENCE_KEY] || 0;
   const wildcards = playerScore[WILDCARD_SCIENCE_KEY] || 0;
   const masks = playerScore[MASK_SCIENCE_KEY] || 0;
@@ -29,12 +31,10 @@ export function getScienceTotal(
     [0, 0, 0] as number[]
   );
 
-  /**
-   * MOSTCARDS -> SWAPCARDS -> WILDCARDS -> MASKS
-   */
-
-  const mostcardPossibilities = getMostcardPossibilities(scienceScores, mostcards);
-  const wildcardPossibilities = getWildcardPossibilities(mostcardPossibilities, wildcards);
+  /** MOSTCARDS -> SWAPCARDS -> WILDCARDS -> MASKS */
+  const mostcardPossibilities = getMostcardPossibilities([scienceScores], mostcards);
+  const swapcardPossibilities = getSwapcardPossibilities(mostcardPossibilities, swapcards);
+  const wildcardPossibilities = getWildcardPossibilities(swapcardPossibilities, wildcards);
   const maskPossibilities = getMaskPossibilities(
     wildcardPossibilities,
     neighborScienceScores,
@@ -46,30 +46,102 @@ export function getScienceTotal(
 }
 
 /** From Armada addon */
-export function getMostcardPossibilities(scienceScores: number[], mostcards: number): number[][] {
+export function getMostcardPossibilities(scienceScores: number[][], mostcards: number): number[][] {
   if (mostcards === 0) {
-    return [scienceScores];
+    return scienceScores;
   }
 
-  let max = scienceScores[0];
-  let maxIndexes = [0];
+  const possibilities: number[][] = [];
 
-  for (let i = 1; i < scienceScores.length; i++) {
-    if (scienceScores[i] === max) {
-      maxIndexes.push(i);
-    } else if (scienceScores[i] > max) {
-      maxIndexes = [i];
-      max = scienceScores[i];
+  scienceScores.forEach(score => {
+    let max = score[0];
+    let maxIndexes = [0];
+
+    for (let i = 1; i < score.length; i++) {
+      if (score[i] === max) {
+        maxIndexes.push(i);
+      } else if (score[i] > max) {
+        maxIndexes = [i];
+        max = score[i];
+      }
     }
+
+    for (let index = 0; index < maxIndexes.length; index++) {
+      const maxIndex = maxIndexes[index];
+      const possibility = [...score];
+      possibility[maxIndex] = max + mostcards;
+      possibilities.push(possibility);
+    }
+  });
+
+  return possibilities;
+}
+
+/** From Leaders addon */
+function getSwapcardPossibilities(scienceScores: number[][], swapcards: number): number[][] {
+  if (swapcards === 0) {
+    return scienceScores;
   }
 
-  const possibilities = [];
-  for (let index = 0; index < maxIndexes.length; index++) {
-    const maxIndex = maxIndexes[index];
-    const possibility = [...scienceScores];
-    possibility[maxIndex] = max + mostcards;
-    possibilities.push(possibility);
-  }
+  let possibilities: number[][] = [];
+
+  scienceScores.forEach(score => {
+    /** If number of science cards is less than a number of swapcards, then decrease the number of swapcards */
+    const sum = score.reduce((a, b) => a + b);
+    if (swapcards >= sum) {
+      return getSwapcardPossibilities([score], sum - 1);
+    }
+
+    let swapsLimitFlag = false; // Duplicate flag №1: is triggered when swap limit is reached */
+
+    score.forEach((pivot, pivotIndex) => {
+      for (let swapCount = 0; swapCount <= swapcards; swapCount++) {
+        let minSwapFlag = false; // Duplicate flag №2: is triggered when the score is decreased to zero
+        for (let i = 0; i < score.length; i++) {
+          const result = [];
+          result[pivotIndex] = pivot + swapCount;
+          let swapsLeft = swapCount; // Number of available swaps
+
+          for (let j = 0; j < score.length; j++) {
+            // Skip if combination of scores in not unique */
+            if (i === pivotIndex || j === pivotIndex || i === j) {
+              continue;
+            }
+
+            if (swapsLimitFlag && swapsLeft === 0) {
+              continue;
+            }
+
+            result[i] = score[i];
+            if (swapsLeft > 0) {
+              result[i]--;
+              swapsLeft--;
+            }
+
+            result[j] = score[j];
+            if (swapsLeft > 0) {
+              result[j]--;
+              swapsLeft--;
+            }
+
+            if (minSwapFlag && result[i] === 0 && result[j] === 0) {
+              continue;
+            }
+
+            possibilities.push(result);
+
+            if (result[i] === 0 && result[j] === 0) {
+              minSwapFlag = true;
+            }
+
+            if (swapsLeft === 0) {
+              swapsLimitFlag = true;
+            }
+          }
+        }
+      }
+    });
+  });
 
   return possibilities;
 }

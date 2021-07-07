@@ -5,6 +5,7 @@ import gears from '../img/gears.png';
 import wildcards from '../img/wildcards.png';
 import masks from '../img/masks.png';
 import mostcards from '../img/mostcards.png';
+import swapcards from '../img/swapcards.png';
 import shuffle from 'lodash.shuffle';
 
 export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
@@ -14,6 +15,7 @@ export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
   wildcards,
   masks,
   mostcards,
+  swapcards,
 };
 
 export const getAllScores = (games: AddonGame[]): GameScore[] => {
