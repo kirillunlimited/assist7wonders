@@ -32,11 +32,17 @@ export function getScienceTotal(
   );
 
   /** MOSTCARDS -> SWAPCARDS -> WILDCARDS -> MASKS */
-  let possibilities = [scienceScores];
-  possibilities = getMostcardPossibilities(possibilities, mostcards);
-  possibilities = getSwapcardPossibilities(possibilities, swapcards);
-  possibilities = getWildcardPossibilities(possibilities, wildcards);
-  possibilities = getMaskPossibilities(possibilities, neighborScienceScores, masks);
+  let possibilities: number[][] = [scienceScores];
+  const possibilityHandlers = [
+    (possibilities: number[][]) => getMostcardPossibilities(possibilities, mostcards),
+    (possibilities: number[][]) => getSwapcardPossibilities(possibilities, swapcards),
+    (possibilities: number[][]) => getWildcardPossibilities(possibilities, wildcards),
+    (possibilities: number[][]) =>
+      getMaskPossibilities(possibilities, neighborScienceScores, masks),
+  ];
+  for (const handler of possibilityHandlers) {
+    possibilities = handler(possibilities);
+  }
 
   const { result, possibility } = getBestSciencePossibility(possibilities);
   const calculations = getScienceCalculations(possibility, result);
