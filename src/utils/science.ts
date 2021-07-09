@@ -87,7 +87,7 @@ function getSwapcardPossibilities(scienceScores: number[][], swapcards: number):
     return scienceScores;
   }
 
-  let possibilities: number[][] = [];
+  const memo: Record<string, number> = {};
 
   for (const score of scienceScores) {
     /** If number of science cards is less than a number of swapcards, then decrease the number of swapcards */
@@ -96,23 +96,14 @@ function getSwapcardPossibilities(scienceScores: number[][], swapcards: number):
       return getSwapcardPossibilities([score], sum - 1);
     }
 
-    let swapsLimitFlag = false; // Duplicate flag №1: is triggered when swap limit is reached */
-
     score.forEach((pivot, pivotIndex) => {
       for (let swapCount = 0; swapCount <= swapcards; swapCount++) {
-        let minSwapFlag = false; // Duplicate flag №2: is triggered when the score is decreased to zero
         for (let i = 0; i < score.length; i++) {
           const result = [];
-          result[pivotIndex] = pivot + swapCount;
-          let swapsLeft = swapCount; // Number of available swaps
+          let swapsLeft = swapCount; // Number of available swaps for current iteration
 
           for (let j = 0; j < score.length; j++) {
-            // Skip if combination of scores in not unique */
             if (i === pivotIndex || j === pivotIndex || i === j) {
-              continue;
-            }
-
-            if (swapsLimitFlag && swapsLeft === 0) {
               continue;
             }
 
@@ -128,26 +119,18 @@ function getSwapcardPossibilities(scienceScores: number[][], swapcards: number):
               swapsLeft--;
             }
 
-            if (minSwapFlag && result[i] === 0 && result[j] === 0) {
-              continue;
-            }
+            result[pivotIndex] = pivot + (swapCount - swapsLeft);
 
-            possibilities.push(result);
-
-            if (result[i] === 0 && result[j] === 0) {
-              minSwapFlag = true;
-            }
-
-            if (swapsLeft === 0) {
-              swapsLimitFlag = true;
-            }
+            /** Keep result in memo-object to eliminate duplicates */
+            const memoKey: string = result.join('-');
+            memo[memoKey] = (memo[memoKey] || 0) + 1;
           }
         }
       }
     });
   }
 
-  return possibilities;
+  return Object.keys(memo).map(score => score.split('-').map(element => Number(element)));
 }
 
 export function getWildcardPossibilities(scienceScores: number[][], wildcards: number): number[][] {
