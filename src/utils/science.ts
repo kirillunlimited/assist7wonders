@@ -89,7 +89,7 @@ function getSwapcardPossibilities(scienceScores: number[][], swapcards: number):
 
   let possibilities: number[][] = [];
 
-  scienceScores.forEach(score => {
+  for (const score of scienceScores) {
     /** If number of science cards is less than a number of swapcards, then decrease the number of swapcards */
     const sum = score.reduce((a, b) => a + b);
     if (swapcards >= sum) {
@@ -145,7 +145,7 @@ function getSwapcardPossibilities(scienceScores: number[][], swapcards: number):
         }
       }
     });
-  });
+  }
 
   return possibilities;
 }
