@@ -49,7 +49,6 @@ export function getScienceTotal(
   return { result, calculations };
 }
 
-/** From Armada addon */
 export function getMostcardPossibilities(scienceScores: number[][], mostcards: number): number[][] {
   if (mostcards === 0) {
     return scienceScores;
@@ -81,8 +80,7 @@ export function getMostcardPossibilities(scienceScores: number[][], mostcards: n
   return possibilities;
 }
 
-/** From Leaders addon */
-function getSwapcardPossibilities(scienceScores: number[][], swapcards: number): number[][] {
+export function getSwapcardPossibilities(scienceScores: number[][], swapcards: number): number[][] {
   if (swapcards === 0) {
     return scienceScores;
   }
@@ -152,7 +150,6 @@ export function getWildcardPossibilities(scienceScores: number[][], wildcards: n
   return possibilities;
 }
 
-/** From Cities addon */
 export function getMaskPossibilities(
   scienceScores: number[][],
   neighborScienceScores: number[],
