@@ -10,16 +10,21 @@ describe('getMostcardPossibilities', () => {
   test('should return same science scores if there are no mostcards', () => {
     expect(getMostcardPossibilities([[1, 1, 1]], 0)).toEqual([[1, 1, 1]]);
   });
-  test('should add mostcards to the biggest number', () => {
+  test('should add mostcards to the biggest science score', () => {
     expect(getMostcardPossibilities([[1, 2, 3]], 1)).toEqual([[1, 2, 4]]);
     expect(getMostcardPossibilities([[1, 2, 3]], 2)).toEqual([[1, 2, 5]]);
     expect(getMostcardPossibilities([[1, 2, 3]], 3)).toEqual([[1, 2, 6]]);
   });
-  test('should get all possibilities if there are equal numbers', () => {
+  test('should get all possibilities if there are equal science points', () => {
     expect(getMostcardPossibilities([[1, 1, 1]], 1)).toEqual([
       [2, 1, 1],
       [1, 2, 1],
       [1, 1, 2],
+    ]);
+    expect(getMostcardPossibilities([[1, 1, 1]], 2)).toEqual([
+      [3, 1, 1],
+      [1, 3, 1],
+      [1, 1, 3],
     ]);
   });
 });
@@ -28,7 +33,7 @@ describe('getSwapcardPossibilities', () => {
   test('should return same science scores if there are no swapcards', () => {
     expect(getSwapcardPossibilities([[1, 1, 1]], 0)).toEqual([[1, 1, 1]]);
   });
-  test('should count possibilities with swapcards', () => {
+  test('should count possibilities with 1 swapcard', () => {
     expect(getSwapcardPossibilities([[1, 1, 1]], 1)).toEqual([
       [2, 0, 1],
       [2, 1, 0],
@@ -38,6 +43,17 @@ describe('getSwapcardPossibilities', () => {
       [0, 1, 2],
       [1, 0, 2],
     ]);
+    expect(getSwapcardPossibilities([[1, 2, 3]], 1)).toEqual([
+      [2, 1, 3],
+      [2, 2, 2],
+      [1, 2, 3],
+      [0, 3, 3],
+      [1, 3, 2],
+      [0, 2, 4],
+      [1, 1, 4],
+    ]);
+  });
+  test('should count possibilities with 2 swapcards', () => {
     expect(getSwapcardPossibilities([[1, 1, 1]], 2)).toEqual([
       [3, 0, 0],
       [2, 0, 1],
@@ -50,19 +66,35 @@ describe('getSwapcardPossibilities', () => {
       [0, 1, 2],
       [1, 0, 2],
     ]);
-    expect(getSwapcardPossibilities([[1, 2, 1]], 2)).toEqual([
-      [3, 0, 1],
-      [3, 1, 0],
-      [2, 1, 1],
-      [2, 2, 0],
-      [1, 2, 1],
-      [0, 4, 0],
-      [0, 3, 1],
-      [1, 3, 0],
-      [0, 1, 3],
-      [0, 2, 2],
-      [1, 0, 3],
-      [1, 1, 2],
+    expect(getSwapcardPossibilities([[1, 2, 3]], 2)).toEqual([
+      [3, 0, 3],
+      [3, 1, 2],
+      [2, 1, 3],
+      [3, 2, 1],
+      [2, 2, 2],
+      [1, 2, 3],
+      [0, 4, 2],
+      [0, 3, 3],
+      [1, 4, 1],
+      [1, 3, 2],
+      [0, 1, 5],
+      [0, 2, 4],
+      [1, 0, 5],
+      [1, 1, 4],
+    ]);
+  });
+  test('should count possibilities with 3 swapcards', () => {
+    expect(getSwapcardPossibilities([[1, 1, 1]], 3)).toEqual([
+      [3, 0, 0],
+      [2, 0, 1],
+      [2, 1, 0],
+      [1, 1, 1],
+      [0, 3, 0],
+      [0, 2, 1],
+      [1, 2, 0],
+      [0, 0, 3],
+      [0, 1, 2],
+      [1, 0, 2],
     ]);
     expect(getSwapcardPossibilities([[1, 2, 3]], 3)).toEqual([
       [4, 0, 2],
@@ -87,20 +119,6 @@ describe('getSwapcardPossibilities', () => {
       [1, 1, 4],
     ]);
   });
-  test('should count possibilities with more swapcards than the available science cards', () => {
-    expect(getSwapcardPossibilities([[1, 1, 1]], 3)).toEqual([
-      [3, 0, 0],
-      [2, 0, 1],
-      [2, 1, 0],
-      [1, 1, 1],
-      [0, 3, 0],
-      [0, 2, 1],
-      [1, 2, 0],
-      [0, 0, 3],
-      [0, 1, 2],
-      [1, 0, 2],
-    ]);
-  });
 });
 
 describe('getWildcardPossibilities', () => {
@@ -112,11 +130,6 @@ describe('getWildcardPossibilities', () => {
       [1, 1, 2],
       [1, 2, 1],
       [2, 1, 1],
-    ]);
-    expect(getWildcardPossibilities([[1, 1, 2]], 1)).toEqual([
-      [1, 1, 3],
-      [1, 2, 2],
-      [2, 1, 2],
     ]);
     expect(getWildcardPossibilities([[1, 2, 3]], 1)).toEqual([
       [1, 2, 4],
@@ -133,14 +146,6 @@ describe('getWildcardPossibilities', () => {
       [2, 2, 1],
       [3, 1, 1],
     ]);
-    expect(getWildcardPossibilities([[1, 1, 2]], 2)).toEqual([
-      [1, 1, 4],
-      [1, 2, 3],
-      [1, 3, 2],
-      [2, 1, 3],
-      [2, 2, 2],
-      [3, 1, 2],
-    ]);
     expect(getWildcardPossibilities([[1, 2, 3]], 2)).toEqual([
       [1, 2, 5],
       [1, 3, 4],
@@ -150,9 +155,105 @@ describe('getWildcardPossibilities', () => {
       [3, 2, 3],
     ]);
   });
+  test('should count possibilities with 3 wildcards', () => {
+    expect(getWildcardPossibilities([[1, 1, 1]], 3)).toEqual([
+      [1, 1, 4],
+      [1, 2, 3],
+      [1, 3, 2],
+      [1, 4, 1],
+      [2, 1, 3],
+      [2, 2, 2],
+      [2, 3, 1],
+      [3, 1, 2],
+      [3, 2, 1],
+      [4, 1, 1],
+    ]);
+    expect(getWildcardPossibilities([[1, 2, 3]], 3)).toEqual([
+      [1, 2, 6],
+      [1, 3, 5],
+      [1, 4, 4],
+      [1, 5, 3],
+      [2, 2, 5],
+      [2, 3, 4],
+      [2, 4, 3],
+      [3, 2, 4],
+      [3, 3, 3],
+      [4, 2, 3],
+    ]);
+  });
 });
 
-describe('getMaskPossibilities', () => {});
+describe('getMaskPossibilities', () => {
+  test('should return same science scores if there are no masks', () => {
+    expect(getMaskPossibilities([[1, 1, 1]], [1, 1, 1], 0)).toEqual([[1, 1, 1]]);
+  });
+  test('should return same science scores if there are no neighbor science points', () => {
+    expect(getMaskPossibilities([[1, 1, 1]], [0, 0, 0], 1)).toEqual([[1, 1, 1]]);
+  });
+  test('should count possibilities with 1 mask', () => {
+    expect(getMaskPossibilities([[1, 1, 1]], [1, 1, 1], 1)).toEqual([
+      [1, 1, 2],
+      [1, 2, 1],
+      [2, 1, 1],
+    ]);
+    expect(getMaskPossibilities([[1, 2, 3]], [1, 1, 1], 1)).toEqual([
+      [1, 2, 4],
+      [1, 3, 3],
+      [2, 2, 3],
+    ]);
+  });
+  test('should count possibilities with 2 masks', () => {
+    expect(getMaskPossibilities([[1, 1, 1]], [0, 0, 1], 2)).toEqual([[1, 1, 2]]);
+    expect(getMaskPossibilities([[1, 1, 1]], [1, 1, 1], 2)).toEqual([
+      [1, 2, 2],
+      [2, 1, 2],
+      [2, 2, 1],
+    ]);
+    expect(getMaskPossibilities([[1, 2, 3]], [1, 1, 1], 2)).toEqual([
+      [1, 3, 4],
+      [2, 2, 4],
+      [2, 3, 3],
+    ]);
+    expect(getMaskPossibilities([[1, 1, 1]], [2, 2, 2], 2)).toEqual([
+      [1, 1, 3],
+      [1, 2, 2],
+      [1, 3, 1],
+      [2, 1, 2],
+      [2, 2, 1],
+      [3, 1, 1],
+    ]);
+    expect(getMaskPossibilities([[1, 2, 3]], [2, 2, 2], 2)).toEqual([
+      [1, 2, 5],
+      [1, 3, 4],
+      [1, 4, 3],
+      [2, 2, 4],
+      [2, 3, 3],
+      [3, 2, 3],
+    ]);
+  });
+  test('should count possibilities with 3 masks', () => {
+    expect(getMaskPossibilities([[1, 1, 1]], [1, 1, 1], 3)).toEqual([[2, 2, 2]]);
+    expect(getMaskPossibilities([[1, 2, 3]], [1, 1, 1], 3)).toEqual([[2, 3, 4]]);
+    expect(getMaskPossibilities([[1, 1, 1]], [2, 2, 2], 3)).toEqual([
+      [1, 2, 3],
+      [1, 3, 2],
+      [2, 1, 3],
+      [2, 2, 2],
+      [2, 3, 1],
+      [3, 1, 2],
+      [3, 2, 1],
+    ]);
+    expect(getMaskPossibilities([[1, 2, 3]], [2, 2, 2], 3)).toEqual([
+      [1, 3, 5],
+      [1, 4, 4],
+      [2, 2, 5],
+      [2, 3, 4],
+      [2, 4, 3],
+      [3, 2, 4],
+      [3, 3, 3],
+    ]);
+  });
+});
 
 describe('getScienceTotal', () => {
   test('should ignore normal points', () => {
