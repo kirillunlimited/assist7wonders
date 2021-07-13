@@ -156,8 +156,14 @@ export function getMaskPossibilities(
     return scienceScores;
   }
 
+  const neighborSum = neighborScienceScores.reduce((a, b) => a + b);
+  if (neighborSum === 0) {
+    return scienceScores;
+  }
+
   const possibilities: number[][] = [];
   const [ng, nc, nt] = neighborScienceScores;
+  const neighborMax = Math.min(neighborSum, masks);
 
   scienceScores.forEach(score => {
     const [gears, compass, tablets] = score;
@@ -166,6 +172,10 @@ export function getMaskPossibilities(
       const maxCompass = Math.min(masks - dg, nc);
       for (let dc = 0; dc <= maxCompass; dc++) {
         const dt = Math.min(masks - dg - dc, nt);
+        /** Skip possibility if there are better possibilities */
+        if (dg + dc + dt < neighborMax) {
+          continue;
+        }
         possibilities.push([gears + dg, compass + dc, tablets + dt]);
       }
     }
