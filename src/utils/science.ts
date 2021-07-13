@@ -95,34 +95,31 @@ export function getSwapcardPossibilities(scienceScores: number[][], swapcards: n
     }
 
     score.forEach((pivot, pivotIndex) => {
-      for (let swapCount = 0; swapCount <= swapcards; swapCount++) {
-        for (let i = 0; i < score.length; i++) {
-          const result = [];
-          let swapsLeft = swapCount; // Number of available swaps for current iteration
+      const rest = [];
+      for (let i = 0; i < score.length; i++) {
+        if (i === pivotIndex) {
+          continue;
+        }
+        rest.push({
+          index: i,
+          value: score[i],
+        });
+      }
 
-          for (let j = 0; j < score.length; j++) {
-            if (i === pivotIndex || j === pivotIndex || i === j) {
-              continue;
-            }
-
-            result[i] = score[i];
-            if (swapsLeft > 0) {
-              result[i]--;
-              swapsLeft--;
-            }
-
-            result[j] = score[j];
-            if (swapsLeft > 0) {
-              result[j]--;
-              swapsLeft--;
-            }
-
-            result[pivotIndex] = pivot + (swapCount - swapsLeft);
-
-            /** Keep result in memo-object to eliminate duplicates */
-            const memoKey: string = result.join('-');
-            memo[memoKey] = (memo[memoKey] || 0) + 1;
+      for (let restValue0 = 0; restValue0 <= rest[0].value; restValue0++) {
+        for (let restValue1 = 0; restValue1 <= rest[1].value; restValue1++) {
+          const diff1 = rest[0].value - restValue0;
+          const diff2 = rest[1].value - restValue1;
+          if (diff1 + diff2 > swapcards) {
+            continue;
           }
+          const result = [];
+          result[pivotIndex] = pivot + diff1 + diff2;
+          result[rest[0].index] = restValue0;
+          result[rest[1].index] = restValue1;
+
+          const memoKey = result.join('-');
+          memo[memoKey] = (memo[memoKey] || 0) + 1;
         }
       }
     });
