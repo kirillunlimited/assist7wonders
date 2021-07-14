@@ -10,9 +10,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { PlayerScore } from '../types';
+import { Player, PlayerScore } from '../types';
 import { getTotal } from '../utils/score';
 import { PlayersContext, GameContext } from './App';
+import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
 
 const useStyles = makeStyles(theme => ({
   head: {
@@ -48,8 +49,11 @@ export default function Total() {
 
   useEffect(() => {
     const bestPlayer = playersContext.state.reduce(
-      (acc, player) => {
-        const playerSum = getTotal(player.score, gameContext.state.scores);
+      (acc, player, playerIndex) => {
+        const playerSum = getTotal(
+          getPlayerScoreByGame(player.score, gameContext.state.scores),
+          getNeighborScores(playersContext.state, playerIndex)
+        );
 
         if (acc.name === '' || playerSum > acc.score) {
           acc = {
@@ -64,6 +68,23 @@ export default function Total() {
     const winner = bestPlayer ? bestPlayer.name : '';
     setWinner(winner);
   }, [playersContext.state, gameContext.state.scores]);
+
+  function renderPlayerScores(player: Player, playerIndex: number) {
+    return gameContext.state.scores.map(score => {
+      const playerScore = getPlayerScoreByGame(player.score, gameContext.state.scores);
+      return (
+        <TableCell
+          key={score.id}
+          className={classes.score}
+          style={{ backgroundColor: score.color }}
+        >
+          {score.sum
+            ? score.sum(playerScore, getNeighborScores(playersContext.state, playerIndex)).result
+            : playerScore[score.id as keyof PlayerScore]}
+        </TableCell>
+      );
+    });
+  }
 
   return (
     <TableContainer>
@@ -82,8 +103,8 @@ export default function Total() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {playersContext.state.map((player, index) => (
-            <TableRow key={index}>
+          {playersContext.state.map((player, playerIndex) => (
+            <TableRow key={playerIndex}>
               <TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
               <TableCell>
                 <Typography variant="body2">{player.name}</Typography>
@@ -91,19 +112,12 @@ export default function Total() {
                   {player.wonder}
                 </Typography>
               </TableCell>
-              {gameContext.state.scores.map(score => (
-                <TableCell
-                  key={score.id}
-                  className={classes.score}
-                  style={{ backgroundColor: score.color }}
-                >
-                  {score.sum
-                    ? score.sum(player.score)
-                    : player.score[score.id as keyof PlayerScore]}
-                </TableCell>
-              ))}
+              {renderPlayerScores(player, playerIndex)}
               <TableCell className={classes.sum}>
-                {getTotal(player.score, gameContext.state.scores)}
+                {getTotal(
+                  getPlayerScoreByGame(player.score, gameContext.state.scores),
+                  getNeighborScores(playersContext.state, playerIndex)
+                )}
               </TableCell>
             </TableRow>
           ))}

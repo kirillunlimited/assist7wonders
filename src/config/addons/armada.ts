@@ -1,3 +1,5 @@
+import { getScienceTotal } from '../../utils/science';
+
 const armada = {
   name: 'Armada',
   maxPlayers: 7,
@@ -31,6 +33,18 @@ const armada = {
           min: 0,
         },
       ],
+    },
+    {
+      id: 'science',
+      color: '#006118',
+      counters: [
+        {
+          id: 'mostcards',
+          min: 0,
+          max: 10,
+        },
+      ],
+      sum: getScienceTotal,
     },
   ],
 };

@@ -3,10 +3,12 @@ import { getAllScores } from './game';
 import { GameScore, Route } from '../types';
 import Scores from '../containers/Scores';
 
+const SCORES_ROUTE = 'scores';
+
 export function getAllRoutes(routes: Route[]): Route[] {
   const scores = getAllScores([BASE_GAME, ...ADDONS]);
   return routes.map(route => {
-    if (route.id === 'scores') {
+    if (route.id === SCORES_ROUTE) {
       return {
         ...route,
         routes: convertScoresToRoutes(scores, route.path),

@@ -1,68 +1,45 @@
-import { PlayerScore, GameScore } from '../types';
+import { PlayerScore, GameScoreSumResult } from '../types';
+import { getScienceTotal } from './science';
 
-const SCIENCE_KEYS = ['compass', 'tablet', 'gear'];
-const WILDCARD_SCIENCE_KEY = 'wildcards';
+export const SCIENCE_KEYS = ['gears', 'compass', 'tablets'];
+export const SWAPCARD_SCIENCE_KEY = 'swapcards';
+export const MOSTCARD_SCIENCE_KEY = 'mostcards';
+export const WILDCARD_SCIENCE_KEY = 'wildcards';
+export const MASK_SCIENCE_KEY = 'masks';
 const TREASURY_KEY = 'treasury';
 
-export function getTotal(playerScore: PlayerScore, gameScores: GameScore[]): number {
-  const gameCounters = gameScores.map(score => score.counters).flat();
-  const validPlayerScore = gameCounters.reduce((result, counter) => {
-    return {
-      ...result,
-      [counter.id]: playerScore[counter.id],
-    };
-  }, {});
+const EXCLUDE_FLAT_SUM_KEYS = [
+  ...SCIENCE_KEYS,
+  SWAPCARD_SCIENCE_KEY,
+  MOSTCARD_SCIENCE_KEY,
+  WILDCARD_SCIENCE_KEY,
+  MASK_SCIENCE_KEY,
+  TREASURY_KEY,
+];
+
+export function getTotal(playerScore: PlayerScore, neighborScores: PlayerScore[]): number {
   return (
-    getFlatTotal(validPlayerScore) +
-    getScienceTotal(validPlayerScore) +
-    getTreasuryTotal(validPlayerScore)
+    getFlatTotal(playerScore) +
+    getScienceTotal(playerScore, neighborScores).result +
+    getTreasuryTotal(playerScore).result
   );
 }
 
 export function getFlatTotal(playerScore: PlayerScore): number {
   return Object.keys(playerScore).reduce((sum, key) => {
-    if (!SCIENCE_KEYS.includes(key) && key !== WILDCARD_SCIENCE_KEY && key !== TREASURY_KEY) {
+    if (!EXCLUDE_FLAT_SUM_KEYS.includes(key)) {
       sum += playerScore[key] || 0;
     }
     return sum;
   }, 0);
 }
 
-function getScienceScore(scienceScores: number[]): number {
-  const min = Math.min(...scienceScores);
-  const sum = scienceScores.reduce((sum, score) => sum + score ** 2, 0);
-  return sum + min * 7;
-}
-
-function getWildcardPossibilities(scienceScores: number[], wildcards: number): number {
-  const score = getScienceScore(scienceScores);
-  if(wildcards === 0) {
-    return score;
-  }
-
-  const [compasses, tablets, gears] = scienceScores;
-  let maxScore = score;
-  for(let dc = 0; dc <= wildcards; dc++)
-  for(let dt = 0; dt <= wildcards-dc; dt++) {
-    const dg = wildcards - dc - dt;
-    const s = getScienceScore([compasses+dc, tablets+dt, gears+dg]);
-    if(s > maxScore) {
-      maxScore = s;
-    }
-  }
-  return maxScore;
-}
-
-export function getScienceTotal(playerScore: PlayerScore): number {
-  const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
-    return [...scienceScores, playerScore[key] || 0];
-  }, [] as number[]);
-  const wildcards = playerScore[WILDCARD_SCIENCE_KEY] || 0;
-  return getWildcardPossibilities(scienceScores, wildcards);
-}
-
-export function getTreasuryTotal(playerScore: PlayerScore): number {
-  return playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
+export function getTreasuryTotal(playerScore: PlayerScore): GameScoreSumResult {
+  const result = playerScore.treasury ? Math.trunc(playerScore.treasury / 3) : 0;
+  return {
+    result,
+    calculations: `Σ <strong>${result.toString()}</strong>`,
+  };
 }
 
 export function isMinValue(value: number, min?: number): boolean {

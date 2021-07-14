@@ -18,10 +18,10 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flexEnd',
+    justifyContent: 'flex-end',
   },
   scoreIcon: {
-    width: '36px',
+    width: '50px',
   },
 });
 
