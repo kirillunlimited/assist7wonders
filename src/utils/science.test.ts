@@ -1,10 +1,42 @@
 import {
+  getNeighborScienceScores,
   getScienceTotal,
   getMostcardPossibilities,
   getSwapcardPossibilities,
   getWildcardPossibilities,
   getMaskPossibilities,
 } from './science';
+
+describe('getNeighborScienceScores', () => {
+  test('should merge neighbor science scores into single number array and ignoring other counters', () => {
+    expect(
+      getNeighborScienceScores([
+        {
+          civilian: 1,
+          commerce: 1,
+          compass: 6,
+          gears: 0,
+          guild: 1,
+          military: 1,
+          tablets: 1,
+          treasury: 1,
+          wonders: 1,
+        },
+        {
+          civilian: 1,
+          commerce: 1,
+          compass: 4,
+          gears: 3,
+          guild: 1,
+          military: 1,
+          tablets: 5,
+          treasury: 1,
+          wonders: 1,
+        },
+      ])
+    ).toEqual([3, 10, 6]);
+  });
+});
 
 describe('getMostcardPossibilities', () => {
   test('should return same science scores if there are no mostcards', () => {

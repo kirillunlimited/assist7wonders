@@ -7,18 +7,9 @@ import {
   MASK_SCIENCE_KEY,
 } from './score';
 
-export function getScienceTotal(
-  playerScore: PlayerScore,
-  neighborScores: PlayerScore[]
-): GameScoreSumResult {
-  const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
-    return [...scienceScores, playerScore[key] || 0];
-  }, [] as number[]);
-  const swapcards = playerScore[SWAPCARD_SCIENCE_KEY] || 0;
-  const mostcards = playerScore[MOSTCARD_SCIENCE_KEY] || 0;
-  const wildcards = playerScore[WILDCARD_SCIENCE_KEY] || 0;
-  const masks = playerScore[MASK_SCIENCE_KEY] || 0;
-  const neighborScienceScores = neighborScores.reduce(
+export function getNeighborScienceScores(neighborScores: PlayerScore[]): number[] {
+  console.log()
+  return neighborScores.reduce(
     (result, neighborScore) => {
       const scienceScore = SCIENCE_KEYS.reduce((acc, key) => {
         return [...acc, neighborScore[key] || 0];
@@ -30,6 +21,20 @@ export function getScienceTotal(
     },
     [0, 0, 0] as number[]
   );
+}
+
+export function getScienceTotal(
+  playerScore: PlayerScore,
+  neighborScores: PlayerScore[]
+): GameScoreSumResult {
+  const scienceScores = SCIENCE_KEYS.reduce((scienceScores, key) => {
+    return [...scienceScores, playerScore[key] || 0];
+  }, [] as number[]);
+  const swapcards = playerScore[SWAPCARD_SCIENCE_KEY] || 0;
+  const mostcards = playerScore[MOSTCARD_SCIENCE_KEY] || 0;
+  const wildcards = playerScore[WILDCARD_SCIENCE_KEY] || 0;
+  const masks = playerScore[MASK_SCIENCE_KEY] || 0;
+  const neighborScienceScores = getNeighborScienceScores(neighborScores);
 
   /** MOSTCARDS -> SWAPCARDS -> WILDCARDS -> MASKS */
   let possibilities: number[][] = [scienceScores];

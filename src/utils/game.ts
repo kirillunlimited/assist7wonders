@@ -49,9 +49,9 @@ export const mergeScores = (scores: GameScore[]): GameScore[] => {
 };
 
 export function getNeighborScores(players: Player[], currentPlayerIndex: number): PlayerScore[] {
-  const leftNeighbor = (players[currentPlayerIndex - 1] || players[players.length - 1]).score;
-  const rightNeighbor = (players[currentPlayerIndex + 1] || players[0]).score;
-  return [leftNeighbor, rightNeighbor];
+  const leftNeighborScore = (players[currentPlayerIndex - 1] || players[players.length - 1]).score;
+  const rightNeighborScore = (players[currentPlayerIndex + 1] || players[0]).score;
+  return [leftNeighborScore, rightNeighborScore];
 }
 
 /** Get actual player score by toggled addons */
