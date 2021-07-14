@@ -3,7 +3,7 @@ import { getScienceTotal } from '../../utils/science';
 const armada = {
   name: 'Armada',
   maxPlayers: 7,
-  wonders: [],
+  wonders: ['Siracusa'],
   scores: [
     {
       id: 'naval',

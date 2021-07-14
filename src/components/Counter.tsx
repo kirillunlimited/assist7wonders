@@ -61,12 +61,7 @@ export default function Counter(props: Props) {
   return (
     <div className={classes.container}>
       {SCORE_ICONS[props.counter] ? (
-        <img
-          src={SCORE_ICONS[props.counter]}
-          className={classes.scoreIcon}
-          title="counter icon"
-          alt={props.counter}
-        />
+        <img src={SCORE_ICONS[props.counter]} className={classes.scoreIcon} alt={props.counter} />
       ) : null}
       <div>
         <IconButton
