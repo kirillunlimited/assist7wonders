@@ -26,9 +26,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "FAST_REFRESH=false react-scripts start",
-    "dev": "run-p --race dev:firebase dev:react",
-    "dev:firebase": "firebase serve -p 4000",
+    "start": "run-p --race dev:firebase dev:*",
+    "dev:firebase": "firebase emulators:start",
     "dev:react": "FAST_REFRESH=false react-scripts start",
     "build": "npx shx rm -rf build && react-scripts build",
     "deploy": "npm run build && firebase deploy",
@@ -37,7 +36,7 @@
     "coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
-  "proxy": "http://localhost:4000",
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",

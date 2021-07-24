@@ -27,4 +27,4 @@ serviceWorkerRegistration.register();
 reportWebVitals();
 
 // Init Firebase analytics
-(window as any).firebase.analytics();
+(window as any)?.firebase?.analytics();
