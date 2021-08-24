@@ -12,10 +12,12 @@ import {
 } from '../utils/storage';
 import playersReducer, { Action as PlayersAction } from '../reducers/players';
 import gamesReducer, { Action as GameAction } from '../reducers/game';
-import { Player, Game } from '../types';
+import userReducer, { Action as UserAction } from '../reducers/user';
+import { Player, Game, User } from '../types';
 import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
+import firebase, { readUserDataFromDb, saveUserDataToDb } from '../config/firebase';
 
 type PlayersContextProps = {
   state: Player[];
@@ -27,8 +29,14 @@ type GameContextProps = {
   dispatch: (action: GameAction) => void;
 };
 
+type UserContextProps = {
+  state: User;
+  dispatch: (action: UserAction) => void;
+};
+
 export const PlayersContext = React.createContext({} as PlayersContextProps);
 export const GameContext = React.createContext({} as GameContextProps);
+export const UserContext = React.createContext({} as UserContextProps);
 
 const useStyles = makeStyles({
   app: {
@@ -41,31 +49,77 @@ const useStyles = makeStyles({
 export default function App() {
   const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
+  const [user, userDispatch] = useReducer(userReducer, { uid: '' });
   const [isReady, setIsReady] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
-    savePlayersToStorage(players);
+    if (isReady) {
+      savePlayers(players);
+    }
   }, [players]);
 
   useEffect(() => {
-    saveAddonsToStorage(game.addons);
-    playersDispatch({ type: 'GAME_UPDATE', payload: game });
+    if (isReady) {
+      saveAddons(game.addons);
+      playersDispatch({ type: 'GAME_UPDATE', payload: game });
+    }
   }, [game]);
 
   useEffect(() => {
     initGame();
-    initPlayers();
-    setIsReady(true);
   }, []);
 
   function initGame(): void {
-    const addons = getAddonsFromStorage();
+    firebase.auth().onAuthStateChanged(async userData => {
+      const uid = userData?.uid || '';
+      userDispatch({ type: 'SET_UID', payload: uid });
+
+      const { addons, players } = (await getSavedData(uid)) || {};
+      initAddons(addons);
+      await initPlayers(players);
+
+      setIsReady(true);
+    });
+  }
+
+  function initAddons(addons: string[] = []): void {
     gameDispatch({ type: 'UPDATE', payload: { addons } });
   }
 
-  function initPlayers(): void {
-    playersDispatch({ type: 'SET', payload: getPlayersFromStorage() });
+  function initPlayers(payload: Player[] = []): void {
+    playersDispatch({ type: 'SET', payload });
+  }
+
+  function savePlayers(players: Player[]) {
+    saveUserDataToDb(user.uid, {
+      players,
+      addons: game.addons,
+    });
+    savePlayersToStorage(players);
+  }
+
+  function saveAddons(addons: string[]) {
+    saveUserDataToDb(user.uid, {
+      players,
+      addons,
+    });
+    saveAddonsToStorage(game.addons);
+  }
+
+  async function getSavedData(uid: string) {
+    /** Authorized */
+    if (uid) {
+      return readUserDataFromDb(uid);
+    }
+
+    /** Unauthorized */
+    const addons = getAddonsFromStorage();
+    const players = getPlayersFromStorage();
+    return {
+      addons,
+      players,
+    };
   }
 
   return (
