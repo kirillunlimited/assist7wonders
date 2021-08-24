@@ -43,3 +43,7 @@ export type Route = {
   component: Function;
   error?: ({ game, players }: { game: Game; players: Player[] }) => string;
 };
+
+export type User = {
+  uid: string;
+};
