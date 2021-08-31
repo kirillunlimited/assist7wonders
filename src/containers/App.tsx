@@ -67,21 +67,24 @@ export default function App() {
   }, [game]);
 
   useEffect(() => {
-    initGame();
-  }, []);
-
-  function initGame(): void {
-    firebase.auth().onAuthStateChanged(async userData => {
-      const uid = userData?.uid || '';
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async user => {
+      const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
 
-      const { addons, players } = (await getSavedData(uid)) || {};
-      initAddons(addons);
-      await initPlayers(players);
+      if (uid) {
+        const { addons, players } = (await getSavedData(uid)) || {};
+        initAddons(addons);
+        await initPlayers(players);
+      } else {
+        /** Reset */
+        initAddons([]);
+        initPlayers([]);
+      }
 
       setIsReady(true);
     });
-  }
+    return () => unregisterAuthObserver();
+  }, []);
 
   function initAddons(addons: string[] = []): void {
     gameDispatch({ type: 'UPDATE', payload: { addons } });

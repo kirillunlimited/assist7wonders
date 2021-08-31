@@ -25,10 +25,11 @@ export default function AuthMenu() {
 
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+      const uid = user?.uid || '';
       setIsSignedIn(!!user);
       userContext.dispatch({
         type: 'SET_UID',
-        payload: user?.uid || '',
+        payload: uid,
       });
     });
     return () => unregisterAuthObserver();
