@@ -125,19 +125,21 @@ export default function App() {
   return (
     <div className={classes.app}>
       <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
-        <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
-          {isReady && (
-            <Layout>
-              <>
-                <Navigation />
-                <MainMenu />
-                <RouteWrapper>
-                  <Router routes={ROUTES} />
-                </RouteWrapper>
-              </>
-            </Layout>
-          )}
-        </PlayersContext.Provider>
+        <UserContext.Provider value={{ state: user, dispatch: userDispatch }}>
+          <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
+            {isReady && (
+              <Layout>
+                <>
+                  <Navigation />
+                  <MainMenu />
+                  <RouteWrapper>
+                    <Router routes={ROUTES} />
+                  </RouteWrapper>
+                </>
+              </Layout>
+            )}
+          </PlayersContext.Provider>
+        </UserContext.Provider>
       </GameContext.Provider>
     </div>
   );

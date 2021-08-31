@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ResetGame from './ResetGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
+import AuthMenu from './AuthMenu';
 import { useTranslation } from 'react-i18next';
 import logo from '../img/logo.png';
 import logo2x from '../img/logo2x.png';
@@ -33,6 +34,7 @@ export default function MainMenu() {
         <ResetGame />
         <AddonsMenu />
         <LanguageMenu />
+        <AuthMenu />
       </Toolbar>
     </AppBar>
   );
