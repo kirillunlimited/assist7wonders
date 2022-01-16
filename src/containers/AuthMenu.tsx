@@ -24,16 +24,8 @@ export default function AuthMenu() {
   };
 
   useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
-      const uid = user?.uid || '';
-      setIsSignedIn(!!user);
-      userContext.dispatch({
-        type: 'SET_UID',
-        payload: uid,
-      });
-    });
-    return () => unregisterAuthObserver();
-  }, []);
+    setIsSignedIn(Boolean(userContext.state.uid))
+  }, [userContext.state.uid]);
 
   function handleSignOut() {
     firebase.auth().signOut();
