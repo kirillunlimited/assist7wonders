@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import Layout from '../components/Layout';
 import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
@@ -6,7 +6,9 @@ import Navigation from './Navigation';
 import Router from './Router';
 import {
   savePlayersToStorage,
+  saveGameIdToStorage,
   saveAddonsToStorage,
+  getGameIdFromStorage,
   getPlayersFromStorage,
   getAddonsFromStorage,
 } from '../utils/storage';
@@ -53,6 +55,15 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
   const classes = useStyles();
 
+  function savePlayers(players: Player[]) {
+    saveUserDataToDb(user.uid, {
+      gameId: game.gameId,
+      players,
+      addons: game.addons,
+    });
+    savePlayersToStorage(players);
+  }
+
   useEffect(() => {
     if (isReady) {
       savePlayers(players);
@@ -61,7 +72,7 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      saveAddons(game.addons);
+      saveGame(game.gameId, game.addons);
       playersDispatch({ type: 'GAME_UPDATE', payload: game });
     }
   }, [game]);
@@ -71,42 +82,40 @@ export default function App() {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
 
-      if (uid) {
-        const { addons, players } = (await getSavedData(uid)) || {};
-        initAddons(addons);
-        await initPlayers(players);
-      } else {
-        /** Reset */
-        initAddons([]);
-        initPlayers([]);
-      }
+      const { gameId, addons, players } = (await getSavedData(uid)) || {};
+      saveGameId(gameId);
+      initGame(gameId, addons);
+      initPlayers(players);
 
       setIsReady(true);
     });
     return () => unregisterAuthObserver();
   }, []);
 
-  function initAddons(addons: string[] = []): void {
-    gameDispatch({ type: 'UPDATE', payload: { addons } });
+  function initGame(gameId: string, addons: string[] = []): void {
+    gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
   }
 
   function initPlayers(payload: Player[] = []): void {
     playersDispatch({ type: 'SET', payload });
   }
 
-  function savePlayers(players: Player[]) {
+  function saveGameId(gameId: string) {
     saveUserDataToDb(user.uid, {
+      gameId,
       players,
-      addons: game.addons,
+      game
     });
-    savePlayersToStorage(players);
+    saveGameIdToStorage(gameId);
   }
 
-  function saveAddons(addons: string[]) {
+  function saveGame(gameId: string, addons: string[]) {
     saveUserDataToDb(user.uid, {
+      gameId,
       players,
       addons,
     });
+    saveGameIdToStorage(gameId);
     saveAddonsToStorage(game.addons);
   }
 
@@ -117,9 +126,11 @@ export default function App() {
     }
 
     /** Unauthorized */
+    const gameId = getGameIdFromStorage();
     const addons = getAddonsFromStorage();
     const players = getPlayersFromStorage();
     return {
+      gameId,
       addons,
       players,
     };

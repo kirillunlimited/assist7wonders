@@ -3,15 +3,24 @@ import { ADDONS, BASE_GAME } from '../config/game';
 import { mergeScores } from '../utils/game';
 
 const UPDATE = 'UPDATE';
+const SET_GAME_ID = 'SET_GAME_ID';
 
 type UpdateAction = {
   type: typeof UPDATE;
   payload: {
+    gameId?: string;
     addons: string[];
   };
 };
 
-export type Action = UpdateAction;
+type SetGameIdAction= {
+  type: typeof SET_GAME_ID;
+  payload: {
+    gameId: string;
+  }
+}
+
+export type Action = UpdateAction | SetGameIdAction;
 
 const reducer = (state: Game, action: Action) => {
   switch (action.type) {
@@ -37,10 +46,16 @@ const reducer = (state: Game, action: Action) => {
         return max;
       }, 0);
       return {
+        gameId: action.payload.gameId || state.gameId,
         maxPlayers,
         addons: action.payload.addons,
         wonders: [...BASE_GAME.wonders, ...addonWonders],
         scores: mergeScores([...BASE_GAME.scores, ...addonScores]),
+      };
+    case SET_GAME_ID:
+      return {
+        ...state,
+        gameId: action.payload.gameId
       };
     default:
       return state;
