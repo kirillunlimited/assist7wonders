@@ -55,15 +55,6 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
   const classes = useStyles();
 
-  function savePlayers(players: Player[]) {
-    saveUserDataToDb(user.uid, {
-      gameId: game.gameId,
-      players,
-      addons: game.addons,
-    });
-    savePlayersToStorage(players);
-  }
-
   useEffect(() => {
     if (isReady) {
       savePlayers(players);
@@ -117,6 +108,15 @@ export default function App() {
     });
     saveGameIdToStorage(gameId);
     saveAddonsToStorage(game.addons);
+  }
+
+  function savePlayers(players: Player[]) {
+    saveUserDataToDb(user.uid, {
+      gameId: game.gameId,
+      players,
+      addons: game.addons,
+    });
+    savePlayersToStorage(players);
   }
 
   async function getSavedData(uid: string) {

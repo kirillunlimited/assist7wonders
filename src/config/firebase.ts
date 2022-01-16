@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import { debounce } from 'debounce';
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,6 +14,8 @@ firebase.initializeApp(config);
 const USERS_TABLE = 'users';
 
 const getUserRef = (uid: string) => firebase.database().ref(`${USERS_TABLE}/${uid}`);
+
+const SAVE_TIMEOUT = 500;
 
 export async function readUserDataFromDb(uid: string) {
   if (uid) {
@@ -27,10 +30,12 @@ export async function readUserDataFromDb(uid: string) {
   }
 }
 
-export const saveUserDataToDb = (uid: string, payload: any) => {
+// make it debounce
+export const saveUserDataToDb = debounce((uid: string, payload: any) => {
+  console.log('save')
   if (uid) {
     getUserRef(uid).set(payload);
   }
-};
+}, SAVE_TIMEOUT);
 
 export default firebase;
