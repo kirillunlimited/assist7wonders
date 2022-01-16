@@ -32,9 +32,9 @@ export async function readUserDataFromDb(uid: string) {
 
 // make it debounce
 export const saveUserDataToDb = debounce((uid: string, payload: any) => {
-  console.log('save')
   if (uid) {
-    getUserRef(uid).set(payload);
+    /** "update" is better than "set" */
+    getUserRef(uid).update(payload);
   }
 }, SAVE_TIMEOUT);
 
