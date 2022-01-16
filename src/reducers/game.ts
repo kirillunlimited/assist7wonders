@@ -8,7 +8,7 @@ const SET_GAME_ID = 'SET_GAME_ID';
 type UpdateAction = {
   type: typeof UPDATE;
   payload: {
-    gameId?: string;
+    gameId?: number;
     addons: string[];
   };
 };
@@ -16,7 +16,7 @@ type UpdateAction = {
 type SetGameIdAction= {
   type: typeof SET_GAME_ID;
   payload: {
-    gameId: string;
+    gameId: number;
   }
 }
 

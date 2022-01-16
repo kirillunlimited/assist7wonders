@@ -1,7 +1,7 @@
 import { debounce } from 'debounce';
 import { Player } from '../types';
-import { nanoid } from 'nanoid'
 
+// TODO: move to common constants
 const SAVE_TIMEOUT = 500;
 
 const saveToStorage = (key: string, data: string | Object) => {
@@ -16,7 +16,7 @@ export const savePlayersToStorage = debounce((players: Player[]) => {
   saveToStorage('players', players);
 }, SAVE_TIMEOUT);
 
-export const saveGameIdToStorage = debounce((gameId: string) => {
+export const saveGameIdToStorage = debounce((gameId: number) => {
   saveToStorage('gameId', gameId);
 }, SAVE_TIMEOUT);
 
@@ -24,8 +24,8 @@ export const saveAddonsToStorage = debounce((addons: string[]) => {
   saveToStorage('addons', addons);
 }, SAVE_TIMEOUT);
 
-export function getGameIdFromStorage(): string {
-  return localStorage.getItem('gameId') || nanoid();
+export function getGameIdFromStorage(): number {
+  return Number(localStorage.getItem('gameId')) || Date.now();
 }
 
 export function getPlayersFromStorage(): Player[] {

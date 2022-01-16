@@ -19,7 +19,7 @@ import { Player, Game, User } from '../types';
 import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import firebase, { readUserDataFromDb, saveUserDataToDb } from '../config/firebase';
+import firebase, { readUserDataFromDb, saveGameDataToDb } from '../config/firebase';
 
 type PlayersContextProps = {
   state: Player[];
@@ -73,7 +73,7 @@ export default function App() {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
 
-      const { gameId, addons, players } = (await getSavedData(uid)) || {};
+      const { gameId, addons, players } = (await getLastSavedGame(uid)) || {};
       saveGameId(gameId);
       initGame(gameId, addons);
       initPlayers(players);
@@ -83,7 +83,7 @@ export default function App() {
     return () => unregisterAuthObserver();
   }, []);
 
-  function initGame(gameId: string, addons: string[] = []): void {
+  function initGame(gameId: number, addons: string[] = []): void {
     gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
   }
 
@@ -91,18 +91,16 @@ export default function App() {
     playersDispatch({ type: 'SET', payload });
   }
 
-  function saveGameId(gameId: string) {
-    saveUserDataToDb(user.uid, {
-      gameId,
+  function saveGameId(gameId: number) {
+    saveGameDataToDb(user.uid, gameId, {
       players,
       game
     });
     saveGameIdToStorage(gameId);
   }
 
-  function saveGame(gameId: string, addons: string[]) {
-    saveUserDataToDb(user.uid, {
-      gameId,
+  function saveGame(gameId: number, addons: string[]) {
+    saveGameDataToDb(user.uid, gameId, {
       players,
       addons,
     });
@@ -111,18 +109,25 @@ export default function App() {
   }
 
   function savePlayers(players: Player[]) {
-    saveUserDataToDb(user.uid, {
-      gameId: game.gameId,
+    saveGameDataToDb(user.uid, game.gameId, {
       players,
       addons: game.addons,
     });
     savePlayersToStorage(players);
   }
 
-  async function getSavedData(uid: string) {
+  async function getLastSavedGame(uid: string) {
     /** Authorized */
     if (uid) {
-      return readUserDataFromDb(uid);
+      const { games } = await readUserDataFromDb(uid);
+      const gameIds = Object.keys(games);
+      const gameId = Number(gameIds[gameIds.length - 1]);
+      const { addons, players } = games[gameId];
+      return {
+        gameId,
+        addons,
+        players
+      }
     }
 
     /** Unauthorized */

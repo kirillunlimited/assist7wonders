@@ -12,7 +12,6 @@ import {
 import { Refresh } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import { GameContext, PlayersContext } from './App';
-import { nanoid } from 'nanoid'
 
 export default function MainMenu() {
   const playersContext = useContext(PlayersContext);
@@ -30,7 +29,7 @@ export default function MainMenu() {
 
   function onResetGame() {
     playersContext.dispatch({ type: 'RESET', payload: gameContext.state });
-    gameContext.dispatch({ type: 'SET_GAME_ID', payload: {gameId: nanoid()}})
+    gameContext.dispatch({ type: 'SET_GAME_ID', payload: {gameId: Date.now()}})
     handleCloseConfirm();
   }
 
