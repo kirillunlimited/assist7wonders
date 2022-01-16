@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import Layout from '../components/Layout';
 import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
@@ -53,17 +53,17 @@ export default function App() {
   const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
   const [user, userDispatch] = useReducer(userReducer, { uid: '' });
-  const [isReady, setIsReady] = useState(false);
+  const isReady = useRef(false);
   const classes = useStyles();
 
   useEffect(() => {
-    if (isReady) {
+    if (isReady.current) {
       savePlayers(players);
     }
   }, [players]);
 
   useEffect(() => {
-    if (isReady) {
+    if (isReady.current) {
       saveGame(game.gameId, game.addons);
       playersDispatch({ type: 'GAME_UPDATE', payload: game });
     }
@@ -74,12 +74,18 @@ export default function App() {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
 
+      // Logout
+      if (isReady.current && !uid) {
+        resetGame();
+        return;
+      }
+
       const { gameId, addons, players } = (await getLastSavedGame(uid)) || {};
       saveGameId(gameId);
       initGame(gameId, addons);
       initPlayers(players);
 
-      setIsReady(true);
+      isReady.current = true;
     });
     return () => unregisterAuthObserver();
   }, []);
@@ -115,6 +121,13 @@ export default function App() {
       addons: game.addons,
     });
     savePlayersToStorage(players);
+  }
+
+  function resetGame() {
+    const gameId = Date.now();
+    saveGameId(gameId);
+    initGame(gameId, []);
+    initPlayers([]);
   }
 
   async function getLastSavedGame(uid: string) {
