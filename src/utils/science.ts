@@ -8,7 +8,6 @@ import {
 } from './score';
 
 export function getNeighborScienceScores(neighborScores: PlayerScore[]): number[] {
-  console.log()
   return neighborScores.reduce(
     (result, neighborScore) => {
       const scienceScore = SCIENCE_KEYS.reduce((acc, key) => {
