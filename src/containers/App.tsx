@@ -19,7 +19,8 @@ import { Player, Game, User } from '../types';
 import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import firebase, { readUserDataFromDb, saveGameDataToDb } from '../config/firebase';
+import firebase from '../config/firebase';
+import { readUserDataFromDb, saveGameDataToDb } from '../utils/firebase';
 
 type PlayersContextProps = {
   state: Player[];

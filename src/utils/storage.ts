@@ -1,8 +1,6 @@
 import { debounce } from 'debounce';
 import { Player } from '../types';
-
-// TODO: move to common constants
-const SAVE_TIMEOUT = 500;
+import { SAVE_TIMEOUT } from '../config/constants';
 
 const saveToStorage = (key: string, data: string | Object) => {
   if (typeof data === 'string') {
