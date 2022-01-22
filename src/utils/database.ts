@@ -25,6 +25,7 @@ export const saveGameDataToDb = debounce((uid: string, gameId: number, payload: 
   if (uid) {
     if (typeof gameId !== 'number' || gameId === 0) {
       console.error('🚫 Error while writing data to database --- wrong game id value:', gameId);
+      return;
     }
     /** "update" is better than "set" */
     getUserRef(uid)
