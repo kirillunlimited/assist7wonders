@@ -33,10 +33,10 @@ export function savePlayers(userId: string, gameId: number, players: Player[]): 
   savePlayersToStorage(players);
 }
 
-export async function getSavedGames(userId: string): Promise<{
-  addons?: string[],
-  players?: Player[]
-}> {
+export async function getSavedGames(userId: string): Promise<Record<string, {
+  addons: string[],
+  players: Player[]
+}>> {
   if (userId) {
     const { games } = await readUserDataFromDb(userId);
     return games;

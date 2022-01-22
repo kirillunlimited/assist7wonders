@@ -17,7 +17,7 @@ import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from '../config/firebase';
-import {saveAll, saveAddons, savePlayers, getLastSavedGame } from '../utils/sync';
+import { saveAll, saveAddons, savePlayers, getLastSavedGame } from '../utils/sync';
 
 type PlayersContextProps = {
   state: Player[];
@@ -78,8 +78,7 @@ export default function App() {
     }
   }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handleLogIn(userId: string) {
-    // TODO: read games list from db
+  async function handleLogIn(userId: string) {
     saveAll(userId, game.gameId, game.addons, players);
   }
 
