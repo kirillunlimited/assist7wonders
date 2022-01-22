@@ -67,20 +67,20 @@ export default function App() {
       restoreGameById(user?.uid);
       return;
     }
-  }, [user.uid]);
+  }, [user.uid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isReady) {
       savePlayers(user.uid, game.gameId, players);
     }
-  }, [players]);
+  }, [players]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isReady) {
       saveAddons(user.uid, game.gameId, game.addons);
       playersDispatch({ type: 'GAME_UPDATE', payload: game });
     }
-  }, [game]);
+  }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleLogIn(userId: string) {
     saveAll(userId, game.gameId, game.addons, players);
