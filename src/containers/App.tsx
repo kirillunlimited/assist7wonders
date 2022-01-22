@@ -1,17 +1,14 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import Layout from '../components/Layout';
 import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
 import Navigation from './Navigation';
 import Router from './Router';
-import {
-  savePlayersToStorage,
-  saveGameIdToStorage,
-  saveAddonsToStorage,
-  getGameIdFromStorage,
-  getPlayersFromStorage,
-  getAddonsFromStorage,
-} from '../utils/storage';
+import ResetGame from './ResetGame';
+import AddonsMenu from './AddonsMenu';
+import LanguageMenu from './LanguageMenu';
+import AuthMenu from './AuthMenu';
+
 import playersReducer, { Action as PlayersAction } from '../reducers/players';
 import gamesReducer, { Action as GameAction } from '../reducers/game';
 import userReducer, { Action as UserAction } from '../reducers/user';
@@ -20,7 +17,7 @@ import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from '../config/firebase';
-import { readUserDataFromDb, saveGameDataToDb } from '../utils/firebase';
+import {saveAll, saveAddons, savePlayers, getLastSavedGame } from '../utils/sync';
 
 type PlayersContextProps = {
   state: Player[];
@@ -53,106 +50,56 @@ export default function App() {
   const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
   const [user, userDispatch] = useReducer(userReducer, { uid: '' });
-  const isReady = useRef(false);
+  const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
 
   useEffect(() => {
-    if (isReady.current) {
-      savePlayers(players);
-    }
-  }, [players]);
-
-  useEffect(() => {
-    if (isReady.current) {
-      saveGame(game.gameId, game.addons);
-      playersDispatch({ type: 'GAME_UPDATE', payload: game });
-    }
-  }, [game]);
-
-  useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async user => {
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
-
-      // Logout
-      if (isReady.current && !uid) {
-        resetGame();
-        return;
-      }
-
-      const { gameId, addons, players } = (await getLastSavedGame(uid)) || {};
-      saveGameId(gameId);
-      initGame(gameId, addons);
-      initPlayers(players);
-
-      isReady.current = true;
+      setIsReady(true);
     });
     return () => unregisterAuthObserver();
   }, []);
 
-  function initGame(gameId: number, addons: string[] = []): void {
-    gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
-  }
-
-  function initPlayers(payload: Player[] = []): void {
-    playersDispatch({ type: 'SET', payload });
-  }
-
-  function saveGameId(gameId: number) {
-    saveGameDataToDb(user.uid, gameId, {
-      players,
-      game
-    });
-    saveGameIdToStorage(gameId);
-  }
-
-  function saveGame(gameId: number, addons: string[]) {
-    saveGameDataToDb(user.uid, gameId, {
-      players,
-      addons,
-    });
-    saveGameIdToStorage(gameId);
-    saveAddonsToStorage(game.addons);
-  }
-
-  function savePlayers(players: Player[]) {
-    saveGameDataToDb(user.uid, game.gameId, {
-      players,
-      addons: game.addons,
-    });
-    savePlayersToStorage(players);
-  }
-
-  function resetGame() {
-    const gameId = Date.now();
-    saveGameId(gameId);
-    initGame(gameId, []);
-    initPlayers([]);
-  }
-
-  async function getLastSavedGame(uid: string) {
-    /** Authorized */
-    if (uid) {
-      const { games } = await readUserDataFromDb(uid);
-      const gameIds = Object.keys(games);
-      const gameId = Number(gameIds[gameIds.length - 1]);
-      const { addons, players } = games[gameId];
-      return {
-        gameId,
-        addons,
-        players
-      }
+  useEffect(() => {
+    if (!isReady) {
+      restoreGameById(user?.uid);
+      return;
     }
+  }, [user.uid]);
 
-    /** Unauthorized */
-    const gameId = getGameIdFromStorage();
-    const addons = getAddonsFromStorage();
-    const players = getPlayersFromStorage();
-    return {
-      gameId,
-      addons,
-      players,
-    };
+  useEffect(() => {
+    if (isReady) {
+      savePlayers(user.uid, game.gameId, players);
+    }
+  }, [players]);
+
+  useEffect(() => {
+    if (isReady) {
+      saveAddons(user.uid, game.gameId, game.addons);
+      playersDispatch({ type: 'GAME_UPDATE', payload: game });
+    }
+  }, [game]);
+
+  function handleLogIn(userId: string) {
+    saveAll(userId, game.gameId, game.addons, players);
+  }
+
+  function handleLogOut() {
+    /** Reset game */
+    const gameId = Date.now();
+    init(gameId, [], []);
+  }
+
+  async function restoreGameById(uid?: string) {
+    const { gameId, addons, players } = (await getLastSavedGame(uid)) || {};
+    init(gameId, addons, players);
+  }
+
+  function init(gameId: number, addons: string[] = [], players: Player[] = []) {
+    gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
+    playersDispatch({ type: 'SET', payload: players });
   }
 
   return (
@@ -164,7 +111,15 @@ export default function App() {
               <Layout>
                 <>
                   <Navigation />
-                  <MainMenu />
+                  <MainMenu>
+                    <ResetGame />
+                    <AddonsMenu />
+                    <LanguageMenu />
+                    <AuthMenu
+                      onLogIn={handleLogIn}
+                      onLogOut={handleLogOut}
+                    />
+                  </MainMenu>
                   <RouteWrapper>
                     <Router routes={ROUTES} />
                   </RouteWrapper>

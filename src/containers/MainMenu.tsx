@@ -1,10 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ResetGame from './ResetGame';
-import AddonsMenu from './AddonsMenu';
-import LanguageMenu from './LanguageMenu';
-import AuthMenu from './AuthMenu';
+
 import { useTranslation } from 'react-i18next';
 import logo from '../img/logo.png';
 import logo2x from '../img/logo2x.png';
@@ -20,7 +17,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MainMenu() {
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function MainMenu(props: Props) {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -30,11 +31,7 @@ export default function MainMenu() {
         <div className={classes.logoWrapper}>
           <img className={classes.logo} src={logo} alt={t('7wonders')} srcSet={`${logo2x} 2x`} />
         </div>
-
-        <ResetGame />
-        <AddonsMenu />
-        <LanguageMenu />
-        <AuthMenu />
+        {props.children}
       </Toolbar>
     </AppBar>
   );
