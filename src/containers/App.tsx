@@ -8,6 +8,7 @@ import ResetGame from './ResetGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import AuthMenu from './AuthMenu';
+import { CircularProgress } from '@material-ui/core';
 
 import playersReducer, { Action as PlayersAction } from '../reducers/players';
 import gamesReducer, { Action as GameAction } from '../reducers/game';
@@ -44,6 +45,12 @@ const useStyles = makeStyles({
     height: '100%',
     textAlign: 'center',
   },
+  loading: {
+    alignItems: 'center'
+  },
+  loader: {
+    margin: '0 auto'
+  }
 });
 
 export default function App() {
@@ -99,13 +106,12 @@ export default function App() {
   }
 
   return (
-    <div className={classes.app}>
+    <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
         <UserContext.Provider value={{ state: user, dispatch: userDispatch }}>
           <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
-            {isReady && (
               <Layout>
-                <>
+                {isReady ? <>
                   <Navigation />
                   <MainMenu>
                     <ResetGame />
@@ -119,9 +125,8 @@ export default function App() {
                   <RouteWrapper>
                     <Router routes={ROUTES} />
                   </RouteWrapper>
-                </>
+                </> : <CircularProgress className={classes.loader}/>}
               </Layout>
-            )}
           </PlayersContext.Provider>
         </UserContext.Provider>
       </GameContext.Provider>
