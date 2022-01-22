@@ -12,10 +12,10 @@ export async function readUserDataFromDb(uid: string) {
     try {
       const ref = getUserRef(uid);
       const snapshot = await ref.once('value');
-      return snapshot.val();
+      return snapshot.val() || {}
     } catch (error) {
       console.error(error);
-      return null;
+      return {};
     }
   }
 }

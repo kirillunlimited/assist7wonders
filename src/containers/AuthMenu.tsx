@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { UserContext } from './App';
 import firebase from '../config/firebase';
 
-export default function AuthMenu() {
+type Props = {
+  onLogIn: (userId: string) => void;
+  onLogOut: () => void;
+}
+
+export default function AuthMenu(props: Props) {
   const userContext = useContext(UserContext);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -16,7 +21,8 @@ export default function AuthMenu() {
     signInFlow: 'popup',
     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     callbacks: {
-      signInSuccessWithAuthResult: () => {
+      signInSuccessWithAuthResult: (authResult: any) => {
+        props.onLogIn(authResult?.user?.uid);
         handleCloseModal();
         return false;
       },
@@ -28,6 +34,7 @@ export default function AuthMenu() {
   }, [userContext.state.uid]);
 
   function handleSignOut() {
+    props.onLogOut();
     firebase.auth().signOut();
   }
 
