@@ -9,7 +9,7 @@
 import { readUserDataFromDb, saveGameDataToDb } from './database';
 import { Player } from '../types';
 
-export function saveAll(userId: string, gameId: number, addons: string[], players: Player[] = []) {
+export function saveAll(userId: string, gameId: number, addons: string[], players: Player[] = []): void {
   userId && saveGameDataToDb(userId, gameId, {
     players,
     addons
@@ -19,38 +19,36 @@ export function saveAll(userId: string, gameId: number, addons: string[], player
   savePlayersToStorage(players);
 }
 
-export function saveAddons(userId: string, gameId: number, addons: string[]) {
+export function saveAddons(userId: string, gameId: number, addons: string[]): void {
   userId && saveGameDataToDb(userId, gameId, {
     addons,
   });
   saveAddonsToStorage(addons);
 }
 
-export function savePlayers(userId: string, gameId: number, players: Player[]) {
+export function savePlayers(userId: string, gameId: number, players: Player[]): void {
   userId && saveGameDataToDb(userId, gameId, {
     players,
   });
   savePlayersToStorage(players);
 }
 
-export async function getLastSavedGame(userId?: string) {
-  /** Authorized */
+export async function getSavedGames(userId: string): Promise<{
+  addons?: string[],
+  players?: Player[]
+}> {
   if (userId) {
     const { games } = await readUserDataFromDb(userId);
-
-    if (games) {
-      const gameIds = Object.keys(games);
-      const gameId = Number(gameIds[gameIds.length - 1]);
-      const { addons, players } = games[gameId];
-      return {
-        gameId,
-        addons,
-        players
-      }
-    }
+    return games;
   }
+  return {};
+}
 
-  /** Unauthorized */
+export function getLastSavedGame(): {
+  gameId: number,
+  addons: string[],
+  players: Player[]
+} {
   const gameId = getGameIdFromStorage();
   const addons = getAddonsFromStorage();
   const players = getPlayersFromStorage();

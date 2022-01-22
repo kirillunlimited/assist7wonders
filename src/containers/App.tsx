@@ -57,17 +57,13 @@ export default function App() {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
+      if (!isReady) {
+        restoreLastGame();
+      }
       setIsReady(true);
     });
     return () => unregisterAuthObserver();
-  }, []);
-
-  useEffect(() => {
-    if (!isReady) {
-      restoreGameById(user?.uid);
-      return;
-    }
-  }, [user.uid]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isReady) {
@@ -83,6 +79,7 @@ export default function App() {
   }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleLogIn(userId: string) {
+    // TODO: read games list from db
     saveAll(userId, game.gameId, game.addons, players);
   }
 
@@ -92,8 +89,8 @@ export default function App() {
     init(gameId, [], []);
   }
 
-  async function restoreGameById(uid?: string) {
-    const { gameId, addons, players } = (await getLastSavedGame(uid)) || {};
+  function restoreLastGame() {
+    const { gameId, addons, players } = getLastSavedGame();
     init(gameId, addons, players);
   }
 
