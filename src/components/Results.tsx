@@ -17,7 +17,7 @@ import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
 type Props = {
   players: Player[];
   game: Game;
-};
+} & React.HTMLAttributes<HTMLElement>;
 
 const useStyles = makeStyles(theme => ({
   head: {
@@ -89,7 +89,7 @@ export default function Results(props: Props) {
   }
 
   return (
-    <TableContainer>
+    <TableContainer className={props.className}>
       <Table>
         <TableHead className={classes.head}>
           <TableRow>
