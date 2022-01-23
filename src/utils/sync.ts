@@ -7,7 +7,7 @@
   getAddonsFromStorage,
 } from './storage';
 import { readUserDataFromDb, saveGameDataToDb } from './database';
-import { Player } from '../types';
+import { Player, HistoryGame } from '../types';
 
 export function saveAll(userId: string, gameId: number, addons: string[], players: Player[] = []): void {
   userId && saveGameDataToDb(userId, gameId, {
@@ -33,17 +33,6 @@ export function savePlayers(userId: string, gameId: number, players: Player[]): 
   savePlayersToStorage(players);
 }
 
-export async function getSavedGames(userId: string): Promise<Record<string, {
-  addons: string[],
-  players: Player[]
-}>> {
-  if (userId) {
-    const { games } = await readUserDataFromDb(userId);
-    return games;
-  }
-  return {};
-}
-
 export function getLastSavedGame(): {
   gameId: number,
   addons: string[],
@@ -57,4 +46,15 @@ export function getLastSavedGame(): {
     addons,
     players,
   };
+}
+
+export async function getHistoryGames(userId: string): Promise<HistoryGame[]> {
+  if (userId) {
+    const { games } = await readUserDataFromDb(userId);
+    return Object.keys(games).map(gameId => ({
+      ...games[gameId],
+      gameId: Number(gameId),
+    }))
+  }
+  return [];
 }

@@ -13,12 +13,13 @@ import { CircularProgress } from '@material-ui/core';
 import playersReducer, { Action as PlayersAction } from '../reducers/players';
 import gamesReducer, { Action as GameAction } from '../reducers/game';
 import userReducer, { Action as UserAction } from '../reducers/user';
-import { Player, Game, User } from '../types';
+import historyReducer, { Action as HistoryAction } from '../reducers/history';
+import { Player, Game, User, HistoryState } from '../types';
 import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from '../config/firebase';
-import { saveAll, saveAddons, savePlayers, getLastSavedGame } from '../utils/sync';
+import { saveAll, saveAddons, savePlayers, getLastSavedGame, getHistoryGames } from '../utils/sync';
 
 type PlayersContextProps = {
   state: Player[];
@@ -35,9 +36,15 @@ type UserContextProps = {
   dispatch: (action: UserAction) => void;
 };
 
+type HistoryContextProps = {
+  state: HistoryState,
+  dispatch: (action: HistoryAction) => void;
+}
+
 export const PlayersContext = React.createContext({} as PlayersContextProps);
 export const GameContext = React.createContext({} as GameContextProps);
 export const UserContext = React.createContext({} as UserContextProps);
+export const HistoryContext = React.createContext({} as HistoryContextProps);
 
 const useStyles = makeStyles({
   app: {
@@ -57,15 +64,20 @@ export default function App() {
   const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
   const [players, playersDispatch] = useReducer(playersReducer, []);
   const [user, userDispatch] = useReducer(userReducer, { uid: '' });
+  const [history, historyDispatch] = useReducer(historyReducer, []);
   const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
 
   useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
       if (!isReady) {
         restoreLastGame();
+        if (uid) {
+          const history = await getHistoryGames(uid);
+          historyDispatch({ type: 'SET_HISTORY', payload: history });
+        }
       }
       setIsReady(true);
     });
@@ -92,15 +104,15 @@ export default function App() {
   function handleLogOut() {
     /** Reset game */
     const gameId = Date.now();
-    init(gameId, [], []);
+    initGame(gameId, [], []);
   }
 
   function restoreLastGame() {
     const { gameId, addons, players } = getLastSavedGame();
-    init(gameId, addons, players);
+    initGame(gameId, addons, players);
   }
 
-  function init(gameId: number, addons: string[] = [], players: Player[] = []) {
+  function initGame(gameId: number, addons: string[] = [], players: Player[] = []) {
     gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
     playersDispatch({ type: 'SET', payload: players });
   }
@@ -110,6 +122,7 @@ export default function App() {
       <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
         <UserContext.Provider value={{ state: user, dispatch: userDispatch }}>
           <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
+            <HistoryContext.Provider value={{ state: history, dispatch: historyDispatch }}>
               <Layout>
                 {isReady ? <>
                   <Navigation />
@@ -127,6 +140,7 @@ export default function App() {
                   </RouteWrapper>
                 </> : <CircularProgress className={classes.loader}/>}
               </Layout>
+            </HistoryContext.Provider>
           </PlayersContext.Provider>
         </UserContext.Provider>
       </GameContext.Provider>
