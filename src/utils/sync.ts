@@ -19,10 +19,11 @@ export function saveAll(userId: string, gameId: number, addons: string[], player
   savePlayersToStorage(players);
 }
 
-export function saveAddons(userId: string, gameId: number, addons: string[]): void {
+export function saveGame(userId: string, gameId: number, addons: string[]): void {
   userId && saveGameDataToDb(userId, gameId, {
     addons,
   });
+  saveGameIdToStorage(gameId);
   saveAddonsToStorage(addons);
 }
 
