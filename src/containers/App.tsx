@@ -19,7 +19,7 @@ import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase from '../config/firebase';
-import { saveAll, saveAddons, savePlayers, getLastSavedGame, getHistoryGames } from '../utils/sync';
+import { saveAll, saveGame, savePlayers, getLastSavedGame, getHistoryGames } from '../utils/sync';
 
 type PlayersContextProps = {
   state: Player[];
@@ -72,17 +72,13 @@ export default function App() {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
       const uid = user?.uid || '';
       userDispatch({ type: 'SET_UID', payload: uid });
-      if (!isReady) {
-        restoreLastGame();
-        if (uid) {
-          const history = await getHistoryGames(uid);
-          historyDispatch({ type: 'SET_HISTORY', payload: history });
-        }
-      }
-      setIsReady(true);
     });
     return () => unregisterAuthObserver();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    restoreUserData();
+  }, [user.uid])
 
   useEffect(() => {
     if (isReady) {
@@ -92,10 +88,21 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      saveAddons(user.uid, game.gameId, game.addons);
+      saveGame(user.uid, game.gameId, game.addons);
       playersDispatch({ type: 'GAME_UPDATE', payload: game });
     }
   }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function restoreUserData() {
+    if (!isReady) {
+      restoreLastGame();
+      if (user.uid) {
+        const history = await getHistoryGames(user.uid);
+        historyDispatch({ type: 'SET_HISTORY', payload: history });
+      }
+    }
+    setIsReady(true);
+  }
 
   async function handleLogIn(userId: string) {
     saveAll(userId, game.gameId, game.addons, players);
