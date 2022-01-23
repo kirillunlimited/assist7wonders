@@ -48,3 +48,11 @@ export type Route = {
 export type User = {
   uid: string;
 };
+
+export type HistoryGame = {
+  gameId: number;
+  addons: string[];
+  players: Player[];
+};
+
+export type HistoryState = HistoryGame[];
