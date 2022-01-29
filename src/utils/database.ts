@@ -20,7 +20,6 @@ export async function readUserDataFromDb(uid: string) {
   }
 }
 
-// make it debounce
 export const saveGameDataToDb = debounce((uid: string, gameId: number, payload: any) => {
   if (uid) {
     if (typeof gameId !== 'number' || gameId === 0) {
@@ -31,5 +30,18 @@ export const saveGameDataToDb = debounce((uid: string, gameId: number, payload: 
     getUserRef(uid)
       .child(`${USER_GAMES_TABLE}/${gameId}`)
       .update(payload);
+  }
+}, SAVE_TIMEOUT);
+
+export const deleteGameFromDb = debounce((uid: string, gameId: number) => {
+  if (uid) {
+    if (typeof gameId !== 'number' || gameId === 0) {
+      console.error('🚫 Error while writing data to database --- wrong game id value:', gameId);
+      return;
+    }
+    /** "update" is better than "set" */
+    getUserRef(uid)
+      .child(`${USER_GAMES_TABLE}/${gameId}`)
+      .remove();
   }
 }, SAVE_TIMEOUT);

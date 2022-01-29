@@ -7,7 +7,9 @@ import {
   TableHead,
   TableRow,
   Typography,
+  IconButton,
 } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { Player, PlayerScore, Game } from '../types';
@@ -17,13 +19,19 @@ import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
 type Props = {
   players: Player[];
   game: Game;
+  onDelete?: () => void;
 } & React.HTMLAttributes<HTMLElement>;
 
 const useStyles = makeStyles(theme => ({
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   head: {
     backgroundColor: '#eee',
   },
-  headerCell: {
+  headCell: {
     fontWeight: 'bold',
   },
   scoresHead: {
@@ -89,42 +97,50 @@ export default function Results(props: Props) {
   }
 
   return (
-    <TableContainer className={props.className}>
-      <Table>
-        <TableHead className={classes.head}>
-          <TableRow>
-            <TableCell />
-            <TableCell className={classes.headerCell}>{t('player')}</TableCell>
-            <TableCell
-              className={`${classes.headerCell} ${classes.scoresHead}`}
-              colSpan={props.game.scores.length}
-            >
-              {t('scores')}
-            </TableCell>
-            <TableCell className={`${classes.headerCell} ${classes.scoresHead}`}>Σ</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.players.map((player, playerIndex) => (
-            <TableRow key={playerIndex}>
-              <TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
-              <TableCell>
-                <Typography variant="body2">{player.name}</Typography>
-                <Typography variant="caption" color="textSecondary">
-                  {player.wonder}
-                </Typography>
+    <div className={props.className}>
+      <header className={classes.header}>
+        <span>{props.game.gameId}</span>
+        {props.onDelete && <IconButton aria-label="delete" onClick={props.onDelete}>
+          <Delete />
+        </IconButton>}
+      </header>
+      <TableContainer>
+        <Table>
+          <TableHead className={classes.head}>
+            <TableRow>
+              <TableCell />
+              <TableCell className={classes.headCell}>{t('player')}</TableCell>
+              <TableCell
+                className={`${classes.headCell} ${classes.scoresHead}`}
+                colSpan={props.game.scores.length}
+              >
+                {t('scores')}
               </TableCell>
-              {renderPlayerScores(player, playerIndex)}
-              <TableCell className={classes.sum}>
-                {getTotal(
-                  getPlayerScoreByGame(player.score, props.game.scores),
-                  getNeighborScores(props.players, playerIndex)
-                )}
-              </TableCell>
+              <TableCell className={`${classes.headCell} ${classes.scoresHead}`}>Σ</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {props.players.map((player, playerIndex) => (
+              <TableRow key={playerIndex}>
+                <TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
+                <TableCell>
+                  <Typography variant="body2">{player.name}</Typography>
+                  <Typography variant="caption" color="textSecondary">
+                    {player.wonder}
+                  </Typography>
+                </TableCell>
+                {renderPlayerScores(player, playerIndex)}
+                <TableCell className={classes.sum}>
+                  {getTotal(
+                    getPlayerScoreByGame(player.score, props.game.scores),
+                    getNeighborScores(props.players, playerIndex)
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
