@@ -108,12 +108,12 @@ export default function Results(props: Props) {
 
   return (
     <div className={props.className}>
-      <header className={classes.header}>
+      {props.onDelete && <header className={classes.header}>
         <span>{getGameDate(props.game.gameId)}</span>
-        {props.onDelete && <IconButton aria-label="delete" onClick={props.onDelete}>
+        <IconButton aria-label="delete" onClick={props.onDelete}>
           <Delete />
-        </IconButton>}
-      </header>
+        </IconButton>
+      </header>}
       <TableContainer>
         <Table>
           <TableHead className={classes.head}>
