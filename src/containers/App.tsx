@@ -78,7 +78,7 @@ export default function App() {
 
   useEffect(() => {
     restoreUserData();
-  }, [user.uid])
+  }, [user.uid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isReady) {
