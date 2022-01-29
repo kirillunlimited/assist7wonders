@@ -96,11 +96,11 @@ export default function App() {
   async function restoreUserData() {
     if (!isReady) {
       restoreLastGame();
-      if (user.uid) {
-        const history = await getHistoryGames(user.uid);
-        historyDispatch({ type: 'SET_HISTORY', payload: history });
-      }
     }
+
+    const history = await getHistoryGames(user.uid);
+    historyDispatch({ type: 'SET_HISTORY', payload: history });
+
     setIsReady(true);
   }
 
