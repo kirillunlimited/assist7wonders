@@ -19,7 +19,7 @@ import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { saveAll, saveGame, savePlayers, getLastSavedGame, getHistoryGames } from '../utils/sync';
+import { saveAll, saveGame, savePlayers, getLastSavedGame, getSavedGames } from '../utils/sync';
 
 type PlayersContextProps = {
   state: Player[];
@@ -78,8 +78,11 @@ export default function App() {
           displayName: user?.displayName,
           }
         });
+        setIsReady(true);
       });
       return () => unregisterAuthObserver();
+    } else {
+      setIsReady(true);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -101,14 +104,23 @@ export default function App() {
   }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function restoreUserData() {
-    if (!isReady) {
-      restoreLastGame();
+    if (user.uid) {
+      const {current, history} = await getSavedGames(user.uid);
+      if (isReady) {
+        // Not init: keep current game, restore all games from db as history
+        current && history && historyDispatch({ type: 'SET_HISTORY', payload: [
+          ...history,
+          current,
+        ] });
+      } else {
+        // Init: restore last game and history from db
+        current && initGame(current.gameId, current.addons, current.players);
+        history && historyDispatch({ type: 'SET_HISTORY', payload: history });
+      }
+    } else {
+      // Not init and no uid - restore game from localStorage
+      !isReady && restoreLastGame();
     }
-
-    const history = await getHistoryGames(user.uid);
-    historyDispatch({ type: 'SET_HISTORY', payload: history });
-
-    setIsReady(true);
   }
 
   async function handleLogIn(userId: string) {
