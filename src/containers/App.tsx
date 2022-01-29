@@ -71,7 +71,11 @@ export default function App() {
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
       const uid = user?.uid || '';
-      userDispatch({ type: 'SET_UID', payload: uid });
+      userDispatch({ type: 'SET_USER', payload: {
+        uid,
+        email: user?.email,
+        displayName: user?.displayName,
+      } });
     });
     return () => unregisterAuthObserver();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

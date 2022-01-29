@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { IconButton, Tooltip, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import { IconButton, Tooltip, Dialog, DialogTitle, DialogContent, Snackbar } from '@material-ui/core';
 import { Person, ExitToApp } from '@material-ui/icons';
 import { StyledFirebaseAuth } from 'react-firebaseui';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ export default function AuthMenu(props: Props) {
   const userContext = useContext(UserContext);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isAuthInfoVisible, setIsAuthInfoVisible] = useState(false);
   const { t } = useTranslation();
 
   const uiConfig = {
@@ -24,6 +25,7 @@ export default function AuthMenu(props: Props) {
       signInSuccessWithAuthResult: (authResult: any) => {
         props.onLogIn(authResult?.user?.uid);
         handleCloseModal();
+        setIsAuthInfoVisible(true);
         return false;
       },
     },
@@ -36,6 +38,7 @@ export default function AuthMenu(props: Props) {
   function handleSignOut() {
     props.onLogOut();
     firebase.auth().signOut();
+    setIsAuthInfoVisible(true);
   }
 
   function handleOpenModal() {
@@ -50,12 +53,27 @@ export default function AuthMenu(props: Props) {
     return isSignedIn ? t('logout') : t('login');
   }
 
-  function handleClick() {
+  function handleClick(): void{
     isSignedIn ? handleSignOut() : handleOpenModal();
   }
 
   function renderIcon() {
     return isSignedIn ? <ExitToApp /> : <Person />;
+  }
+
+  function handleAuthInfoClose(event: React.SyntheticEvent | React.MouseEvent, reason?: string): void {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setIsAuthInfoVisible(false);
+  }
+
+  function authInfoDescription(): string {
+    if (isSignedIn) {
+      const name = userContext.state.displayName || userContext.state.email || userContext.state.uid;
+      return t('logInInfo', { name })
+    }
+    return t('logOutInfo');
   }
 
   return (
@@ -71,6 +89,23 @@ export default function AuthMenu(props: Props) {
           <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
         </DialogContent>
       </Dialog>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={isAuthInfoVisible}
+        autoHideDuration={6000}
+        onClose={handleAuthInfoClose}
+        message={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: authInfoDescription(),
+            }}
+          />
+        }
+      />
     </div>
   );
 }
