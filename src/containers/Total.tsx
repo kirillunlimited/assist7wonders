@@ -38,7 +38,7 @@ export default function Total() {
         players={playersContext.state}
         game={gameContext.state}
       />
-      {historyContext.state.length && <div className={classes.history}>
+      {Boolean(historyContext.state.length) && <div className={classes.history}>
         <Typography variant="h2" className={classes.title}>
           {t('history')}
         </Typography>
