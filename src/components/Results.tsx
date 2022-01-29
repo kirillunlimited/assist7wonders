@@ -96,10 +96,20 @@ export default function Results(props: Props) {
     });
   }
 
+  function getGameDate(gameId: number) {
+    const date = new Date(gameId);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDay()).padStart(2, '0');
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  }
+
   return (
     <div className={props.className}>
       <header className={classes.header}>
-        <span>{props.game.gameId}</span>
+        <span>{getGameDate(props.game.gameId)}</span>
         {props.onDelete && <IconButton aria-label="delete" onClick={props.onDelete}>
           <Delete />
         </IconButton>}
