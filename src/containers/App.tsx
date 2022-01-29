@@ -18,7 +18,7 @@ import { Player, Game, User, HistoryState } from '../types';
 import { GAME_BOILERPLATE } from '../config/game';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import firebase from '../config/firebase';
+import firebase, {isFirebaseOk} from '../config/firebase';
 import { saveAll, saveGame, savePlayers, getLastSavedGame, getHistoryGames } from '../utils/sync';
 
 type PlayersContextProps = {
@@ -69,15 +69,18 @@ export default function App() {
   const classes = useStyles();
 
   useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
-      const uid = user?.uid || '';
-      userDispatch({ type: 'SET_USER', payload: {
-        uid,
-        email: user?.email,
-        displayName: user?.displayName,
-      } });
-    });
-    return () => unregisterAuthObserver();
+    if (isFirebaseOk) {
+      const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
+        const uid = user?.uid || '';
+        userDispatch({ type: 'SET_USER', payload: {
+          uid,
+          email: user?.email,
+          displayName: user?.displayName,
+          }
+        });
+      });
+      return () => unregisterAuthObserver();
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -141,10 +144,10 @@ export default function App() {
                     <ResetGame />
                     <AddonsMenu />
                     <LanguageMenu />
-                    <AuthMenu
+                    {isFirebaseOk && <AuthMenu
                       onLogIn={handleLogIn}
                       onLogOut={handleLogOut}
-                    />
+                    />}
                   </MainMenu>
                   <RouteWrapper>
                     <Router routes={ROUTES} />
