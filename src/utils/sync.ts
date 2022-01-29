@@ -53,13 +53,21 @@ export function getLastSavedGame(): {
   };
 }
 
-export async function getHistoryGames(userId: string): Promise<HistoryGame[]> {
+export async function getSavedGames(userId: string): Promise<{
+  current?: HistoryGame,
+  history?: HistoryGame[]
+}> {
   if (userId) {
     const { games } = await readUserDataFromDb(userId);
-    return Object.keys(games || {}).map(gameId => ({
+    const gamesArray: HistoryGame[] = Object.keys(games || {}).map(gameId => ({
       ...games[gameId],
       gameId: Number(gameId),
-    }))
+    }));
+
+    return {
+      current: gamesArray.pop(),
+      history: gamesArray,
+    }
   }
-  return [];
+  return {};
 }
