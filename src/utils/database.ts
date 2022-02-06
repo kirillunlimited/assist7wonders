@@ -1,31 +1,33 @@
 import firebase, { isFirebaseOk } from '../config/firebase';
 import { SAVE_TIMEOUT } from '../config/constants';
 import { debounce } from 'debounce';
-import { GameState } from '../types';
+import { GamesState, GameState } from '../types';
 
 const USERS_TABLE = 'users';
 const USER_GAMES_TABLE = 'games';
 
 const getUserRef = (userId: string) => firebase.database().ref(`${USERS_TABLE}/${userId}`);
 
-export async function readUserDataFromDb(userId: string) {
+export async function getUserGamesFromDb(userId: string): Promise<GamesState> {
   if (!isFirebaseOk) {
-    return {};
+    return [];
   }
 
   if (userId) {
     try {
       const ref = getUserRef(userId);
       const snapshot = await ref.once('value');
-      return snapshot.val() || {}
+      const { games } = snapshot.val();
+      return games || []
     } catch (error) {
       console.error(error);
-      return {};
+      return [];
     }
   }
+  return [];
 }
 
-export const saveGamesToDb = debounce((userId: string, games: GameState[]) => {
+export const saveUserGamesToDb = debounce((userId: string, games: GameState[]) => {
   if (!isFirebaseOk) {
     return;
   }

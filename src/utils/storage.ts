@@ -1,5 +1,5 @@
 import { debounce } from 'debounce';
-import { GameState } from '../types';
+import { GameState, GamesState } from '../types';
 import { SAVE_TIMEOUT } from '../config/constants';
 
 const GAMES_STORAGE_KEY = 'games';
@@ -16,7 +16,7 @@ export const saveGamesToStorage = debounce((games: GameState[]) => {
   saveToStorage(GAMES_STORAGE_KEY, games);
 }, SAVE_TIMEOUT);
 
-export const getGamesFromStorage = () => {
+export const getGamesFromStorage = (): GamesState => {
   const gamesString = localStorage.getItem(GAMES_STORAGE_KEY);
 
   if (gamesString) {
