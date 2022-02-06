@@ -7,7 +7,6 @@ import { UserContext } from './App';
 import firebase from '../config/firebase';
 
 type Props = {
-  onLogIn: (userId: string) => void;
   onLogOut: () => void;
 }
 
@@ -23,7 +22,6 @@ export default function AuthMenu(props: Props) {
     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     callbacks: {
       signInSuccessWithAuthResult: (authResult: any) => {
-        props.onLogIn(authResult?.user?.uid);
         handleCloseModal();
         setIsAuthInfoVisible(true);
         return false;

@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Route as RouteType } from '../types';
-import { GameContext, PlayersContext } from './App';
+import { CurrentGameContext } from './App';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -38,12 +38,11 @@ export default function Router({ routes }: { routes: RouteType[] }) {
 
 function RouteWithSubRoutes(route: RouteType) {
   const classes = useStyles();
-  const gameContext = useContext(GameContext);
-  const playersContext = useContext(PlayersContext);
+  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   const error =
-    route.error && route.error({ game: gameContext.state, players: playersContext.state });
+    route.error && route.error({ game: currentGameState, players: currentGamePlayers });
 
   return (
     <div>

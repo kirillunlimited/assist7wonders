@@ -1,14 +1,14 @@
 /** GAME */
-export type CoreGame = {
+export type CoreGameParams = {
   maxPlayers: number;
   wonders: string[];
   scores: GameScore[];
 };
-export type Game = CoreGame & {
+export type GameParams = CoreGameParams & {
   gameId: number;
   addons: string[];
 };
-export type AddonGame = CoreGame & {
+export type AddonGameParams = CoreGameParams & {
   name: string;
 };
 export type GameScore = {
@@ -42,19 +42,21 @@ export type Route = {
   routes?: Route[];
   color?: string;
   component: Function;
-  error?: ({ game, players }: { game: Game; players: Player[] }) => string;
+  error?: ({ game, players }: { game: GameParams; players: Player[] }) => string;
 };
 
+/** USER */
 export type User = {
   uid: string;
   email?: string | null;
   displayName?: string | null;
 };
 
-export type HistoryGame = {
+/** GAMES */
+export type GameState = {
   gameId: number;
   addons: string[];
   players: Player[];
+  isLast?: boolean;
 };
-
-export type HistoryState = HistoryGame[];
+export type GamesState = GameState[];

@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { PlayersContext, GameContext, HistoryContext, UserContext } from './App';
-import { HistoryGame } from '../types';
+import { GamesContext, CurrentGameContext/*, UserContext*/ } from './App';
+import { GameState } from '../types';
 import Results from '../components/Results';
-import { updateAction } from '../reducers/game';
+import { mapHistoryGameToCurrentGame } from '../reducers/games';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { saveHistory } from '../utils/sync';
 
 const useStyles = makeStyles(() => ({
   history: {
@@ -24,34 +23,34 @@ const useStyles = makeStyles(() => ({
 
 export default function Total() {
   const classes = useStyles();
-  const playersContext = useContext(PlayersContext);
-  const gameContext = useContext(GameContext);
-  const historyContext = useContext(HistoryContext);
-  const userContext = useContext(UserContext);
+  const gamesContext = useContext(GamesContext);
+  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
-  function getGame(game: HistoryGame) {
-    return updateAction(game.gameId, game.addons || []);
+  function getGame(game: GameState) {
+    return mapHistoryGameToCurrentGame(game);
+  }
+
+  function getHistoryGames() {
+    return gamesContext.state.filter(game => game.gameId !== currentGameState.gameId);
   }
 
   function handleHistoryGameDelete(gameId: number) {
-    const uid = userContext.state.uid;
-    const history = historyContext.state.filter(game => game.gameId !== gameId);
-    historyContext.dispatch({type: 'SET_HISTORY', payload: history});
-    saveHistory(uid, gameId);
+    const games = gamesContext.state.filter(game => game.gameId !== gameId);
+    gamesContext.dispatch({type: 'SET_GAMES', payload: games});
   }
 
   return (
     <div>
       <Results
-        players={playersContext.state}
-        game={gameContext.state}
+        players={currentGamePlayers}
+        game={currentGameState}
       />
-      {Boolean(historyContext.state.length) && <div className={classes.history}>
+      {getHistoryGames().length > 0 && <div className={classes.history}>
         <Typography variant="h2" className={classes.title}>
           {t('history')}
         </Typography>
-        {historyContext.state.map(game => <Results
+        {getHistoryGames().map(game => <Results
           className={classes.historyItem}
           key={game.gameId}
           players={game.players}

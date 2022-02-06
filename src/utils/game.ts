@@ -1,4 +1,4 @@
-import { AddonGame, Player, PlayerScoreKey, PlayerScore, GameScore } from '../types';
+import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore } from '../types';
 import compass from '../img/compass.png';
 import tablets from '../img/tablets.png';
 import gears from '../img/gears.png';
@@ -18,7 +18,7 @@ export const SCORE_ICONS: { [key in PlayerScoreKey]?: string } = {
   swapcards,
 };
 
-export const getAllScores = (games: AddonGame[]): GameScore[] => {
+export const getAllScores = (games: AddonGameParams[]): GameScore[] => {
   const allScores = games.map(addon => addon.scores).flat();
   return mergeScores(allScores);
 };
@@ -68,7 +68,7 @@ export function getPlayerScoreByGame(
   }, {});
 }
 
-export const getAllCounters = (games: AddonGame[]) => {
+export const getAllCounters = (games: AddonGameParams[]) => {
   const scores = getAllScores(games);
   return scores.reduce((counters, score) => {
     const result: { [key: string]: number } = {};

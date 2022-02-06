@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, useMemo } from 'react';
 import Layout from '../components/Layout';
 import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
@@ -10,41 +10,31 @@ import LanguageMenu from './LanguageMenu';
 import AuthMenu from './AuthMenu';
 import { CircularProgress } from '@material-ui/core';
 
-import playersReducer, { Action as PlayersAction } from '../reducers/players';
-import gamesReducer, { Action as GameAction } from '../reducers/game';
+import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import userReducer, { Action as UserAction } from '../reducers/user';
-import historyReducer, { Action as HistoryAction } from '../reducers/history';
-import { Player, Game, User, HistoryState } from '../types';
-import { GAME_BOILERPLATE } from '../config/game';
+import { Player, GameParams, User, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { saveAll, saveGame, savePlayers, getLastSavedGame, getSavedGames } from '../utils/sync';
+import { saveGames, getSavedGames } from '../utils/sync';
+import { getCurrentGameState, getCurrentGamePlayers } from '../reducers/games';
 
-type PlayersContextProps = {
-  state: Player[];
-  dispatch: (action: PlayersAction) => void;
-};
-
-type GameContextProps = {
-  state: Game;
-  dispatch: (action: GameAction) => void;
-};
+type GamesContextProps = {
+  state: GamesState;
+  dispatch: (action: GamesAction) => void;
+}
 
 type UserContextProps = {
   state: User;
   dispatch: (action: UserAction) => void;
 };
 
-type HistoryContextProps = {
-  state: HistoryState,
-  dispatch: (action: HistoryAction) => void;
-}
-
-export const PlayersContext = React.createContext({} as PlayersContextProps);
-export const GameContext = React.createContext({} as GameContextProps);
 export const UserContext = React.createContext({} as UserContextProps);
-export const HistoryContext = React.createContext({} as HistoryContextProps);
+export const GamesContext = React.createContext({} as GamesContextProps);
+export const CurrentGameContext = React.createContext({} as {
+  currentGameState: GameParams,
+  currentGamePlayers: Player[]
+});
 
 const useStyles = makeStyles({
   app: {
@@ -61,12 +51,13 @@ const useStyles = makeStyles({
 });
 
 export default function App() {
-  const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
-  const [players, playersDispatch] = useReducer(playersReducer, []);
   const [user, userDispatch] = useReducer(userReducer, { uid: '' });
-  const [history, historyDispatch] = useReducer(historyReducer, []);
+  const [games, gamesDispatch] = useReducer(gamesReducer, []);
   const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
+
+  const lastGameState = useMemo(() => getCurrentGameState(games), [games]);
+  const lastGamePlayers = useMemo(() => getCurrentGamePlayers(games), [games]);
 
   useEffect(() => {
     if (isFirebaseOk) {
@@ -92,30 +83,25 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      savePlayers(user.uid, game.gameId, players);
+      saveGames(user.uid, games);
     }
-  }, [players]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (isReady) {
-      saveGame(user.uid, game.gameId, game.addons);
-      playersDispatch({ type: 'GAME_UPDATE', payload: game });
-    }
-  }, [game]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function restoreUserData() {
     if (user.uid) {
-      const {current, history} = await getSavedGames(user.uid);
+      const savedGames = await getSavedGames(user.uid);
       if (isReady) {
         // Not init: keep current game, restore all games from db as history
-        current && history && historyDispatch({ type: 'SET_HISTORY', payload: [
-          ...history,
-          current,
+        savedGames && gamesDispatch({ type: 'SET_GAMES', payload: [
+          ...games,
+          ...savedGames.map(game => ({
+            ...game,
+            isLast: false,
+          }))
         ] });
       } else {
         // Init: restore last game and history from db
-        current && initGame(current.gameId, current.addons, current.players);
-        history && historyDispatch({ type: 'SET_HISTORY', payload: history });
+        savedGames && gamesDispatch({ type: 'SET_GAMES', payload: savedGames });
       }
     } else {
       // Not init and no uid - restore game from localStorage
@@ -123,53 +109,54 @@ export default function App() {
     }
   }
 
-  async function handleLogIn(userId: string) {
-    saveAll(userId, game.gameId, game.addons, players);
-  }
-
   function handleLogOut() {
     /** Reset game */
+    gamesDispatch({ type: 'SET_GAMES', payload: []})
+
     const gameId = Date.now();
-    initGame(gameId, [], []);
+    gamesDispatch({ type: 'ADD_GAME', payload: {
+      gameId
+    }})
   }
 
-  function restoreLastGame() {
-    const { gameId, addons, players } = getLastSavedGame();
-    initGame(gameId, addons, players);
-  }
-
-  function initGame(gameId: number, addons: string[] = [], players: Player[] = []) {
-    gameDispatch({ type: 'UPDATE', payload: { gameId, addons } });
-    playersDispatch({ type: 'SET', payload: players });
+  async function restoreLastGame() {
+    const games = await getSavedGames();
+    if (games?.length) {
+      games && gamesDispatch({ type: 'SET_GAMES', payload: games });
+    } else {
+      gamesDispatch({
+        type: 'ADD_GAME',
+        payload: {
+          gameId: Date.now(),
+        }
+      });
+    }
   }
 
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
-      <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
+      <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
         <UserContext.Provider value={{ state: user, dispatch: userDispatch }}>
-          <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
-            <HistoryContext.Provider value={{ state: history, dispatch: historyDispatch }}>
-              <Layout>
-                {isReady ? <>
-                  <Navigation />
-                  <MainMenu>
-                    <ResetGame />
-                    <AddonsMenu />
-                    <LanguageMenu />
-                    {isFirebaseOk && <AuthMenu
-                      onLogIn={handleLogIn}
-                      onLogOut={handleLogOut}
-                    />}
-                  </MainMenu>
-                  <RouteWrapper>
-                    <Router routes={ROUTES} />
-                  </RouteWrapper>
-                </> : <CircularProgress className={classes.loader}/>}
-              </Layout>
-            </HistoryContext.Provider>
-          </PlayersContext.Provider>
+          <CurrentGameContext.Provider value={{ currentGameState: lastGameState, currentGamePlayers: lastGamePlayers }}>
+            <Layout>
+              {isReady ? <>
+                <Navigation />
+                <MainMenu>
+                  <ResetGame />
+                  <AddonsMenu />
+                  <LanguageMenu />
+                  {isFirebaseOk && <AuthMenu
+                    onLogOut={handleLogOut}
+                  />}
+                </MainMenu>
+                <RouteWrapper>
+                  <Router routes={ROUTES} />
+                </RouteWrapper>
+              </> : <CircularProgress className={classes.loader}/>}
+            </Layout>
+          </CurrentGameContext.Provider>
         </UserContext.Provider>
-      </GameContext.Provider>
+      </GamesContext.Provider>
     </div>
   );
 }
