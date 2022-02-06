@@ -8,7 +8,8 @@ import ResetGame from './ResetGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import AuthMenu from './AuthMenu';
-import { CircularProgress } from '@material-ui/core';
+import { IconButton, CircularProgress } from '@material-ui/core';
+import { Save } from '@material-ui/icons';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import userReducer, { Action as UserAction } from '../reducers/user';
@@ -16,7 +17,7 @@ import { Player, GameParams, User, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { saveGames, getSavedGames } from '../utils/sync';
+import { getSavedGames, saveGames, getUserData, saveUserData } from '../utils/sync';
 import { getCurrentGameState, getCurrentGamePlayers } from '../reducers/games';
 
 type GamesContextProps = {
@@ -60,6 +61,10 @@ export default function App() {
   const lastGamePlayers = useMemo(() => getCurrentGamePlayers(games), [games]);
 
   useEffect(() => {
+    /** Restore last games */
+    const savedGames = getSavedGames();
+    gamesDispatch({ type: 'SET_GAMES', payload: savedGames});
+
     if (isFirebaseOk) {
       const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
         const uid = user?.uid || '';
@@ -83,54 +88,36 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      saveGames(user.uid, games);
+      saveGames(games);
     }
   }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function restoreUserData() {
-    if (user.uid) {
-      const savedGames = await getSavedGames(user.uid);
-      if (isReady) {
-        // Not init: keep current game, restore all games from db as history
-        savedGames && gamesDispatch({ type: 'SET_GAMES', payload: [
-          ...games,
-          ...savedGames.map(game => ({
-            ...game,
-            isLast: false,
-          }))
-        ] });
-      } else {
-        // Init: restore last game and history from db
-        savedGames && gamesDispatch({ type: 'SET_GAMES', payload: savedGames });
-      }
-    } else {
-      // Not init and no uid - restore game from localStorage
-      !isReady && restoreLastGame();
+    if (isReady && user.uid) {
+      // Not init: keep current game and restore all games from db
+      await mergeGames();
     }
+  }
+
+  // TODO: try to do it via 'update', not 'set'
+  async function mergeGames() {
+    const userGames = await getUserData(user.uid);
+    const mergedGames = [
+      ...userGames.map(game => ({...game, isLast: false})),
+      ...games,
+    ];
+    gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
+    saveUserData(user.uid, mergedGames);
   }
 
   function handleLogOut() {
     /** Reset game */
-    gamesDispatch({ type: 'SET_GAMES', payload: []})
+    gamesDispatch({ type: 'SET_GAMES', payload: []});
 
     const gameId = Date.now();
     gamesDispatch({ type: 'ADD_GAME', payload: {
       gameId
     }})
-  }
-
-  async function restoreLastGame() {
-    const games = await getSavedGames();
-    if (games?.length) {
-      games && gamesDispatch({ type: 'SET_GAMES', payload: games });
-    } else {
-      gamesDispatch({
-        type: 'ADD_GAME',
-        payload: {
-          gameId: Date.now(),
-        }
-      });
-    }
   }
 
   return (
@@ -142,6 +129,9 @@ export default function App() {
               {isReady ? <>
                 <Navigation />
                 <MainMenu>
+                  <IconButton onClick={mergeGames} color="inherit">
+                    <Save/>
+                  </IconButton>
                   <ResetGame />
                   <AddonsMenu />
                   <LanguageMenu />

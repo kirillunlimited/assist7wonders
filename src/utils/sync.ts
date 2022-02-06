@@ -1,23 +1,19 @@
-  import {
-  saveGamesToStorage,
-  getGamesFromStorage,
-} from './storage';
-import {
-  readUserDataFromDb,
-  saveGamesToDb,
-} from './database';
-import { GameState } from '../types';
+import { saveGamesToStorage, getGamesFromStorage } from './storage';
+import { getUserGamesFromDb, saveUserGamesToDb } from './database';
+import { GamesState } from '../types';
 
-export function saveGames(userId: string, games: GameState[]) {
-  userId && saveGamesToDb(userId, games);
+export function getSavedGames(): GamesState {
+  return getGamesFromStorage();
+}
+
+export function saveGames(games: GamesState) {
   saveGamesToStorage(games)
 }
 
-export async function getSavedGames(userId?: string): Promise<GameState[]> {
-  if (userId) {
-    const { games } = await readUserDataFromDb(userId);
-    return games || [];
-  } else {
-    return getGamesFromStorage();
-  }
+export function getUserData(userId: string): Promise<GamesState> {
+  return getUserGamesFromDb(userId);
+}
+
+export async function saveUserData(userId: string, games: GamesState) {
+  saveUserGamesToDb(userId, games);
 }
