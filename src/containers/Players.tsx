@@ -19,7 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Player } from '../types';
-import { GameContext, PlayersContext } from './App';
+import { CurrentGameContext, GamesContext } from './App';
 
 const useStyles = makeStyles(theme => ({
   subtitle: {
@@ -47,8 +47,8 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
 };
 
 export default function Players() {
-  const playersContext = useContext(PlayersContext);
-  const gameContext = useContext(GameContext);
+  const gamesContext = useContext(GamesContext);
+  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
   const [deletedPlayer, setDeletedPlayer] = useState({
     player: null,
@@ -58,31 +58,48 @@ export default function Players() {
   const { t } = useTranslation();
 
   function handleSubmit(name: string, wonder: string) {
-    playersContext.dispatch({ type: 'ADD', payload: { name, wonder } });
+    gamesContext.dispatch({ type: 'ADD_PLAYER', payload: {
+      gameId: currentGameState?.gameId,
+      name,
+      wonder
+    } });
   }
 
   function handleDeletePlayer(name: string) {
     let playerIndex = -1;
-    const deletedPlayer = playersContext.state.find((player, index) => {
+    const deletedPlayer = currentGamePlayers.find((player, index) => {
       if (player.name === name) {
         playerIndex = index;
         return true;
       }
       return false;
     });
+
     if (deletedPlayer) {
       setDeletedPlayer({
         player: deletedPlayer,
         index: playerIndex,
       });
       setIsDeleteConfirmOpened(true);
-      playersContext.dispatch({ type: 'DELETE', payload: name });
+
+      gamesContext.dispatch({
+        type: 'DELETE_PLAYER', payload: {
+          gameId: currentGameState?.gameId,
+          name
+        }
+      });
     }
   }
 
   function handleRestorePlayer() {
-    setIsDeleteConfirmOpened(false);
-    playersContext.dispatch({ type: 'RESTORE', payload: deletedPlayer });
+    if (deletedPlayer?.player) {
+      setIsDeleteConfirmOpened(false);
+      gamesContext.dispatch({ type: 'RESTORE_PLAYER', payload: {
+        gameId: currentGameState?.gameId,
+        player: deletedPlayer.player,
+        index: deletedPlayer.index
+      } });
+    }
   }
 
   function handleCloseConfirm(event: React.SyntheticEvent | React.MouseEvent, reason?: string) {
@@ -93,7 +110,7 @@ export default function Players() {
   }
 
   function handleWonderChange(name: string, wonder: string) {
-    playersContext.dispatch({ type: 'SET_WONDER', payload: { name, wonder } });
+    gamesContext.dispatch({ type: 'SET_PLAYER_WONDER', payload: { gameId: currentGameState.gameId, name, wonder } });
   }
 
   function onDragEnd(result: DropResult): void {
@@ -103,27 +120,32 @@ export default function Players() {
     }
 
     const reorderedPlayers = reorder(
-      playersContext.state,
+      currentGamePlayers,
       result.source.index,
       result.destination.index
     );
 
-    playersContext.dispatch({ type: 'SET', payload: reorderedPlayers });
+    gamesContext.dispatch({
+      type: 'SET_PLAYERS', payload: {
+        gameId: currentGameState.gameId,
+        players: reorderedPlayers
+      }
+    });
   }
 
   return (
     <div>
       <Typography variant="subtitle1" component="p">
-        {playersContext.state.length} / {gameContext.state.maxPlayers}
+        {currentGamePlayers.length} / {currentGameState?.maxPlayers}
       </Typography>
-      {playersContext.state.length ? (
+      {currentGamePlayers.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
             {provided => (
               <TableContainer {...provided.droppableProps} ref={provided.innerRef}>
                 <Table>
                   <TableBody>
-                    {playersContext.state.map((player, index) => (
+                    {currentGamePlayers.map((player, index) => (
                       <Draggable key={player.name} draggableId={player.name} index={index}>
                         {provided => (
                           <TableRow ref={provided.innerRef} {...provided.draggableProps}>
@@ -133,8 +155,8 @@ export default function Players() {
                             <TableCell className={classes.wonder}>
                               <WonderSelect
                                 value={player.wonder}
-                                wonders={gameContext.state.wonders}
-                                selectedWonders={playersContext.state.map(player => player.wonder)}
+                                wonders={currentGameState.wonders}
+                                selectedWonders={currentGamePlayers.map(player => player.wonder)}
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
                             </TableCell>
@@ -158,17 +180,17 @@ export default function Players() {
         </DragDropContext>
       ) : null}
 
-      {playersContext.state.length < 2 ? (
+      {currentGamePlayers.length < 2 ? (
         <Typography variant="subtitle1" className={classes.subtitle} component="p">
           {t('addMinPlayers')}
         </Typography>
       ) : null}
 
       <NewPlayer
-        names={playersContext.state.map(player => player.name)}
-        wonders={gameContext.state.wonders}
-        selectedWonders={playersContext.state.map(player => player.wonder)}
-        isMax={playersContext.state.length >= gameContext.state.maxPlayers}
+        names={currentGamePlayers.map(player => player.name)}
+        wonders={currentGameState.wonders}
+        selectedWonders={currentGamePlayers.map(player => player.wonder)}
+        isMax={currentGamePlayers.length >= currentGameState.maxPlayers}
         onSubmit={handleSubmit}
       />
 

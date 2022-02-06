@@ -1,73 +1,23 @@
   import {
-  savePlayersToStorage,
-  saveGameIdToStorage,
-  saveAddonsToStorage,
-  getGameIdFromStorage,
-  getPlayersFromStorage,
-  getAddonsFromStorage,
+  saveGamesToStorage,
+  getGamesFromStorage,
 } from './storage';
-import { readUserDataFromDb, saveGameDataToDb , deleteGameFromDb } from './database';
-import { Player, HistoryGame } from '../types';
+import {
+  readUserDataFromDb,
+  saveGamesToDb,
+} from './database';
+import { GameState } from '../types';
 
-export function saveAll(userId: string, gameId: number, addons: string[], players: Player[] = []): void {
-  userId && saveGameDataToDb(userId, gameId, {
-    players,
-    addons
-  });
-  saveGameIdToStorage(gameId);
-  saveAddonsToStorage(addons);
-  savePlayersToStorage(players);
+export function saveGames(userId: string, games: GameState[]) {
+  userId && saveGamesToDb(userId, games);
+  saveGamesToStorage(games)
 }
 
-export function saveGame(userId: string, gameId: number, addons: string[]): void {
-  userId && saveGameDataToDb(userId, gameId, {
-    addons,
-  });
-  saveGameIdToStorage(gameId);
-  saveAddonsToStorage(addons);
-}
-
-export function savePlayers(userId: string, gameId: number, players: Player[]): void {
-  userId && saveGameDataToDb(userId, gameId, {
-    players,
-  });
-  savePlayersToStorage(players);
-}
-
-export function saveHistory(userId: string, gameId: number) {
-  userId && deleteGameFromDb(userId, gameId);
-}
-
-export function getLastSavedGame(): {
-  gameId: number,
-  addons: string[],
-  players: Player[]
-} {
-  const gameId = getGameIdFromStorage();
-  const addons = getAddonsFromStorage();
-  const players = getPlayersFromStorage();
-  return {
-    gameId,
-    addons,
-    players,
-  };
-}
-
-export async function getSavedGames(userId: string): Promise<{
-  current?: HistoryGame,
-  history?: HistoryGame[]
-}> {
+export async function getSavedGames(userId?: string): Promise<GameState[]> {
   if (userId) {
     const { games } = await readUserDataFromDb(userId);
-    const gamesArray: HistoryGame[] = Object.keys(games || {}).map(gameId => ({
-      ...games[gameId],
-      gameId: Number(gameId),
-    }));
-
-    return {
-      current: gamesArray.pop(),
-      history: gamesArray,
-    }
+    return games || [];
+  } else {
+    return getGamesFromStorage();
   }
-  return {};
 }

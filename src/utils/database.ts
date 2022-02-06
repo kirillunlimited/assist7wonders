@@ -1,20 +1,21 @@
 import firebase, { isFirebaseOk } from '../config/firebase';
 import { SAVE_TIMEOUT } from '../config/constants';
 import { debounce } from 'debounce';
+import { GameState } from '../types';
 
 const USERS_TABLE = 'users';
 const USER_GAMES_TABLE = 'games';
 
-const getUserRef = (uid: string) => firebase.database().ref(`${USERS_TABLE}/${uid}`);
+const getUserRef = (userId: string) => firebase.database().ref(`${USERS_TABLE}/${userId}`);
 
-export async function readUserDataFromDb(uid: string) {
+export async function readUserDataFromDb(userId: string) {
   if (!isFirebaseOk) {
     return {};
   }
 
-  if (uid) {
+  if (userId) {
     try {
-      const ref = getUserRef(uid);
+      const ref = getUserRef(userId);
       const snapshot = await ref.once('value');
       return snapshot.val() || {}
     } catch (error) {
@@ -24,36 +25,14 @@ export async function readUserDataFromDb(uid: string) {
   }
 }
 
-export const saveGameDataToDb = debounce((uid: string, gameId: number, payload: any) => {
+export const saveGamesToDb = debounce((userId: string, games: GameState[]) => {
   if (!isFirebaseOk) {
     return;
   }
 
-  if (uid) {
-    if (typeof gameId !== 'number' || gameId === 0) {
-      console.error('🚫 Error while writing data to database --- wrong game id value:', gameId);
-      return;
-    }
-    /** "update" is better than "set" */
-    getUserRef(uid)
-      .child(`${USER_GAMES_TABLE}/${gameId}`)
-      .update(payload);
-  }
-}, SAVE_TIMEOUT);
-
-export const deleteGameFromDb = debounce((uid: string, gameId: number) => {
-  if (!isFirebaseOk) {
-    return;
-  }
-
-  if (uid) {
-    if (typeof gameId !== 'number' || gameId === 0) {
-      console.error('🚫 Error while writing data to database --- wrong game id value:', gameId);
-      return;
-    }
-    /** "update" is better than "set" */
-    getUserRef(uid)
-      .child(`${USER_GAMES_TABLE}/${gameId}`)
-      .remove();
+  if (userId) {
+    getUserRef(userId)
+      .child(`${USER_GAMES_TABLE}`)
+      .set(games);
   }
 }, SAVE_TIMEOUT);

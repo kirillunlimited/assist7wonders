@@ -12,13 +12,13 @@ import {
 import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { Player, PlayerScore, Game } from '../types';
+import { Player, PlayerScore, GameParams } from '../types';
 import { getTotal } from '../utils/score';
 import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
 
 type Props = {
   players: Player[];
-  game: Game;
+  game: GameParams;
   onDelete?: () => void;
 } & React.HTMLAttributes<HTMLElement>;
 
@@ -100,9 +100,9 @@ export default function Results(props: Props) {
     const date = new Date(gameId);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDay()).padStart(2, '0');
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
 
