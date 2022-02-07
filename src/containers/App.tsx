@@ -101,13 +101,18 @@ export default function App() {
 
   // TODO: try to do it via 'update', not 'set'
   async function mergeGames() {
-    const userGames = await getUserData(user.uid);
-    const mergedGames = [
-      ...userGames.map(game => ({...game, isLast: false})),
-      ...games,
-    ];
-    gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
-    saveUserData(user.uid, mergedGames);
+    try {
+      const userGames = await getUserData(user.uid);
+      const mergedGames = [
+        ...userGames.map(game => ({...game, isLast: false})),
+        ...games,
+      ];
+      gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
+      saveUserData(user.uid, mergedGames);
+    } catch (error) {
+      // TODO: snack bar
+      console.error(error);
+    }
   }
 
   function handleLogOut() {
