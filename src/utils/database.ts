@@ -13,18 +13,10 @@ export async function getUserGamesFromDb(userId: string): Promise<GamesState> {
     return [];
   }
 
-  if (userId) {
-    try {
-      const ref = getUserRef(userId);
-      const snapshot = await ref.once('value');
-      const { games } = snapshot.val();
-      return games || []
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
-  return [];
+  const ref = getUserRef(userId);
+  const snapshot = await ref.once('value');
+  const { games } = snapshot.val();
+  return games || [];
 }
 
 export const saveUserGamesToDb = debounce((userId: string, games: GameState[]) => {

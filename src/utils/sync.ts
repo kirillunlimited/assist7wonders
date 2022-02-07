@@ -10,7 +10,7 @@ export function saveGames(games: GamesState) {
   saveGamesToStorage(games)
 }
 
-export function getUserData(userId: string): Promise<GamesState> {
+export function getUserData(userId: string) {
   return getUserGamesFromDb(userId);
 }
 
