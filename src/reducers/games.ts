@@ -121,6 +121,7 @@ export const mapHistoryGameToCurrentGame = (game: GameState) => {
 
   return {
     gameId: game.gameId,
+    modified: game.modified,
     maxPlayers,
     addons: gameAddons,
     wonders: [...BASE_GAME.wonders, ...addonWonders],
@@ -131,12 +132,13 @@ export const mapHistoryGameToCurrentGame = (game: GameState) => {
 export const getCurrentGameState = (games: GamesState): GameParams => {
   const lastGame = games.find(game => game.isLast) || {
     gameId: Date.now(),
+    modified: Date.now(),
     players: [],
     addons: [],
     isLast: true,
   }
 
-  return mapHistoryGameToCurrentGame(lastGame)
+  return mapHistoryGameToCurrentGame(lastGame);
 }
 
 export const getCurrentGamePlayers = (games: GamesState): Player[] => {
@@ -178,6 +180,7 @@ const reducer = (state: GamesState, action: Action) => {
         {
           ...params,
           gameId,
+          modified: Date.now(),
           isLast: true
         }
       ];
@@ -187,7 +190,8 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
-            addons
+            addons,
+            modified: Date.now(),
           }
         }
         return game;
@@ -199,6 +203,7 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
+            modified: Date.now(),
             players: [
               ...game.players,
               {
@@ -220,6 +225,7 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
+            modified: Date.now(),
             players,
           }
         }
@@ -232,6 +238,7 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
+            modified: Date.now(),
             players: game.players.filter(player => player.name !== name),
           }
         }
@@ -246,6 +253,7 @@ const reducer = (state: GamesState, action: Action) => {
           if (game.gameId === gameId) {
             return {
               ...game,
+              modified: Date.now(),
               players: [...game.players.slice(0, index), player, ...game.players.slice(index)]
             }
           }
@@ -260,6 +268,7 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
+            modified: Date.now(),
             players: game.players.map(player => {
               if (player.name === name) {
                 return {
@@ -283,6 +292,7 @@ const reducer = (state: GamesState, action: Action) => {
         if (game.gameId === gameId) {
           return {
             ...game,
+            modified: Date.now(),
             players: game.players.map(player => {
               if (player.name === name) {
                 return {

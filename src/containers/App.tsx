@@ -17,7 +17,8 @@ import { Player, GameParams, User, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { getSavedGames, saveGames, getUserData, saveUserData } from '../utils/sync';
+import { getSavedGames, saveGames, getUserData, addGames } from '../utils/sync';
+import { mergeGameArrays } from '../utils/game';
 import { getCurrentGameState, getCurrentGamePlayers } from '../reducers/games';
 
 type GamesContextProps = {
@@ -65,6 +66,11 @@ export default function App() {
     const savedGames = getSavedGames();
     gamesDispatch({ type: 'SET_GAMES', payload: savedGames});
 
+    /** Init games array in storage if there was no data */
+    if (!savedGames.length) {
+      startNewGame();
+    }
+
     if (isFirebaseOk) {
       const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
         const uid = user?.uid || '';
@@ -99,16 +105,16 @@ export default function App() {
     }
   }
 
-  // TODO: try to do it via 'update', not 'set'
   async function mergeGames() {
     try {
       const userGames = await getUserData(user.uid);
-      const mergedGames = [
-        ...userGames.map(game => ({...game, isLast: false})),
+      const mergedGames = mergeGameArrays([
         ...games,
-      ];
+        ...userGames
+      ]);
+
+      addGames(user.uid, mergedGames);
       gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
-      saveUserData(user.uid, mergedGames);
     } catch (error) {
       // TODO: snack bar
       console.error(error);
@@ -118,11 +124,14 @@ export default function App() {
   function handleLogOut() {
     /** Reset game */
     gamesDispatch({ type: 'SET_GAMES', payload: []});
+    startNewGame();
+  }
 
+  function startNewGame() {
     const gameId = Date.now();
     gamesDispatch({ type: 'ADD_GAME', payload: {
       gameId
-    }})
+    }});
   }
 
   return (

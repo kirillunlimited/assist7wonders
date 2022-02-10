@@ -1,4 +1,4 @@
-import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore } from '../types';
+import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GamesState, GamesDict } from '../types';
 import compass from '../img/compass.png';
 import tablets from '../img/tablets.png';
 import gears from '../img/gears.png';
@@ -93,4 +93,65 @@ export function getAvatarText(name: string): string {
     .reduce((acc, word) => (word ? acc + word[0] : acc), '')
     .substring(0, 2)
     .toUpperCase();
+}
+
+
+// TODO: unit test
+export function mapGamesArrayToObject(games: GamesState = []): GamesDict {
+  return games.reduce((acc, game) => ({
+    ...acc,
+    [game.gameId]: {
+      players: game.players || [],
+      addons: game.addons || [],
+      modified: game.modified,
+      isLast: game.isLast || false,
+    }
+  }), {});
+}
+
+// TODO: unit test
+export function mapGamesObjectToArray(games: GamesDict = {}): GamesState {
+  return Object.keys(games).map(gameId => ({
+    gameId: Number(gameId),
+    modified: games[gameId].modified,
+    addons: (games[gameId].addons || []).filter(addon => addon),
+    players: (games[gameId].players || []).filter(player => player),
+    isLast: games[gameId].isLast || false,
+  }));
+}
+
+// TODO: unit test
+/** Keep games with greater "modified" value (later game is more relevant) */
+export function mergeGameArrays(games: GamesState): GamesState {
+  let dict: Record<string, {
+    index: number;
+    modified: number;
+  }> = {};
+
+  return games.reduce((acc, game) => {
+    if (dict[game.gameId]) {
+      if (dict[game.gameId].modified > game.modified) {
+        return acc;
+      } else {
+        acc[dict[game.gameId].index] = game;
+
+        dict[game.gameId] = {
+          index: acc.length,
+          modified: game.modified,
+        };
+
+        return acc;
+      }
+    }
+
+    dict[game.gameId] = {
+      index: acc.length,
+      modified: game.modified,
+    };
+
+    return [
+      ...acc,
+      game
+    ];
+  }, [] as GamesState);
 }
