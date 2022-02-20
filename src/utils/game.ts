@@ -128,30 +128,47 @@ export function mergeGameArrays(games: GamesState): GamesState {
     modified: number;
   }> = {};
 
-  return games.reduce((acc, game) => {
-    if (dict[game.gameId]) {
-      if (dict[game.gameId].modified > game.modified) {
-        return acc;
-      } else {
-        acc[dict[game.gameId].index] = game;
+  /** Find the game with the biggest modified value */
+  let lastGameId: number = -1;
 
-        dict[game.gameId] = {
-          index: acc.length,
-          modified: game.modified,
-        };
+  return games
+    .reduce((acc, game) => {
+      lastGameId = game.modified > lastGameId ? game.modified : lastGameId;
+      if (dict[game.gameId]) {
+        if (dict[game.gameId].modified > game.modified) {
+          return acc;
+        } else {
+          acc[dict[game.gameId].index] = game;
 
-        return acc;
+          dict[game.gameId] = {
+            index: acc.length,
+            modified: game.modified,
+          };
+
+          return acc;
+        }
       }
-    }
 
-    dict[game.gameId] = {
-      index: acc.length,
-      modified: game.modified,
-    };
+      dict[game.gameId] = {
+        index: acc.length,
+        modified: game.modified,
+      };
 
-    return [
-      ...acc,
-      game
-    ];
-  }, [] as GamesState);
+      return [
+        ...acc,
+        game
+      ];
+    }, [] as GamesState)
+    .map(game => {
+      if (game.modified === lastGameId) {
+        return {
+          ...game,
+          isLast: true
+        }
+      }
+      return {
+        ...game,
+        isLast: false
+      }
+    })
 }
