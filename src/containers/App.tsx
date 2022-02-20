@@ -17,8 +17,9 @@ import { Player, GameParams, User, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { getSavedGames, saveGames, getUserData, addGames } from '../utils/sync';
 import { mergeGameArrays } from '../utils/game';
+import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
+import { getUserGamesFromDb, addGamesToDb } from '../utils/database';
 import { getCurrentGameState, getCurrentGamePlayers } from '../reducers/games';
 
 type GamesContextProps = {
@@ -63,7 +64,7 @@ export default function App() {
 
   useEffect(() => {
     /** Restore last games */
-    const savedGames = getSavedGames();
+    const savedGames = getGamesFromStorage();
     gamesDispatch({ type: 'SET_GAMES', payload: savedGames});
 
     /** Init games array in storage if there was no data */
@@ -94,7 +95,7 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      saveGames(games);
+      saveGamesToStorage(games);
     }
   }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -107,13 +108,13 @@ export default function App() {
 
   async function mergeGames() {
     try {
-      const userGames = await getUserData(user.uid);
+      const userGames = await getUserGamesFromDb(user.uid);
       const mergedGames = mergeGameArrays([
         ...games,
         ...userGames
       ]);
 
-      addGames(user.uid, mergedGames);
+      addGamesToDb(user.uid, mergedGames);
       gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
     } catch (error) {
       // TODO: snack bar
