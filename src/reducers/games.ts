@@ -1,7 +1,7 @@
 import { GameParams, GameScore, GamesState, GameState, Player, PlayerScore, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
 import { mergeScores } from '../utils/game';
-import { getAllCounters } from '../utils/game';
+import { getAllCounters, shuffleWonders } from '../utils/game';
 
 const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 
@@ -95,6 +95,29 @@ type SetPlayerWonderActions = {
 
 export type Action = SetGamesAction | AddGameAction | UpdateAddonsAction | AddPlayerAction | SetPlayersAction | DeletePlayerAction | RestorePlayerAction | SetPlayerScoreAction | SetPlayerWonderActions;
 
+/** TODO: move these methods to helpers and add unit tests */
+const getWondersByAddons = (gameAddons: string[]) => {
+  const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
+  const addonWonders = addons.reduce((wonders, addon) => {
+    if (addon) {
+      return [...wonders, ...addon.wonders];
+    }
+    return wonders;
+  }, [] as string[]);
+
+  return [...BASE_GAME.wonders, ...addonWonders];
+}
+
+const getMaxPlayersByAddons = (gameAddons: string[]) => {
+  const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
+  return [BASE_GAME, ...addons].reduce((max, addon) => {
+    if (addon.maxPlayers > max) {
+      return addon.maxPlayers;
+    }
+    return max;
+  }, 0);
+}
+
 export const mapHistoryGameToCurrentGame = (game: GameState) => {
   const gameAddons = game.addons || []
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
@@ -105,26 +128,15 @@ export const mapHistoryGameToCurrentGame = (game: GameState) => {
     return scores;
   }, [] as GameScore[]);
 
-  const addonWonders = addons.reduce((wonders, addon) => {
-    if (addon) {
-      return [...wonders, ...addon.wonders];
-    }
-    return wonders;
-  }, [] as string[]);
-
-  const maxPlayers = [BASE_GAME, ...addons].reduce((max, addon) => {
-    if (addon.maxPlayers > max) {
-      return addon.maxPlayers;
-    }
-    return max;
-  }, 0);
+  const wonders = getWondersByAddons(gameAddons);
+  const maxPlayers = getMaxPlayersByAddons(gameAddons);
 
   return {
     gameId: game.gameId,
     modified: game.modified,
     maxPlayers,
     addons: gameAddons,
-    wonders: [...BASE_GAME.wonders, ...addonWonders],
+    wonders,
     scores: mergeScores([...BASE_GAME.scores, ...addonScores]),
   };
 }
@@ -144,6 +156,30 @@ export const getCurrentGameState = (games: GamesState): GameParams => {
 export const getCurrentGamePlayers = (games: GamesState): Player[] => {
   return games.find(game => game.isLast)?.players || [];
 }
+
+/** Slice extra players if new limit is less than before */
+const updatePlayersCount = (players: Player[], maxPlayers: number): Player[] => {
+  return players.slice(0, maxPlayers);
+};
+
+/** Change selected wonders if they are no longer available due to addons change */
+const updateSelectedWonders = (players: Player[], wonders: string[]): Player[] => {
+  const selectedWonders = players.map(player => player.wonder);
+  return [
+    ...players.map(player => {
+      if (!wonders.includes(player.wonder)) {
+        const shuffledWonders = shuffleWonders(wonders).filter(
+          wonder => !selectedWonders.includes(wonder)
+        );
+        return {
+          ...player,
+          wonder: shuffledWonders[0],
+        };
+      }
+      return player;
+    }),
+  ];
+};
 
 const reducer = (state: GamesState, action: Action) => {
   switch (action.type) {
@@ -188,8 +224,11 @@ const reducer = (state: GamesState, action: Action) => {
       const {gameId, addons} = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
+          const wonders = getWondersByAddons(addons);
+          const maxPlayers = getMaxPlayersByAddons(addons);
           return {
             ...game,
+            players: updateSelectedWonders(updatePlayersCount(game.players, maxPlayers), wonders),
             addons,
             modified: Date.now(),
           }
