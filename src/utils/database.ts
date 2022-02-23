@@ -42,8 +42,12 @@ export const deleteGameFromDb = (userId: string, gameId: number) => {
     .remove();
 }
 
-export const readLastGame = async(userId: string): Promise<GameState | null> => {
+export const readLastGame = async(userId?: string): Promise<GameState | null> => {
   if (!isFirebaseOk) {
+    return null;
+  }
+
+  if (!userId) {
     return null;
   }
 
@@ -52,7 +56,8 @@ export const readLastGame = async(userId: string): Promise<GameState | null> => 
     .orderByChild('isLast')
     .equalTo(true);
   const snapshot = await gamesRef.once('value');
-  return snapshot.val() || null;
+  const games = snapshot.val() || null;
+  return mapGamesObjectToArray(games)[0];
 }
 
 export const updatePlayerScore = (userId: string, gameId: number, name: string, scoreKey: PlayerScoreKey, value: number) => {
