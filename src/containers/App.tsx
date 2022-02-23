@@ -20,7 +20,7 @@ import firebase, {isFirebaseOk} from '../config/firebase';
 import { mergeGameArrays } from '../utils/game';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 import { getUserGamesFromDb, addGamesToDb } from '../utils/database';
-import { getCurrentGameState, getCurrentGamePlayers } from '../reducers/games';
+import { getCurrentGameState, getCurrentGamePlayers } from '../utils/game';
 
 type GamesContextProps = {
   state: GamesState;
