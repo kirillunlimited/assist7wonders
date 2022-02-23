@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GamesContext, CurrentGameContext, UserContext } from './App';
 import { GameState } from '../types';
 import Results from '../components/Results';
-import { mapHistoryGameToCurrentGame } from '../reducers/games';
+import { mapHistoryGameToCurrentGame } from '../utils/game';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
