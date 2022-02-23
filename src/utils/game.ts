@@ -102,7 +102,14 @@ export function mapGamesArrayToObject(games: GamesState = []): GamesDict {
   return games.reduce((acc, game) => ({
     ...acc,
     [game.gameId]: {
-      players: game.players || [],
+      players: (game.players || []).reduce((playersDict, player, index) => ({
+        ...playersDict,
+        [player.name]: {
+          index,
+          score: player.score,
+          wonder: player.wonder,
+        }
+      }), {}),
       addons: game.addons || [],
       modified: game.modified,
       isLast: game.isLast || false,
@@ -116,7 +123,14 @@ export function mapGamesObjectToArray(games: GamesDict = {}): GamesState {
     gameId: Number(gameId),
     modified: games[gameId].modified,
     addons: (games[gameId].addons || []).filter(addon => addon),
-    players: (games[gameId].players || []).filter(player => player),
+    players: Object.keys(games[gameId].players || {})
+      .filter(player => player)
+      .sort((firstPlayerName, secondPlayerName) => games[gameId].players[firstPlayerName].index - games[gameId].players[secondPlayerName].index)
+      .map(playerName => ({
+        name: playerName,
+        score: games[gameId]?.players?.[playerName]?.score,
+        wonder: games[gameId]?.players?.[playerName]?.wonder,
+      })),
     isLast: games[gameId].isLast || false,
   }));
 }

@@ -1,7 +1,5 @@
 import firebase, { isFirebaseOk } from '../config/firebase';
-import { SAVE_TIMEOUT } from '../config/constants';
-import { debounce } from 'debounce';
-import { GamesState, GameState } from '../types';
+import { GamesState, GameState, PlayerScoreKey } from '../types';
 import { mapGamesArrayToObject, mapGamesObjectToArray } from '../utils/game';
 
 const USERS_TABLE = 'users';
@@ -19,20 +17,6 @@ export async function getUserGamesFromDb(userId: string): Promise<GamesState> {
   const { games } = snapshot.val() || {};
   return mapGamesObjectToArray(games);
 }
-
-export const saveUserGamesToDb = debounce((userId: string, games: GameState[]) => {
-  if (!isFirebaseOk) {
-    return;
-  }
-
-  if (userId) {
-    const gamesObject = mapGamesArrayToObject(games);
-
-    getUserRef(userId)
-      .child(`${USER_GAMES_TABLE}`)
-      .set(gamesObject);
-  }
-}, SAVE_TIMEOUT);
 
 export const addGamesToDb = (userId: string, games: GameState[]) => {
   if (!isFirebaseOk) {
@@ -56,4 +40,31 @@ export const deleteGameFromDb = (userId: string, gameId: number) => {
   getUserRef(userId)
     .child(`${USER_GAMES_TABLE}/${gameId}`)
     .remove();
+}
+
+export const readLastGame = async(userId: string): Promise<GameState | null> => {
+  if (!isFirebaseOk) {
+    return null;
+  }
+
+  const gamesRef = getUserRef(userId)
+    .child(`${USER_GAMES_TABLE}`)
+    .orderByChild('isLast')
+    .equalTo(true);
+  const snapshot = await gamesRef.once('value');
+  return snapshot.val() || null;
+}
+
+export const updatePlayerScore = (userId: string, gameId: number, name: string, scoreKey: PlayerScoreKey, value: number) => {
+  if (!isFirebaseOk) {
+    return;
+  }
+
+  if (userId) {
+    getUserRef(userId)
+      .child(`${USER_GAMES_TABLE}`)
+      .update({
+        [`${gameId}/players/${name}/score/${scoreKey}`]: value
+      });
+  }
 }
