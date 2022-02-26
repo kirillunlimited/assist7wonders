@@ -11,9 +11,12 @@ import {
 } from '@material-ui/core';
 import { Refresh } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { GamesContext } from './App';
+import { GamesContext, UserContext } from './App';
+import { getNewGameByLastGame } from '../utils/game';
+import { addGameToDb } from '../utils/database';
 
 export default function MainMenu() {
+  const userContext = useContext(UserContext);
   const gamesContext = useContext(GamesContext);
   const [isConfirmOpened, setIsConfirmOpened] = useState(false);
   const { t } = useTranslation();
@@ -27,12 +30,15 @@ export default function MainMenu() {
   }
 
   function onResetGame() {
+    const gameId = Date.now();
+    const newGame = getNewGameByLastGame(gameId, gamesContext.state);
     gamesContext.dispatch({
       type: 'ADD_GAME',
       payload: {
-        gameId: Date.now(),
+        game: newGame,
       }
     });
+    addGameToDb(userContext.state.uid, gameId, newGame);
     handleCloseConfirm();
   }
 

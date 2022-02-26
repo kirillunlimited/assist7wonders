@@ -32,16 +32,6 @@ export const addGamesToDb = (userId: string, games: GameState[]) => {
   }
 }
 
-export const deleteGameFromDb = (userId: string, gameId: number) => {
-  if (!isFirebaseOk) {
-    return;
-  }
-
-  getUserRef(userId)
-    .child(`${USER_GAMES_TABLE}/${gameId}`)
-    .remove();
-}
-
 export const readLastGame = async(userId?: string): Promise<GameState | null> => {
   if (!isFirebaseOk) {
     return null;
@@ -72,4 +62,28 @@ export const updatePlayerScore = (userId: string, gameId: number, name: string, 
         [`${gameId}/players/${name}/score/${scoreKey}`]: value
       });
   }
+}
+
+export const addGameToDb = (userId: string, gameId: number, game: GameState) => {
+  if (!isFirebaseOk) {
+    return;
+  }
+
+  if (userId) {
+    const gamesObject = mapGamesArrayToObject([game]);
+
+    getUserRef(userId)
+      .child(`${USER_GAMES_TABLE}`)
+      .update(gamesObject);
+  }
+}
+
+export const deleteGameFromDb = (userId: string, gameId: number) => {
+  if (!isFirebaseOk) {
+    return;
+  }
+
+  getUserRef(userId)
+    .child(`${USER_GAMES_TABLE}/${gameId}`)
+    .remove();
 }
