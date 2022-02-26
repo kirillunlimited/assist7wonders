@@ -273,3 +273,33 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
     }),
   ];
 };
+
+export function getNewGameByLastGame(gameId: number, games: GamesState): GameState {
+  /** Take params from last game or set it empty */
+  const lastGame = games.find(game => game.isLast);
+
+  const addons = lastGame?.addons;
+  const players = lastGame?.players?.map(player => {
+    return {
+      ...player,
+      score: Object.keys(player.score)?.reduce((acc, counterKey) => {
+        return {
+          ...acc,
+          [counterKey]: 0,
+        }
+      }, {} as PlayerScore),
+    }
+  });
+
+  const params = {
+    addons: addons || [],
+    players: players || []
+  };
+
+  return {
+    ...params,
+    gameId,
+    modified: Date.now(),
+    isLast: true
+  };
+}

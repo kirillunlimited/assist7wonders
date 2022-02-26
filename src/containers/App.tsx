@@ -17,10 +17,9 @@ import { Player, GameParams, User, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
 import firebase, {isFirebaseOk} from '../config/firebase';
-import { mergeGameArrays } from '../utils/game';
+import { getCurrentGameState, getCurrentGamePlayers, mergeGameArrays, getNewGameByLastGame } from '../utils/game';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
-import { getUserGamesFromDb, addGamesToDb } from '../utils/database';
-import { getCurrentGameState, getCurrentGamePlayers } from '../utils/game';
+import { getUserGamesFromDb, addGamesToDb, addGameToDb } from '../utils/database';
 
 type GamesContextProps = {
   state: GamesState;
@@ -130,9 +129,11 @@ export default function App() {
 
   function startNewGame() {
     const gameId = Date.now();
+    const newGame = getNewGameByLastGame(gameId, games);
     gamesDispatch({ type: 'ADD_GAME', payload: {
-      gameId
+      game: newGame,
     }});
+    addGameToDb(user.uid, gameId, newGame);
   }
 
   return (

@@ -1,4 +1,4 @@
-import { GamesState, Player, PlayerScore, PlayerScoreKey } from '../types';
+import { GameState, GamesState, Player, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
 import { getAllCounters, getMaxPlayersByAddons, getWondersByAddons, updateSelectedWonders, updatePlayersCount } from '../utils/game';
 
@@ -27,7 +27,7 @@ type SetGamesAction = {
 type AddGameAction = {
   type: typeof ADD_GAME;
   payload: {
-    gameId: number;
+    game: GameState;
   };
 }
 
@@ -99,39 +99,14 @@ const reducer = (state: GamesState, action: Action) => {
     case SET_GAMES:
       return action.payload;
     case ADD_GAME:
-      const {gameId} = action.payload;
-
-      /** Take params from last game or set it empty */
-      const lastGame = state.find(game => game.isLast);
-
-      const addons = lastGame?.addons;
-      const players = lastGame?.players?.map(player => {
-        return {
-          ...player,
-          score: Object.keys(player.score)?.reduce((acc, counterKey) => {
-            return {
-              ...acc,
-              [counterKey]: 0,
-            }
-          }, {} as PlayerScore),
-        }
-      });
-      const params = {
-        addons: addons || [],
-        players: players || []
-      };
+      const { game } = action.payload;
 
       return [
         ...state.map(game => ({
           ...game,
           isLast: false
         })),
-        {
-          ...params,
-          gameId,
-          modified: Date.now(),
-          isLast: true
-        }
+        game,
       ];
     case UPDATE_ADDONS: {
       const {gameId, addons} = action.payload;
