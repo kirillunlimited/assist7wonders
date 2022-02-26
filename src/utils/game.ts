@@ -112,27 +112,46 @@ export function mapGamesArrayToObject(games: GamesState = []): GamesDict {
       }), {}),
       addons: game.addons || [],
       modified: game.modified,
-      isLast: game.isLast || false,
     }
   }), {});
 }
 
 // TODO: unit test
 export function mapGamesObjectToArray(games: GamesDict = {}): GamesState {
-  return Object.keys(games).map(gameId => ({
-    gameId: Number(gameId),
-    modified: games[gameId].modified,
-    addons: (games[gameId].addons || []).filter(addon => addon),
-    players: Object.keys(games[gameId].players || {})
-      .filter(player => player)
-      .sort((firstPlayerName, secondPlayerName) => games[gameId].players[firstPlayerName].index - games[gameId].players[secondPlayerName].index)
-      .map(playerName => ({
-        name: playerName,
-        score: games[gameId]?.players?.[playerName]?.score,
-        wonder: games[gameId]?.players?.[playerName]?.wonder,
-      })),
-    isLast: games[gameId].isLast || false,
-  }));
+  /** Find the game with the biggest modified value */
+  let lastGameId: number = -1;
+
+  return Object.keys(games)
+    .map(gameId => {
+      const game = games[gameId];
+      lastGameId = game.modified > lastGameId ? game.modified : lastGameId;
+
+      return {
+        gameId: Number(gameId),
+        modified: game.modified,
+        addons: (game.addons || []).filter(addon => addon),
+        players: Object.keys(game.players || {})
+          .filter(player => player)
+          .sort((firstPlayerName, secondPlayerName) => game.players[firstPlayerName].index - game.players[secondPlayerName].index)
+          .map(playerName => ({
+            name: playerName,
+            score: game?.players?.[playerName]?.score,
+            wonder: game?.players?.[playerName]?.wonder,
+          })),
+      }
+    })
+    .map(game => {
+      if (game.modified === lastGameId) {
+        return {
+          ...game,
+          isLast: true
+        }
+      }
+      return {
+        ...game,
+        isLast: false
+      }
+    })
 }
 
 // TODO: unit test
