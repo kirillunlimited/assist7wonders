@@ -38,11 +38,11 @@ export default function Router({ routes }: { routes: RouteType[] }) {
 
 function RouteWithSubRoutes(route: RouteType) {
   const classes = useStyles();
-  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   const error =
-    route.error && route.error({ game: currentGameState, players: currentGamePlayers });
+    route.error && route.error({ game: currentGameParams, players: currentGamePlayers });
 
   return (
     <div>

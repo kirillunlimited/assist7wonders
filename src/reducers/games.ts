@@ -1,4 +1,4 @@
-import { GameState, GamesState, Player, PlayerScoreKey } from '../types';
+import { GameState, Player, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
 import { getAllCounters, getMaxPlayersByAddons, getWondersByAddons, updateSelectedWonders, updatePlayersCount } from '../utils/game';
 
@@ -21,7 +21,7 @@ const SET_PLAYER_WONDER = 'SET_PLAYER_WONDER';
 
 type SetGamesAction = {
   type: typeof SET_GAMES;
-  payload: GamesState;
+  payload: GameState[];
 };
 
 type AddGameAction = {
@@ -94,7 +94,7 @@ type SetPlayerWonderActions = {
 
 export type Action = SetGamesAction | AddGameAction | UpdateAddonsAction | AddPlayerAction | SetPlayersAction | DeletePlayerAction | RestorePlayerAction | SetPlayerScoreAction | SetPlayerWonderActions;
 
-const reducer = (state: GamesState, action: Action) => {
+const reducer = (state: GameState[], action: Action) => {
   switch (action.type) {
     case SET_GAMES:
       return action.payload;

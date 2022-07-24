@@ -1,4 +1,4 @@
-import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GamesState, GameState, GameParams } from '../types';
+import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GameState, GameParams } from '../types';
 import compass from '../img/compass.png';
 import tablets from '../img/tablets.png';
 import gears from '../img/gears.png';
@@ -119,7 +119,17 @@ export const getMaxPlayersByAddons = (gameAddons: string[]) => {
   }, 0);
 }
 
-export const mapHistoryGameToCurrentGame = (game: GameState): GameParams => {
+export const getLastGameState = (games: GameState[]): GameState => {
+  return games.find(game => game.isLast) || {
+    gameId: Date.now(),
+    modified: Date.now(),
+    players: [],
+    addons: [],
+    isLast: true,
+  }
+}
+
+export const getGameParamsByGameState = (game: GameState): GameParams => {
   const gameAddons = game.addons || []
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonScores = addons.reduce((scores, addon) => {
@@ -141,19 +151,7 @@ export const mapHistoryGameToCurrentGame = (game: GameState): GameParams => {
   };
 }
 
-export const getCurrentGameState = (games: GamesState): GameParams => {
-  const lastGame = games.find(game => game.isLast) || {
-    gameId: Date.now(),
-    modified: Date.now(),
-    players: [],
-    addons: [],
-    isLast: true,
-  }
-
-  return mapHistoryGameToCurrentGame(lastGame);
-}
-
-export const getCurrentGamePlayers = (games: GamesState): Player[] => {
+export const getCurrentGamePlayers = (games: GameState[]): Player[] => {
   return games.find(game => game.isLast)?.players || [];
 }
 
@@ -181,7 +179,7 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
   ];
 };
 
-export function getNewGameByLastGame(gameId: number, games: GamesState): GameState {
+export function getNewGameByLastGame(gameId: number, games: GameState[]): GameState {
   /** Take params from last game or set it empty */
   const lastGame = games.find(game => game.isLast);
 

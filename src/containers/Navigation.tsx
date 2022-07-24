@@ -29,7 +29,7 @@ export default function Navigation() {
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
-  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   function renderTabs(routes: Route[]): Array<React.ReactNode> {
@@ -38,7 +38,7 @@ export default function Navigation() {
         return renderTabs(route.routes);
       } else {
         const error =
-          route.error && route.error({ game: currentGameState, players: currentGamePlayers });
+          route.error && route.error({ game: currentGameParams, players: currentGamePlayers });
         return error ? null : (
           <Tab
             key={route.id}

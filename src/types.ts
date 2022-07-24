@@ -23,6 +23,14 @@ export type GameScore = {
 };
 export type GameScoreSumResult = { result: number; calculations: string };
 
+export type GameState = {
+  gameId: number;
+  addons: string[];
+  players: Player[];
+  isLast: boolean;
+  modified: number;
+};
+
 /** PLAYERS */
 export type Player = {
   name: string;
@@ -51,13 +59,3 @@ export type User = {
   email?: string | null;
   displayName?: string | null;
 };
-
-/** GAMES */
-export type GameState = {
-  gameId: number;
-  addons: string[];
-  players: Player[];
-  isLast: boolean;
-  modified: number;
-};
-export type GamesState = GameState[];

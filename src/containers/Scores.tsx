@@ -35,15 +35,15 @@ const useStyles = makeStyles({
 
 export default function Scores(props: Props) {
   const gamesContext = useContext(GamesContext);
-  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const classes = useStyles();
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
-    gamesContext.dispatch({ type: 'SET_PLAYER_SCORE', payload: { gameId: currentGameState.gameId, name, scoreKey, value } });
+    gamesContext.dispatch({ type: 'SET_PLAYER_SCORE', payload: { gameId: currentGameParams.gameId, name, scoreKey, value } });
   }
 
   function getSum(player: Player, players: Player[], playerIndex: number): GameScoreSumResult {
-    const playerScore = getPlayerScoreByGame(player.score, currentGameState.scores);
+    const playerScore = getPlayerScoreByGame(player.score, currentGameParams.scores);
     return props.score.sum
       ? props.score.sum(playerScore, getNeighborScores(players, playerIndex))
       : { result: 0, calculations: '' };
@@ -53,7 +53,7 @@ export default function Scores(props: Props) {
     player: Player,
     counter: { id: string; min?: number; max?: number }
   ): React.ReactNode | null {
-    const playerScore = getPlayerScoreByGame(player.score, currentGameState.scores);
+    const playerScore = getPlayerScoreByGame(player.score, currentGameParams.scores);
     const isVisible = Object.keys(playerScore).includes(counter.id);
 
     if (isVisible) {

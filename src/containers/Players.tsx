@@ -48,7 +48,7 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
 
 export default function Players() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
   const [deletedPlayer, setDeletedPlayer] = useState({
     player: null,
@@ -59,7 +59,7 @@ export default function Players() {
 
   function handleSubmit(name: string, wonder: string) {
     gamesContext.dispatch({ type: 'ADD_PLAYER', payload: {
-      gameId: currentGameState?.gameId,
+      gameId: currentGameParams?.gameId,
       name,
       wonder
     } });
@@ -84,7 +84,7 @@ export default function Players() {
 
       gamesContext.dispatch({
         type: 'DELETE_PLAYER', payload: {
-          gameId: currentGameState?.gameId,
+          gameId: currentGameParams?.gameId,
           name
         }
       });
@@ -95,7 +95,7 @@ export default function Players() {
     if (deletedPlayer?.player) {
       setIsDeleteConfirmOpened(false);
       gamesContext.dispatch({ type: 'RESTORE_PLAYER', payload: {
-        gameId: currentGameState?.gameId,
+        gameId: currentGameParams?.gameId,
         player: deletedPlayer.player,
         index: deletedPlayer.index
       } });
@@ -110,7 +110,7 @@ export default function Players() {
   }
 
   function handleWonderChange(name: string, wonder: string) {
-    gamesContext.dispatch({ type: 'SET_PLAYER_WONDER', payload: { gameId: currentGameState.gameId, name, wonder } });
+    gamesContext.dispatch({ type: 'SET_PLAYER_WONDER', payload: { gameId: currentGameParams.gameId, name, wonder } });
   }
 
   function onDragEnd(result: DropResult): void {
@@ -127,7 +127,7 @@ export default function Players() {
 
     gamesContext.dispatch({
       type: 'SET_PLAYERS', payload: {
-        gameId: currentGameState.gameId,
+        gameId: currentGameParams.gameId,
         players: reorderedPlayers
       }
     });
@@ -136,7 +136,7 @@ export default function Players() {
   return (
     <div>
       <Typography variant="subtitle1" component="p">
-        {currentGamePlayers.length} / {currentGameState?.maxPlayers}
+        {currentGamePlayers.length} / {currentGameParams?.maxPlayers}
       </Typography>
       {currentGamePlayers.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -155,7 +155,7 @@ export default function Players() {
                             <TableCell className={classes.wonder}>
                               <WonderSelect
                                 value={player.wonder}
-                                wonders={currentGameState.wonders}
+                                wonders={currentGameParams.wonders}
                                 selectedWonders={currentGamePlayers.map(player => player.wonder)}
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
@@ -188,9 +188,9 @@ export default function Players() {
 
       <NewPlayer
         names={currentGamePlayers.map(player => player.name)}
-        wonders={currentGameState.wonders}
+        wonders={currentGameParams.wonders}
         selectedWonders={currentGamePlayers.map(player => player.wonder)}
-        isMax={currentGamePlayers.length >= currentGameState.maxPlayers}
+        isMax={currentGamePlayers.length >= currentGameParams.maxPlayers}
         onSubmit={handleSubmit}
       />
 

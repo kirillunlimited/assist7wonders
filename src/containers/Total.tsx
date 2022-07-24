@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { GamesContext, CurrentGameContext } from './App';
-import { GameState } from '../types';
+import { GameParams, GameState } from '../types';
 import Results from '../components/Results';
-import { mapHistoryGameToCurrentGame } from '../utils/game';
+import { getGameParamsByGameState } from '../utils/game';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
@@ -24,15 +24,15 @@ const useStyles = makeStyles(() => ({
 export default function Total() {
   const classes = useStyles();
   const gamesContext = useContext(GamesContext);
-  const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
-  function getGame(game: GameState) {
-    return mapHistoryGameToCurrentGame(game);
+  function getGameParams(game: GameState): GameParams {
+    return getGameParamsByGameState(game);
   }
 
   function getHistoryGames() {
-    return gamesContext.state.filter(game => game.gameId !== currentGameState.gameId);
+    return gamesContext.state.filter(game => game.gameId !== currentGameParams.gameId);
   }
 
   function handleHistoryGameDelete(gameId: number) {
@@ -44,7 +44,7 @@ export default function Total() {
     <div>
       <Results
         players={currentGamePlayers}
-        game={currentGameState}
+        game={currentGameParams}
       />
       {getHistoryGames().length > 0 && <div className={classes.history}>
         <Typography variant="h2" className={classes.title}>
@@ -54,7 +54,7 @@ export default function Total() {
           className={classes.historyItem}
           key={game.gameId}
           players={game.players}
-          game={getGame(game)}
+          game={getGameParams(game)}
           onDelete={() => handleHistoryGameDelete(game.gameId)}
         />)}
       </div>}

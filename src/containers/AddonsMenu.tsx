@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 export default function MainMenu() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameState} = useContext(CurrentGameContext);
+  const {currentGameParams} = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const { t } = useTranslation();
@@ -28,15 +28,15 @@ export default function MainMenu() {
   }
 
   function handleMenuItemClick(_: React.MouseEvent, addon: string, isAdd: boolean) {
-    if (!currentGameState) {
+    if (!currentGameParams) {
       return;
     }
-    const selectedAddons = currentGameState?.addons || [];
+    const selectedAddons = currentGameParams?.addons || [];
     const addons = isAdd ? [...selectedAddons, addon] : selectedAddons.filter(selectedAddon => selectedAddon !== addon)
     gamesContext.dispatch({
       type: 'UPDATE_ADDONS',
       payload: {
-        gameId: currentGameState?.gameId,
+        gameId: currentGameParams?.gameId,
         addons,
       }
     });
@@ -59,14 +59,14 @@ export default function MainMenu() {
           <MenuItem
             key={addon.name}
             onClick={e =>
-              handleMenuItemClick(e, addon.name, !currentGameState?.addons?.includes(addon.name))
+              handleMenuItemClick(e, addon.name, !currentGameParams?.addons?.includes(addon.name))
             }
           >
             <Checkbox
               classes={{
                 root: classes.checkbox,
               }}
-              checked={currentGameState?.addons?.includes(addon.name)}
+              checked={currentGameParams?.addons?.includes(addon.name)}
             />
             {t(addon.name)}
           </MenuItem>

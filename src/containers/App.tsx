@@ -10,20 +10,20 @@ import LanguageMenu from './LanguageMenu';
 import { CircularProgress } from '@material-ui/core';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
-import { Player, GameParams, GamesState } from '../types';
+import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import { getCurrentGameState, getCurrentGamePlayers, getNewGameByLastGame } from '../utils/game';
+import { getGameParamsByGameState, getCurrentGamePlayers, getNewGameByLastGame, getLastGameState } from '../utils/game';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
 type GamesContextProps = {
-  state: GamesState;
+  state: GameState[];
   dispatch: (action: GamesAction) => void;
 }
 
 export const GamesContext = React.createContext({} as GamesContextProps);
 export const CurrentGameContext = React.createContext({} as {
-  currentGameState: GameParams,
+  currentGameParams: GameParams,
   currentGamePlayers: Player[]
 });
 
@@ -46,7 +46,8 @@ export default function App() {
   const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
 
-  const lastGameState = useMemo(() => getCurrentGameState(games), [games]);
+  const lastGameState = useMemo(() => getLastGameState(games), [games]);
+  const lastGameParams = useMemo(() => getGameParamsByGameState(lastGameState), [lastGameState]);
   const lastGamePlayers = useMemo(() => getCurrentGamePlayers(games), [games]);
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function App() {
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-          <CurrentGameContext.Provider value={{ currentGameState: lastGameState, currentGamePlayers: lastGamePlayers }}>
+          <CurrentGameContext.Provider value={{ currentGameParams: lastGameParams, currentGamePlayers: lastGamePlayers }}>
             <Layout>
               {isReady ? <>
                 <Navigation />
