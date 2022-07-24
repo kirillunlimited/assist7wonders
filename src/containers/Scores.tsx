@@ -4,9 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Profile from '../components/Profile';
 import Counter from '../components/Counter';
 import { PlayerScoreKey, Player, GameScore, GameScoreSumResult } from '../types';
-import { CurrentGameContext, GamesContext, UserContext } from './App';
+import { CurrentGameContext, GamesContext } from './App';
 import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
-import { updatePlayerScore } from '../utils/database';
 
 type Props = {
   score: GameScore;
@@ -36,13 +35,11 @@ const useStyles = makeStyles({
 
 export default function Scores(props: Props) {
   const gamesContext = useContext(GamesContext);
-  const userContext = useContext(UserContext);
   const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const classes = useStyles();
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
     gamesContext.dispatch({ type: 'SET_PLAYER_SCORE', payload: { gameId: currentGameState.gameId, name, scoreKey, value } });
-    updatePlayerScore(userContext.state.uid, currentGameState.gameId, name, scoreKey, value)
   }
 
   function getSum(player: Player, players: Player[], playerIndex: number): GameScoreSumResult {

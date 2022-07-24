@@ -11,12 +11,10 @@ import {
 } from '@material-ui/core';
 import { Refresh } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { GamesContext, UserContext } from './App';
+import { GamesContext } from './App';
 import { getNewGameByLastGame } from '../utils/game';
-import { addGameToDb } from '../utils/database';
 
 export default function MainMenu() {
-  const userContext = useContext(UserContext);
   const gamesContext = useContext(GamesContext);
   const [isConfirmOpened, setIsConfirmOpened] = useState(false);
   const { t } = useTranslation();
@@ -38,7 +36,6 @@ export default function MainMenu() {
         game: newGame,
       }
     });
-    addGameToDb(userContext.state.uid, gameId, newGame);
     handleCloseConfirm();
   }
 

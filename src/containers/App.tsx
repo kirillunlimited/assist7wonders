@@ -7,31 +7,20 @@ import Router from './Router';
 import ResetGame from './ResetGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
-import AuthMenu from './AuthMenu';
-import { IconButton, CircularProgress } from '@material-ui/core';
-import { Save } from '@material-ui/icons';
+import { CircularProgress } from '@material-ui/core';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
-import userReducer, { Action as UserAction } from '../reducers/user';
-import { Player, GameParams, User, GamesState } from '../types';
+import { Player, GameParams, GamesState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import firebase, {isFirebaseOk} from '../config/firebase';
-import { getCurrentGameState, getCurrentGamePlayers, mergeGameArrays, getNewGameByLastGame } from '../utils/game';
+import { getCurrentGameState, getCurrentGamePlayers, getNewGameByLastGame } from '../utils/game';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
-import { getUserGamesFromDb, addGamesToDb, addGameToDb } from '../utils/database';
 
 type GamesContextProps = {
   state: GamesState;
   dispatch: (action: GamesAction) => void;
 }
 
-type UserContextProps = {
-  state: User;
-  dispatch: (action: UserAction) => void;
-};
-
-export const UserContext = React.createContext({} as UserContextProps);
 export const GamesContext = React.createContext({} as GamesContextProps);
 export const CurrentGameContext = React.createContext({} as {
   currentGameState: GameParams,
@@ -53,7 +42,6 @@ const useStyles = makeStyles({
 });
 
 export default function App() {
-  const [user, userDispatch] = useReducer(userReducer, { uid: '' });
   const [games, gamesDispatch] = useReducer(gamesReducer, []);
   const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
@@ -71,26 +59,8 @@ export default function App() {
       startNewGame();
     }
 
-    if (isFirebaseOk) {
-      const unregisterAuthObserver = firebase.auth().onAuthStateChanged(async (user) => {
-        const uid = user?.uid || '';
-        userDispatch({ type: 'SET_USER', payload: {
-          uid,
-          email: user?.email,
-          displayName: user?.displayName,
-          }
-        });
-        setIsReady(true);
-      });
-      return () => unregisterAuthObserver();
-    } else {
-      setIsReady(true);
-    }
+    setIsReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    restoreUserData();
-  }, [user.uid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isReady) {
@@ -98,34 +68,6 @@ export default function App() {
     }
   }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function restoreUserData() {
-    if (isReady && user.uid) {
-      // Not init: keep current game and restore all games from db
-      await mergeGames();
-    }
-  }
-
-  async function mergeGames() {
-    try {
-      const userGames = await getUserGamesFromDb(user.uid);
-      const mergedGames = mergeGameArrays([
-        ...games,
-        ...userGames
-      ]);
-
-      addGamesToDb(user.uid, mergedGames);
-      gamesDispatch({ type: 'SET_GAMES', payload: mergedGames });
-    } catch (error) {
-      // TODO: snack bar
-      console.error(error);
-    }
-  }
-
-  function handleLogOut() {
-    /** Reset game */
-    gamesDispatch({ type: 'SET_GAMES', payload: []});
-    startNewGame();
-  }
 
   function startNewGame() {
     const gameId = Date.now();
@@ -133,27 +75,19 @@ export default function App() {
     gamesDispatch({ type: 'ADD_GAME', payload: {
       game: newGame,
     }});
-    addGameToDb(user.uid, gameId, newGame);
   }
 
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-        <UserContext.Provider value={{ state: user, dispatch: userDispatch }}>
           <CurrentGameContext.Provider value={{ currentGameState: lastGameState, currentGamePlayers: lastGamePlayers }}>
             <Layout>
               {isReady ? <>
                 <Navigation />
                 <MainMenu>
-                  <IconButton onClick={mergeGames} color="inherit">
-                    <Save/>
-                  </IconButton>
                   <ResetGame />
                   <AddonsMenu />
                   <LanguageMenu />
-                  {isFirebaseOk && <AuthMenu
-                    onLogOut={handleLogOut}
-                  />}
                 </MainMenu>
                 <RouteWrapper>
                   <Router routes={ROUTES} />
@@ -161,7 +95,6 @@ export default function App() {
               </> : <CircularProgress className={classes.loader}/>}
             </Layout>
           </CurrentGameContext.Provider>
-        </UserContext.Provider>
       </GamesContext.Provider>
     </div>
   );

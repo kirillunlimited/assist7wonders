@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { GamesContext, CurrentGameContext, UserContext } from './App';
+import { GamesContext, CurrentGameContext } from './App';
 import { GameState } from '../types';
 import Results from '../components/Results';
 import { mapHistoryGameToCurrentGame } from '../utils/game';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { deleteGameFromDb } from '../utils/database';
 
 const useStyles = makeStyles(() => ({
   history: {
@@ -24,7 +23,6 @@ const useStyles = makeStyles(() => ({
 
 export default function Total() {
   const classes = useStyles();
-  const userContext = useContext(UserContext);
   const gamesContext = useContext(GamesContext);
   const {currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
@@ -40,7 +38,6 @@ export default function Total() {
   function handleHistoryGameDelete(gameId: number) {
     const games = gamesContext.state.filter(game => game.gameId !== gameId);
     gamesContext.dispatch({type: 'SET_GAMES', payload: games});
-    deleteGameFromDb(userContext.state.uid, gameId);
   }
 
   return (
