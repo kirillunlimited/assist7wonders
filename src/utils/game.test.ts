@@ -26,6 +26,9 @@ describe('shuffleWonders', () => {
 });
 
 describe('getAvatarText', () => {
+  test('should return empty string', () => {
+    expect(getAvatarText('')).toEqual('');
+  });
   test('should return 1 letter', () => {
     expect(getAvatarText('Jean')).toEqual('J');
   });

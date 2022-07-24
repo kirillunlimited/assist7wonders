@@ -48,7 +48,7 @@ export const getLastGameState = (games: GameState[]): GameState => {
 }
 
 export const getGameParamsByGameState = (game: GameState): GameParams => {
-  const gameAddons = game.addons || []
+  const gameAddons = game.addons || [];
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonScores = addons.reduce((scores, addon) => {
     return [...scores, ...addon.scores];

@@ -382,6 +382,162 @@ describe('getNeighborScores', () => {
       },
     ]);
   });
+
+  test('should return scores of left and right players for the first player', () => {
+    expect(
+      getNeighborScores(
+        [
+          {
+            name: '1',
+            wonder: '1',
+            score: {
+              civilian: 10,
+              commerce: 0,
+              compass: 1,
+              gears: 0,
+              guild: 10,
+              military: 0,
+              tablets: 1,
+              treasury: 3,
+              wonders: 10,
+            },
+          },
+          {
+            name: '2',
+            wonder: '2',
+            score: {
+              civilian: 1,
+              commerce: 1,
+              compass: 1,
+              gears: 1,
+              guild: 1,
+              military: 1,
+              tablets: 1,
+              treasury: 1,
+              wonders: 1,
+            },
+          },
+          {
+            name: '3',
+            wonder: '3',
+            score: {
+              civilian: 5,
+              commerce: 5,
+              compass: 1,
+              gears: 0,
+              guild: 0,
+              military: 0,
+              tablets: 1,
+              treasury: 6,
+              wonders: 10,
+            },
+          },
+        ],
+        0
+      )
+    ).toEqual([
+      {
+        civilian: 5,
+        commerce: 5,
+        compass: 1,
+        gears: 0,
+        guild: 0,
+        military: 0,
+        tablets: 1,
+        treasury: 6,
+        wonders: 10,
+      },
+      {
+        civilian: 1,
+        commerce: 1,
+        compass: 1,
+        gears: 1,
+        guild: 1,
+        military: 1,
+        tablets: 1,
+        treasury: 1,
+        wonders: 1,
+      }
+    ]);
+  });
+
+  test('should return scores of left and right players for the last player', () => {
+    expect(
+      getNeighborScores(
+        [
+          {
+            name: '1',
+            wonder: '1',
+            score: {
+              civilian: 10,
+              commerce: 0,
+              compass: 1,
+              gears: 0,
+              guild: 10,
+              military: 0,
+              tablets: 1,
+              treasury: 3,
+              wonders: 10,
+            },
+          },
+          {
+            name: '2',
+            wonder: '2',
+            score: {
+              civilian: 1,
+              commerce: 1,
+              compass: 1,
+              gears: 1,
+              guild: 1,
+              military: 1,
+              tablets: 1,
+              treasury: 1,
+              wonders: 1,
+            },
+          },
+          {
+            name: '3',
+            wonder: '3',
+            score: {
+              civilian: 5,
+              commerce: 5,
+              compass: 1,
+              gears: 0,
+              guild: 0,
+              military: 0,
+              tablets: 1,
+              treasury: 6,
+              wonders: 10,
+            },
+          },
+        ],
+        2
+      )
+    ).toEqual([
+      {
+        civilian: 1,
+        commerce: 1,
+        compass: 1,
+        gears: 1,
+        guild: 1,
+        military: 1,
+        tablets: 1,
+        treasury: 1,
+        wonders: 1,
+      },
+      {
+        civilian: 10,
+        commerce: 0,
+        compass: 1,
+        gears: 0,
+        guild: 10,
+        military: 0,
+        tablets: 1,
+        treasury: 3,
+        wonders: 10,
+      }
+    ]);
+  });
 });
 
 describe('getPlayerScoreByGame', () => {
