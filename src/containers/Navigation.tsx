@@ -13,6 +13,9 @@ const useStyles = makeStyles(theme => ({
       width: 'auto',
     },
   },
+  tabs: {
+    height: '100%'
+  },
   indicator: {
     backgroundColor: '#FFF',
   },
@@ -63,6 +66,7 @@ export default function Navigation() {
         classes={{
           indicator: classes.indicator,
         }}
+        className={classes.tabs}
         value={location.pathname}
         variant={bigScreen ? 'standard' : 'scrollable'}
         scrollButtons="auto"
