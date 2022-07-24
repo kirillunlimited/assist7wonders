@@ -23,6 +23,7 @@ type GamesContextProps = {
 
 export const GamesContext = React.createContext({} as GamesContextProps);
 export const CurrentGameContext = React.createContext({} as {
+  currentGameState: GameState,
   currentGameParams: GameParams,
   currentGamePlayers: Player[]
 });
@@ -72,7 +73,7 @@ export default function App() {
 
   function startNewGame() {
     const gameId = Date.now();
-    const newGame = getNewGameByLastGame(gameId, games);
+    const newGame = getNewGameByLastGame(gameId, lastGameState);
     gamesDispatch({ type: 'ADD_GAME', payload: {
       game: newGame,
     }});
@@ -81,7 +82,11 @@ export default function App() {
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-          <CurrentGameContext.Provider value={{ currentGameParams: lastGameParams, currentGamePlayers: lastGamePlayers }}>
+          <CurrentGameContext.Provider value={{
+            currentGameState: lastGameState,
+            currentGameParams: lastGameParams,
+            currentGamePlayers: lastGamePlayers
+            }}>
             <Layout>
               {isReady ? <>
                 <Navigation />

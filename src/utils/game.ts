@@ -179,10 +179,8 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
   ];
 };
 
-export function getNewGameByLastGame(gameId: number, games: GameState[]): GameState {
-  /** Take params from last game or set it empty */
-  const lastGame = games.find(game => game.isLast);
-
+/** Take params from last game or set it empty */
+export function getNewGameByLastGame(gameId: number, lastGame: GameState): GameState {
   const addons = lastGame?.addons;
   const players = lastGame?.players?.map(player => {
     return {
