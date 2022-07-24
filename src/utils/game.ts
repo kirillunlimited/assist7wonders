@@ -96,20 +96,16 @@ export function getAvatarText(name: string): string {
     .toUpperCase();
 }
 
-/** TODO: move these methods to helpers and add unit tests */
-export const getWondersByAddons = (gameAddons: string[]) => {
+export const getWondersByAddons = (gameAddons: string[]): string[] => {
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonWonders = addons.reduce((wonders, addon) => {
-    if (addon) {
-      return [...wonders, ...addon.wonders];
-    }
-    return wonders;
+    return [...wonders, ...addon.wonders];
   }, [] as string[]);
 
   return [...BASE_GAME.wonders, ...addonWonders];
 }
 
-export const getMaxPlayersByAddons = (gameAddons: string[]) => {
+export const getMaxPlayersByAddons = (gameAddons: string[]): number => {
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   return [BASE_GAME, ...addons].reduce((max, addon) => {
     if (addon.maxPlayers > max) {
@@ -135,10 +131,7 @@ export const getGameParamsByGameState = (game: GameState): GameParams => {
   const gameAddons = game.addons || []
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonScores = addons.reduce((scores, addon) => {
-    if (addon) {
-      return [...scores, ...addon.scores];
-    }
-    return scores;
+    return [...scores, ...addon.scores];
   }, [] as GameScore[]);
 
   const wonders = getWondersByAddons(gameAddons);
@@ -204,7 +197,7 @@ export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameS
   return {
     ...params,
     gameId,
-    modified: Date.now(),
+    modified: gameId,
     isLast: true
   };
 }
