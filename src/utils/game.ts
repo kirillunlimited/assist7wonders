@@ -180,7 +180,7 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
 };
 
 /** Take params from last game or set it empty */
-export function getNewGameByLastGame(gameId: number, lastGame: GameState): GameState {
+export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameState => {
   const addons = lastGame?.addons;
   const wonders = getWondersByAddons(addons);
   const shuffledWonders = shuffleWonders(wonders);

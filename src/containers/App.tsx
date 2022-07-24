@@ -82,25 +82,25 @@ export default function App() {
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-          <CurrentGameContext.Provider value={{
-            currentGameState: lastGameState,
-            currentGameParams: lastGameParams,
-            currentGamePlayers: lastGamePlayers
-            }}>
-            <Layout>
-              {isReady ? <>
-                <Navigation />
-                <MainMenu>
-                  <ResetGame />
-                  <AddonsMenu />
-                  <LanguageMenu />
-                </MainMenu>
-                <RouteWrapper>
-                  <Router routes={ROUTES} />
-                </RouteWrapper>
-              </> : <CircularProgress className={classes.loader}/>}
-            </Layout>
-          </CurrentGameContext.Provider>
+        <CurrentGameContext.Provider value={{
+          currentGameState: lastGameState,
+          currentGameParams: lastGameParams,
+          currentGamePlayers: lastGamePlayers
+        }}>
+          <Layout>
+            {isReady ? <>
+              <Navigation />
+              <MainMenu>
+                <ResetGame />
+                <AddonsMenu />
+                <LanguageMenu />
+              </MainMenu>
+              <RouteWrapper>
+                <Router routes={ROUTES} />
+              </RouteWrapper>
+            </> : <CircularProgress className={classes.loader}/>}
+          </Layout>
+        </CurrentGameContext.Provider>
       </GamesContext.Provider>
     </div>
   );
