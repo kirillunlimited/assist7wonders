@@ -1,6 +1,7 @@
 import { GameState, Player, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
-import { getAllCounters, getMaxPlayersByAddons, getWondersByAddons, updateSelectedWonders, updatePlayersCount } from '../utils/game';
+import { getMaxPlayersByAddons, getWondersByAddons, updateSelectedWonders, updatePlayersCount } from '../utils/game';
+import {getAllCounters} from '../utils/score'
 
 const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 

@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { Player, PlayerScore, GameParams } from '../types';
 import { getTotal } from '../utils/score';
-import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
+import { getNeighborScores, getPlayerScoreByGame } from '../utils/score';
 
 type Props = {
   players: Player[];

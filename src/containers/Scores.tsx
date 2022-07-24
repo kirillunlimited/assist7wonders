@@ -5,7 +5,7 @@ import Profile from '../components/Profile';
 import Counter from '../components/Counter';
 import { PlayerScoreKey, Player, GameScore, GameScoreSumResult } from '../types';
 import { CurrentGameContext, GamesContext } from './App';
-import { getNeighborScores, getPlayerScoreByGame } from '../utils/game';
+import { getNeighborScores, getPlayerScoreByGame } from '../utils/score';
 
 type Props = {
   score: GameScore;

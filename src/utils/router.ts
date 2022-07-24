@@ -1,5 +1,5 @@
 import { BASE_GAME, ADDONS } from '../config/game';
-import { getAllScores } from './game';
+import { getAllScores } from './score';
 import { GameScore, Route } from '../types';
 import Scores from '../containers/Scores';
 
