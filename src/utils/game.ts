@@ -153,10 +153,6 @@ export const getGameParamsByGameState = (game: GameState): GameParams => {
   };
 }
 
-export const getCurrentGamePlayers = (games: GameState[]): Player[] => {
-  return games.find(game => game.isLast)?.players || [];
-}
-
 /** Slice extra players if new limit is less than before */
 export const updatePlayersCount = (players: Player[], maxPlayers: number): Player[] => {
   return players.slice(0, maxPlayers);

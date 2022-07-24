@@ -13,7 +13,7 @@ import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import { getGameParamsByGameState, getCurrentGamePlayers, getNewGameByLastGame, getLastGameState } from '../utils/game';
+import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/game';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
 type GamesContextProps = {
@@ -49,7 +49,7 @@ export default function App() {
 
   const lastGameState = useMemo(() => getLastGameState(games), [games]);
   const lastGameParams = useMemo(() => getGameParamsByGameState(lastGameState), [lastGameState]);
-  const lastGamePlayers = useMemo(() => getCurrentGamePlayers(games), [games]);
+  const lastGamePlayers = useMemo(() => lastGameState.players, [lastGameState]);
 
   useEffect(() => {
     /** Restore last games */
