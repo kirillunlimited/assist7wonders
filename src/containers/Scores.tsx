@@ -12,6 +12,11 @@ type Props = {
 };
 
 const useStyles = makeStyles({
+  tr: {
+    '&:last-child td': {
+      borderBottom: 'none',
+    }
+  },
   td: {
     '&:first-child': {
       paddingLeft: 0,
@@ -91,7 +96,7 @@ export default function Scores(props: Props) {
       <Table>
         <TableBody>
           {playersContext.state.map((player, playerIndex) => (
-            <TableRow key={player.name}>
+            <TableRow className={classes.tr} key={player.name}>
               <TableCell className={classes.td}>
                 <Profile name={player.name} />
               </TableCell>
