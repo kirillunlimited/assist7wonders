@@ -182,9 +182,13 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
 /** Take params from last game or set it empty */
 export function getNewGameByLastGame(gameId: number, lastGame: GameState): GameState {
   const addons = lastGame?.addons;
-  const players = lastGame?.players?.map(player => {
+  const wonders = getWondersByAddons(addons);
+  const shuffledWonders = shuffleWonders(wonders);
+
+  const players = lastGame?.players?.map((player, index) => {
     return {
       ...player,
+      wonder: shuffledWonders[index],
       score: Object.keys(player.score)?.reduce((acc, counterKey) => {
         return {
           ...acc,
