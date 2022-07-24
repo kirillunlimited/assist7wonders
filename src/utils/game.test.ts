@@ -6,8 +6,14 @@ import {
   getAllCounters,
   shuffleWonders,
   getAvatarText,
+  getWondersByAddons,
+  getMaxPlayersByAddons,
+  emptyGameState,
+  getLastGameState,
 } from './game';
 import { BASE_GAME } from '../config/game';
+import leaders from '../config/addons/leaders';
+import cities from '../config/addons/cities';
 
 describe('getAllScores', () => {
   test('should return empty array', () => {
@@ -241,5 +247,54 @@ describe('getAvatarText', () => {
   test('should return 2 letters', () => {
     expect(getAvatarText('Jean Claud')).toEqual('JC');
     expect(getAvatarText('Jean Claud Van Damme')).toEqual('JC');
+  });
+});
+
+describe('getWondersByAddons', () => {
+  test('should return empty array', () => {
+    expect(getWondersByAddons([])).toEqual(BASE_GAME.wonders);
+  });
+  test('should return proper wonders array', () => {
+    expect(getWondersByAddons(['Leaders'])).toEqual([...BASE_GAME.wonders, ...leaders.wonders]);
+    expect(getWondersByAddons(['Leaders', 'Cities'])).toEqual([...BASE_GAME.wonders, ...leaders.wonders, ...cities.wonders]);
+  });
+});
+
+describe('getMaxPlayersByAddons', () => {
+  test('should return base game maxPlayers values', () => {
+    expect(getMaxPlayersByAddons([])).toEqual(BASE_GAME.maxPlayers);
+  });
+  test('should return the biggest maxPlayers value', () => {
+    expect(getMaxPlayersByAddons(['Leaders', 'Cities'])).toEqual(cities.maxPlayers);
+  });
+});
+
+describe('getLastGameState', () => {
+  test('should return empty game state', () => {
+    expect(getLastGameState([])).toEqual(emptyGameState);
+  });
+  test('should return last game state', () => {
+    expect(getLastGameState([
+      {
+        addons: [],
+        gameId: 0,
+        isLast: false,
+        modified: 0,
+        players: []
+      },
+      {
+        addons: [],
+        gameId: 1,
+        isLast: true,
+        modified: 1,
+        players: []
+      },
+    ])).toEqual({
+        addons: [],
+        gameId: 1,
+        isLast: true,
+        modified: 1,
+        players: []
+      })
   });
 });

@@ -119,14 +119,16 @@ export const getMaxPlayersByAddons = (gameAddons: string[]) => {
   }, 0);
 }
 
-export const getLastGameState = (games: GameState[]): GameState => {
-  return games.find(game => game.isLast) || {
+export const emptyGameState =  {
     gameId: Date.now(),
     modified: Date.now(),
     players: [],
     addons: [],
     isLast: true,
-  }
+  };
+
+export const getLastGameState = (games: GameState[]): GameState => {
+  return games.find(game => game.isLast) || emptyGameState;
 }
 
 export const getGameParamsByGameState = (game: GameState): GameParams => {
