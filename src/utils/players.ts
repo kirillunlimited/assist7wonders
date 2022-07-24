@@ -11,6 +11,7 @@ export function getAvatarText(name: string): string {
     .toUpperCase();
 }
 
+/* Get the greatest maxPlayers value from selected addons */
 export const getMaxPlayersByAddons = (gameAddons: string[]): number => {
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   return [BASE_GAME, ...addons].reduce((max, addon) => {

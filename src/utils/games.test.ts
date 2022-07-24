@@ -3,7 +3,7 @@ import {
   getLastGameState,
   getGameParamsByGameState,
   getNewGameByLastGame
-} from './game';
+} from './games';
 import { mergeScores } from './score';
 import { BASE_GAME } from '../config/game';
 import leaders from '../config/addons/leaders';

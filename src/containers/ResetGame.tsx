@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { Refresh } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
-import { getNewGameByLastGame } from '../utils/game';
+import { getNewGameByLastGame } from '../utils/games';
 import { GamesContext, CurrentGameContext } from './App';
 
 export default function MainMenu() {

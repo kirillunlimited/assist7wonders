@@ -13,7 +13,7 @@ import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
-import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/game';
+import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/games';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
 type GamesContextProps = {
