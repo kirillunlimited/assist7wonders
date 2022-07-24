@@ -1,4 +1,4 @@
-import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GamesState, GameState, GamesDict, GameParams } from '../types';
+import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GamesState, GameState, GameParams } from '../types';
 import compass from '../img/compass.png';
 import tablets from '../img/tablets.png';
 import gears from '../img/gears.png';
@@ -96,117 +96,6 @@ export function getAvatarText(name: string): string {
     .toUpperCase();
 }
 
-
-// TODO: unit test
-export function mapGamesArrayToObject(games: GamesState = []): GamesDict {
-  return games.reduce((acc, game) => ({
-    ...acc,
-    [game.gameId]: {
-      players: (game.players || []).reduce((playersDict, player, index) => ({
-        ...playersDict,
-        [player.name]: {
-          index,
-          score: player.score,
-          wonder: player.wonder,
-        }
-      }), {}),
-      addons: game.addons || [],
-      modified: game.modified,
-    }
-  }), {});
-}
-
-// TODO: unit test
-export function mapGamesObjectToArray(games: GamesDict = {}): GamesState {
-  /** Find the game with the biggest modified value */
-  let lastGameId: number = -1;
-
-  return Object.keys(games)
-    .map(gameId => {
-      const game = games[gameId];
-      lastGameId = game.modified > lastGameId ? game.modified : lastGameId;
-
-      return {
-        gameId: Number(gameId),
-        modified: game.modified,
-        addons: (game.addons || []).filter(addon => addon),
-        players: Object.keys(game.players || {})
-          .filter(player => player)
-          .sort((firstPlayerName, secondPlayerName) => game.players[firstPlayerName].index - game.players[secondPlayerName].index)
-          .map(playerName => ({
-            name: playerName,
-            score: game?.players?.[playerName]?.score,
-            wonder: game?.players?.[playerName]?.wonder,
-          })),
-      }
-    })
-    .map(game => {
-      if (game.modified === lastGameId) {
-        return {
-          ...game,
-          isLast: true
-        }
-      }
-      return {
-        ...game,
-        isLast: false
-      }
-    })
-}
-
-// TODO: unit test
-/** Keep games with greater "modified" value (later game is more relevant) */
-export function mergeGameArrays(games: GamesState): GamesState {
-  let dict: Record<string, {
-    index: number;
-    modified: number;
-  }> = {};
-
-  /** Find the game with the biggest modified value */
-  let lastGameId: number = -1;
-
-  return games
-    .reduce((acc, game) => {
-      lastGameId = game.modified > lastGameId ? game.modified : lastGameId;
-      if (dict[game.gameId]) {
-        if (dict[game.gameId].modified > game.modified) {
-          return acc;
-        } else {
-          acc[dict[game.gameId].index] = game;
-
-          dict[game.gameId] = {
-            index: acc.length,
-            modified: game.modified,
-          };
-
-          return acc;
-        }
-      }
-
-      dict[game.gameId] = {
-        index: acc.length,
-        modified: game.modified,
-      };
-
-      return [
-        ...acc,
-        game
-      ];
-    }, [] as GamesState)
-    .map(game => {
-      if (game.modified === lastGameId) {
-        return {
-          ...game,
-          isLast: true
-        }
-      }
-      return {
-        ...game,
-        isLast: false
-      }
-    })
-}
-
 /** TODO: move these methods to helpers and add unit tests */
 export const getWondersByAddons = (gameAddons: string[]) => {
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
@@ -230,7 +119,7 @@ export const getMaxPlayersByAddons = (gameAddons: string[]) => {
   }, 0);
 }
 
-export const mapHistoryGameToCurrentGame = (game: GameState) => {
+export const mapHistoryGameToCurrentGame = (game: GameState): GameParams => {
   const gameAddons = game.addons || []
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonScores = addons.reduce((scores, addon) => {
@@ -245,7 +134,6 @@ export const mapHistoryGameToCurrentGame = (game: GameState) => {
 
   return {
     gameId: game.gameId,
-    modified: game.modified,
     maxPlayers,
     addons: gameAddons,
     wonders,

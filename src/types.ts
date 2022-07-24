@@ -61,14 +61,3 @@ export type GameState = {
   modified: number;
 };
 export type GamesState = GameState[];
-
-export type GamesDict = Record<string, {
-  addons: string[];
-  players: Record<string, {
-    index: number;
-    score: PlayerScore;
-    wonder: string;
-  }>;
-  modified: number;
-  isLast: boolean;
-}>;
