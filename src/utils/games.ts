@@ -16,14 +16,14 @@ export const getLastGameState = (games: GameState[]): GameState => {
     if (!prev) {
       return current;
     }
-    return (prev?.gameId > current.gameId) ? prev : current;
+    return (prev.gameId > current.gameId) ? prev : current;
   }, null);
 
   return game || emptyGameState;
 }
 
 export const getGameParamsByGameState = (game: GameState): GameParams => {
-  const gameAddons = game.addons || [];
+  const gameAddons = game.addons;
   const addons = ADDONS.filter(addon => gameAddons.includes(addon.name));
   const addonScores = addons.reduce((scores, addon) => {
     return [...scores, ...addon.scores];
@@ -43,15 +43,15 @@ export const getGameParamsByGameState = (game: GameState): GameParams => {
 
 /** Take params from last game or set it empty */
 export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameState => {
-  const addons = lastGame?.addons;
+  const addons = lastGame.addons;
   const wonders = getWondersByAddons(addons);
   const shuffledWonders = shuffleWonders(wonders);
 
-  const players = lastGame?.players?.map((player, index) => {
+  const players = lastGame.players.map((player, index) => {
     return {
       ...player,
       wonder: shuffledWonders[index],
-      score: Object.keys(player.score)?.reduce((acc, counterKey) => {
+      score: Object.keys(player.score).reduce((acc, counterKey) => {
         return {
           ...acc,
           [counterKey]: 0,
@@ -61,8 +61,8 @@ export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameS
   });
 
   const params = {
-    addons: addons || [],
-    players: players || []
+    addons,
+    players
   };
 
   return {
