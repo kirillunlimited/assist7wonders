@@ -17,22 +17,25 @@ describe('getLastGameState', () => {
       {
         addons: [],
         gameId: 0,
-        isLast: false,
         modified: 0,
         players: []
       },
       {
         addons: [],
+        gameId: 2,
+        modified: 2,
+        players: []
+      },
+      {
+        addons: [],
         gameId: 1,
-        isLast: true,
         modified: 1,
         players: []
       },
     ])).toEqual({
         addons: [],
-        gameId: 1,
-        isLast: true,
-        modified: 1,
+        gameId: 2,
+        modified: 2,
         players: []
       })
   });
@@ -44,7 +47,6 @@ describe('getGameParamsByGameState', () => {
       gameId: 0,
       addons: [],
       players: [],
-      isLast: true,
       modified: 0
     })).toEqual({
       gameId: 0,
@@ -59,7 +61,6 @@ describe('getGameParamsByGameState', () => {
       gameId: 0,
       addons: [leaders.name],
       players: [],
-      isLast: true,
       modified: 0
     })).toEqual({
       gameId: 0,
@@ -84,7 +85,6 @@ describe('getNewGameByLastGame', () => {
           point2: 2,
         },
       }],
-      isLast: true,
       modified: 0
     };
     const newGameState = getNewGameByLastGame(1, lastGameState);
@@ -97,7 +97,6 @@ describe('getNewGameByLastGame', () => {
       point1: 0,
       point2: 0
     });
-    expect(newGameState.isLast).toBeTruthy();
     expect(newGameState.modified).toEqual(1);
   });
 });

@@ -106,10 +106,7 @@ const reducer = (state: GameState[], action: Action) => {
       const { game } = action.payload;
 
       return [
-        ...state.map(game => ({
-          ...game,
-          isLast: false
-        })),
+        ...state,
         game,
       ];
     case UPDATE_ADDONS: {

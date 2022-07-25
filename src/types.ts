@@ -27,7 +27,6 @@ export type GameState = {
   gameId: number;
   addons: string[];
   players: Player[];
-  isLast: boolean;
   modified: number;
 };
 

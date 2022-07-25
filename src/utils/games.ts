@@ -9,11 +9,17 @@ export const emptyGameState =  {
     modified: Date.now(),
     players: [],
     addons: [],
-    isLast: true,
   };
 
 export const getLastGameState = (games: GameState[]): GameState => {
-  return games.find(game => game.isLast) || emptyGameState;
+  const game = games.reduce((prev: GameState | null, current: GameState) => {
+    if (!prev) {
+      return current;
+    }
+    return (prev?.gameId > current.gameId) ? prev : current;
+  }, null);
+
+  return game || emptyGameState;
 }
 
 export const getGameParamsByGameState = (game: GameState): GameParams => {
@@ -63,6 +69,5 @@ export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameS
     ...params,
     gameId,
     modified: gameId,
-    isLast: true
   };
 }
