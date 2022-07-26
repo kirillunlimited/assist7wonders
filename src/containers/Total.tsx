@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 export default function Total() {
   const classes = useStyles();
   const gamesContext = useContext(GamesContext);
-  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameParams, currentGameState, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   function getGameParams(game: GameState): GameParams {
@@ -45,6 +45,7 @@ export default function Total() {
       <Results
         players={currentGamePlayers}
         game={currentGameParams}
+        modified={currentGameState.modified}
       />
       {getHistoryGames().length > 0 && <div className={classes.history}>
         <Typography variant="h2" className={classes.title}>
@@ -55,6 +56,7 @@ export default function Total() {
           key={game.gameId}
           players={game.players}
           game={getGameParams(game)}
+          modified={currentGameState.modified}
           onDelete={() => handleHistoryGameDelete(game.gameId)}
         />)}
       </div>}

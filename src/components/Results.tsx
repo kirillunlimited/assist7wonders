@@ -24,6 +24,7 @@ import { getNeighborScores, getPlayerScoreByGame } from '../utils/score';
 type Props = {
   players: Player[];
   game: GameParams;
+  modified: number;
   onDelete?: () => void;
 } & React.HTMLAttributes<HTMLElement>;
 
@@ -32,6 +33,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: '48px'
   },
   head: {
     backgroundColor: '#eee',
@@ -122,12 +124,12 @@ export default function Results(props: Props) {
 
   return (
     <div className={props.className}>
-      {props.onDelete && <header className={classes.header}>
-        <span>{getGameDate(props.game.gameId)}</span>
-        <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
+       <header className={classes.header}>
+         <Typography variant="body2">{getGameDate(props.modified)}</Typography>
+        {props.onDelete && <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
           <Delete />
-        </IconButton>
-      </header>}
+        </IconButton>}
+      </header>
       <TableContainer>
         <Table>
           <TableHead className={classes.head}>
