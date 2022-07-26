@@ -56,7 +56,7 @@ export default function Total() {
           key={game.gameId}
           players={game.players}
           game={getGameParams(game)}
-          modified={currentGameState.modified}
+          modified={game.modified}
           onDelete={() => handleHistoryGameDelete(game.gameId)}
         />)}
       </div>}

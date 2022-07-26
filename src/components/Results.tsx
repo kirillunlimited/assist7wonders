@@ -104,14 +104,13 @@ export default function Results(props: Props) {
     });
   }
 
-  function getGameDate(gameId: number) {
-    const date = new Date(gameId);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  function getGameDate(ms: number): string {
+    const userLocale = navigator.languages && navigator.languages.length
+      ? navigator.languages[0]
+      : navigator.language;
+    const date = new Date(ms);
+    const dateString = date.toLocaleString(userLocale, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    return dateString;
   }
 
   function toggleDialog(show: boolean): void {
