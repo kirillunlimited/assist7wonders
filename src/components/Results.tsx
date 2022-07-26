@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogTitle,
   Button,
+  Tooltip,
 } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -125,9 +126,11 @@ export default function Results(props: Props) {
     <div className={props.className}>
        <header className={classes.header}>
          <Typography variant="body2">{getGameDate(props.modified)}</Typography>
-        {props.onDelete && <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
+        {props.onDelete && <Tooltip title={t('deleteGame') || ''}>
+        <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
           <Delete />
-        </IconButton>}
+        </IconButton>
+      </Tooltip>}
       </header>
       <TableContainer>
         <Table>
