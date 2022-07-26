@@ -8,6 +8,11 @@ import {
   TableRow,
   Typography,
   IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
 } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -55,6 +60,7 @@ const useStyles = makeStyles(theme => ({
 export default function Results(props: Props) {
   const classes = useStyles();
   const [winner, setWinner] = useState('');
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -106,11 +112,19 @@ export default function Results(props: Props) {
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
 
+  function toggleDialog(show: boolean): void {
+    setIsDialogOpened(show);
+  }
+
+  function handleDeleteConfirm(): void {
+    props.onDelete?.();
+  }
+
   return (
     <div className={props.className}>
       {props.onDelete && <header className={classes.header}>
         <span>{getGameDate(props.game.gameId)}</span>
-        <IconButton aria-label="delete" onClick={props.onDelete}>
+        <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
           <Delete />
         </IconButton>
       </header>}
@@ -151,6 +165,23 @@ export default function Results(props: Props) {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
+        <DialogTitle disableTypography>
+          <Typography variant="h6"> {t('newPlayer')}</Typography>
+        </DialogTitle>
+          <DialogContent>
+            {t('deleteGame')}
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={() => toggleDialog(false)} color="primary">
+            {t('no')}
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="primary" autoFocus>
+            {t('yes')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
