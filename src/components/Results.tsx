@@ -169,10 +169,10 @@ export default function Results(props: Props) {
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
         <DialogTitle disableTypography>
-          <Typography variant="h6"> {t('newPlayer')}</Typography>
+          <Typography variant="h6"> {t('deleteGame')}</Typography>
         </DialogTitle>
           <DialogContent>
-            {t('deleteGame')}
+            {t('deleteGameDescription')}
           </DialogContent>
           <DialogActions>
           <Button onClick={() => toggleDialog(false)} color="primary">
