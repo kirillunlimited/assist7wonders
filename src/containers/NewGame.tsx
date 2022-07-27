@@ -9,12 +9,12 @@ import {
   DialogContentText,
   Button,
 } from '@material-ui/core';
-import { Refresh } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import { getNewGameByLastGame } from '../utils/games';
 import { GamesContext, CurrentGameContext } from './App';
 
-export default function MainMenu() {
+export default function NewGame() {
   const gamesContext = useContext(GamesContext);
   const {currentGameState} = useContext(CurrentGameContext);
   const [isConfirmOpened, setIsConfirmOpened] = useState(false);
@@ -28,7 +28,7 @@ export default function MainMenu() {
     setIsConfirmOpened(false);
   }
 
-  function onResetGame() {
+  function handleNewGameStart() {
     const gameId = Date.now();
     const newGame = getNewGameByLastGame(gameId, currentGameState);
     gamesContext.dispatch({
@@ -44,7 +44,7 @@ export default function MainMenu() {
     <div>
       <Tooltip title={t('newGame') as string}>
         <IconButton onClick={handleOpenConfirm} color="inherit">
-          <Refresh />
+          <Add />
         </IconButton>
       </Tooltip>
       <Dialog
@@ -60,7 +60,7 @@ export default function MainMenu() {
           <Button onClick={handleCloseConfirm} color="primary">
             {t('no')}
           </Button>
-          <Button onClick={onResetGame} color="primary" autoFocus>
+          <Button onClick={handleNewGameStart} color="primary" autoFocus>
             {t('yes')}
           </Button>
         </DialogActions>

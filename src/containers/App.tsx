@@ -4,7 +4,7 @@ import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
 import Navigation from './Navigation';
 import Router from './Router';
-import ResetGame from './ResetGame';
+import NewGame from './NewGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import { CircularProgress } from '@material-ui/core';
@@ -91,7 +91,7 @@ export default function App() {
             {isReady ? <>
               <Navigation />
               <MainMenu>
-                <ResetGame />
+                <NewGame />
                 <AddonsMenu />
                 <LanguageMenu />
               </MainMenu>
