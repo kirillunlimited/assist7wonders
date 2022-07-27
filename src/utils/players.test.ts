@@ -3,6 +3,7 @@ import {
   getMaxPlayersByAddons,
   updatePlayersCount,
   updateSelectedWonders,
+  getPlayersWithShuffledWonders,
 } from './players';
 import { BASE_GAME } from '../config/game';
 import cities from '../config/addons/cities';
@@ -99,5 +100,28 @@ describe('updateSelectedWonders', () => {
 
     expect(result[0].wonder).not.toEqual('wonder1');
     expect(result[1].wonder).not.toEqual('wonder2');
+  });
+});
+
+describe('getPlayersWithShuffledWonders', () => {
+  test('should return empty players array', () => {
+    expect(getPlayersWithShuffledWonders([], [])).toEqual([]);
+  });
+  test('should shuffle selected wonders', () => {
+    const result = getPlayersWithShuffledWonders([
+      {
+        name: 'player1',
+        wonder: BASE_GAME.wonders[0],
+        score: {},
+      },
+      {
+        name: 'player2',
+        wonder: BASE_GAME.wonders[1],
+        score: {},
+      }
+    ], []);
+    const wonders = result.map(player => player.wonder);
+    expect(BASE_GAME.wonders).toContain(wonders[0]);
+    expect(BASE_GAME.wonders).toContain(wonders[1]);
   });
 });
