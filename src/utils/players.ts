@@ -1,5 +1,5 @@
 import { Player } from '../types';
-import { shuffleWonders } from './wonders';
+import { shuffleWonders, getWondersByAddons } from './wonders';
 import { ADDONS, BASE_GAME } from '../config/game';
 
 /* Get first 2 capital letters of the name */
@@ -45,3 +45,15 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
     }),
   ];
 };
+
+export const getPlayersWithShuffledWonders = (players: Player[], addons: string[]): Player[] => {
+  const wonders = getWondersByAddons(addons);
+  const shuffledWonders = shuffleWonders(wonders);
+
+  return players.map((player, index) => {
+    return {
+      ...player,
+      wonder: shuffledWonders[index],
+    }
+  });
+}

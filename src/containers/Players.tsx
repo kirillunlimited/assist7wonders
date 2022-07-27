@@ -14,12 +14,13 @@ import {
 import NewPlayer from '../components/NewPlayer';
 import Profile from '../components/Profile';
 import WonderSelect from '../components/WonderSelect';
-import { DeleteForever, Close } from '@material-ui/icons';
+import { DeleteForever, Close, Shuffle } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Player } from '../types';
 import { CurrentGameContext, GamesContext } from './App';
+import { getPlayersWithShuffledWonders } from '../utils/players';
 
 const useStyles = makeStyles(theme => ({
   subtitle: {
@@ -31,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   },
   wonder: {
     width: '100%',
+  },
+  controls: {
+    marginTop: theme.spacing(2),
   },
   delete: {
     width: '100%',
@@ -48,7 +52,7 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
 
 export default function Players() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
+  const {currentGameState, currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
   const [deletedPlayer, setDeletedPlayer] = useState({
     player: null,
@@ -91,7 +95,7 @@ export default function Players() {
     }
   }
 
-  function handleRestorePlayer() {
+  function handleRestorePlayer(): void {
     if (deletedPlayer?.player) {
       setIsDeleteConfirmOpened(false);
       gamesContext.dispatch({ type: 'RESTORE_PLAYER', payload: {
@@ -100,6 +104,11 @@ export default function Players() {
         index: deletedPlayer.index
       } });
     }
+  }
+
+  function handleShuffleWondersClick(): void {
+    const players = getPlayersWithShuffledWonders(currentGameState.players, currentGameState.addons);
+    gamesContext.dispatch({ type: 'SET_PLAYERS', payload: {gameId: currentGameState.gameId, players }});
   }
 
   function handleCloseConfirm(event: React.SyntheticEvent | React.MouseEvent, reason?: string) {
@@ -186,13 +195,24 @@ export default function Players() {
         </Typography>
       ) : null}
 
-      <NewPlayer
-        names={currentGamePlayers.map(player => player.name)}
-        wonders={currentGameParams.wonders}
-        selectedWonders={currentGamePlayers.map(player => player.wonder)}
-        isMax={currentGamePlayers.length >= currentGameParams.maxPlayers}
-        onSubmit={handleSubmit}
-      />
+      <div className={classes.controls}>
+        <Button
+          variant="outlined"
+          color="primary"
+          aria-label="add"
+          startIcon={<Shuffle/>}
+          onClick={handleShuffleWondersClick}
+        >
+          {t('shuffleWonders')}
+        </Button>
+        <NewPlayer
+          names={currentGamePlayers.map(player => player.name)}
+          wonders={currentGameParams.wonders}
+          selectedWonders={currentGamePlayers.map(player => player.wonder)}
+          isMax={currentGamePlayers.length >= currentGameParams.maxPlayers}
+          onSubmit={handleSubmit}
+        />
+      </div>
 
       <Snackbar
         anchorOrigin={{

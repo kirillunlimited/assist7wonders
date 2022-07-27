@@ -104,7 +104,6 @@ const reducer = (state: GameState[], action: Action) => {
       return action.payload;
     case ADD_GAME:
       const { game } = action.payload;
-
       return [
         ...state,
         game,
