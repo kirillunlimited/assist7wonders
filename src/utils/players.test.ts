@@ -2,7 +2,7 @@ import {
   getAvatarText,
   getMaxPlayersByAddons,
   updatePlayersCount,
-  updateSelectedWonders,
+  getPlayersWithUpdatedWonders,
   getPlayersWithShuffledWonders,
 } from './players';
 import { BASE_GAME } from '../config/game';
@@ -57,9 +57,9 @@ describe('updatePlayersCount', () => {
   });
 });
 
-describe('updateSelectedWonders', () => {
+describe('getPlayersWithUpdatedWonders', () => {
   test('should return same players array', () => {
-    expect(updateSelectedWonders([
+    expect(getPlayersWithUpdatedWonders([
       {
         name: 'player1',
         wonder: 'wonder1',
@@ -85,7 +85,7 @@ describe('updateSelectedWonders', () => {
   });
 
   test('should return players array with changed wonders', () => {
-    const result = updateSelectedWonders([
+    const result = getPlayersWithUpdatedWonders([
       {
         name: 'player1',
         wonder: 'wonder1',

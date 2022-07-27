@@ -1,6 +1,6 @@
 import { GameState, Player, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
-import { getMaxPlayersByAddons, updateSelectedWonders, updatePlayersCount } from '../utils/players';
+import { getMaxPlayersByAddons, getPlayersWithUpdatedWonders, updatePlayersCount } from '../utils/players';
 import { getWondersByAddons } from '../utils/wonders';
 import  {getAllCounters} from '../utils/score'
 
@@ -116,7 +116,7 @@ const reducer = (state: GameState[], action: Action) => {
           const maxPlayers = getMaxPlayersByAddons(addons);
           return {
             ...game,
-            players: updateSelectedWonders(updatePlayersCount(game.players, maxPlayers), wonders),
+            players: getPlayersWithUpdatedWonders(updatePlayersCount(game.players, maxPlayers), wonders),
             addons,
             modified: Date.now(),
           }

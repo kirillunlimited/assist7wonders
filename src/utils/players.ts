@@ -1,5 +1,5 @@
 import { Player } from '../types';
-import { shuffleWonders, getWondersByAddons } from './wonders';
+import { shuffleWonders } from './wonders';
 import { ADDONS, BASE_GAME } from '../config/game';
 
 /* Get first 2 capital letters of the name */
@@ -28,7 +28,7 @@ export const updatePlayersCount = (players: Player[], maxPlayers: number): Playe
 };
 
 /** Change selected wonders if they are no longer available due to addons change */
-export const updateSelectedWonders = (players: Player[], wonders: string[]): Player[] => {
+export const getPlayersWithUpdatedWonders = (players: Player[], wonders: string[]): Player[] => {
   const selectedWonders = players.map(player => player.wonder);
   return [
     ...players.map(player => {
@@ -46,8 +46,7 @@ export const updateSelectedWonders = (players: Player[], wonders: string[]): Pla
   ];
 };
 
-export const getPlayersWithShuffledWonders = (players: Player[], addons: string[]): Player[] => {
-  const wonders = getWondersByAddons(addons);
+export const getPlayersWithShuffledWonders = (players: Player[], wonders: string[]): Player[] => {
   const shuffledWonders = shuffleWonders(wonders);
 
   return players.map((player, index) => {

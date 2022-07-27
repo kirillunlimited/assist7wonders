@@ -107,7 +107,7 @@ export default function Players() {
   }
 
   function handleShuffleWondersClick(): void {
-    const players = getPlayersWithShuffledWonders(currentGameState.players, currentGameState.addons);
+    const players = getPlayersWithShuffledWonders(currentGameState.players, currentGameParams.wonders);
     gamesContext.dispatch({ type: 'SET_PLAYERS', payload: {gameId: currentGameState.gameId, players }});
   }
 
