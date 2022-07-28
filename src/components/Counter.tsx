@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IconButton, Input } from '@material-ui/core';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { SCORE_ICONS } from '../utils/game';
+import { SCORE_ICONS } from '../utils/score';
 import { isMinValue, isMaxValue } from '../utils/score';
 
 export type Props = {

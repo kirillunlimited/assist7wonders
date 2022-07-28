@@ -5,13 +5,16 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import ROUTES from '../config/routes';
 import { Route } from '../types';
-import { GameContext, PlayersContext } from './App';
+import { CurrentGameContext } from './App';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
     },
+  },
+  tabs: {
+    height: '100%'
   },
   indicator: {
     backgroundColor: '#FFF',
@@ -29,8 +32,7 @@ export default function Navigation() {
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
-  const gameContext = useContext(GameContext);
-  const playersContext = useContext(PlayersContext);
+  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   function renderTabs(routes: Route[]): Array<React.ReactNode> {
@@ -39,7 +41,7 @@ export default function Navigation() {
         return renderTabs(route.routes);
       } else {
         const error =
-          route.error && route.error({ game: gameContext.state, players: playersContext.state });
+          route.error && route.error({ game: currentGameParams, players: currentGamePlayers });
         return error ? null : (
           <Tab
             key={route.id}
@@ -64,6 +66,7 @@ export default function Navigation() {
         classes={{
           indicator: classes.indicator,
         }}
+        className={classes.tabs}
         value={location.pathname}
         variant={bigScreen ? 'standard' : 'scrollable'}
         scrollButtons="auto"

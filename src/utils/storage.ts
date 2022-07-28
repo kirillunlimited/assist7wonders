@@ -1,35 +1,26 @@
 import { debounce } from 'debounce';
-import { Player } from '../types';
+import { GameState } from '../types';
+import { SAVE_TIMEOUT } from '../config/constants';
 
-const SAVE_TIMEOUT = 500;
+const GAMES_STORAGE_KEY = 'games';
 
-const saveToStorage = (key: string, data: Object) => {
+const saveToStorage = (key: string, data: string | Object) => {
+  if (typeof data === 'string') {
+    localStorage.setItem(key, data);
+    return;
+  }
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const savePlayersToStorage = debounce((players: Player[]) => {
-  saveToStorage('players', players);
+export const saveGamesToStorage = debounce((games: GameState[]) => {
+  saveToStorage(GAMES_STORAGE_KEY, games);
 }, SAVE_TIMEOUT);
 
-export const saveAddonsToStorage = debounce((addons: string[]) => {
-  saveToStorage('addons', addons);
-}, SAVE_TIMEOUT);
+export const getGamesFromStorage = (): GameState[] => {
+  const gamesString = localStorage.getItem(GAMES_STORAGE_KEY);
 
-export function getPlayersFromStorage(): Player[] {
-  const playersString = localStorage.getItem('players');
-
-  if (playersString) {
-    return JSON.parse(playersString);
-  }
-
-  return [];
-}
-
-export function getAddonsFromStorage(): string[] {
-  const addonsString = localStorage.getItem('addons');
-
-  if (addonsString) {
-    return JSON.parse(addonsString);
+  if (gamesString) {
+    return JSON.parse(gamesString);
   }
 
   return [];

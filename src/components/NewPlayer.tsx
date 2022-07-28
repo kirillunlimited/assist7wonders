@@ -13,7 +13,7 @@ import { Close, PersonAdd } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import WonderSelect from './WonderSelect';
 import { useTranslation } from 'react-i18next';
-import { shuffleWonders } from '../utils/game';
+import { shuffleWonders } from '../utils/wonders';
 
 export type Props = {
   names: string[];

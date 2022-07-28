@@ -1,34 +1,32 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState, useMemo } from 'react';
 import Layout from '../components/Layout';
 import RouteWrapper from '../components/RouteWrapper';
 import MainMenu from './MainMenu';
 import Navigation from './Navigation';
 import Router from './Router';
-import {
-  savePlayersToStorage,
-  saveAddonsToStorage,
-  getPlayersFromStorage,
-  getAddonsFromStorage,
-} from '../utils/storage';
-import playersReducer, { Action as PlayersAction } from '../reducers/players';
-import gamesReducer, { Action as GameAction } from '../reducers/game';
-import { Player, Game } from '../types';
-import { GAME_BOILERPLATE } from '../config/game';
+import NewGame from './NewGame';
+import AddonsMenu from './AddonsMenu';
+import LanguageMenu from './LanguageMenu';
+import { CircularProgress } from '@material-ui/core';
+
+import gamesReducer, { Action as GamesAction } from '../reducers/games';
+import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
 import { makeStyles } from '@material-ui/core/styles';
+import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/games';
+import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
-type PlayersContextProps = {
-  state: Player[];
-  dispatch: (action: PlayersAction) => void;
-};
+type GamesContextProps = {
+  state: GameState[];
+  dispatch: (action: GamesAction) => void;
+}
 
-type GameContextProps = {
-  state: Game;
-  dispatch: (action: GameAction) => void;
-};
-
-export const PlayersContext = React.createContext({} as PlayersContextProps);
-export const GameContext = React.createContext({} as GameContextProps);
+export const GamesContext = React.createContext({} as GamesContextProps);
+export const CurrentGameContext = React.createContext({} as {
+  currentGameState: GameState,
+  currentGameParams: GameParams,
+  currentGamePlayers: Player[]
+});
 
 const useStyles = makeStyles({
   app: {
@@ -36,55 +34,74 @@ const useStyles = makeStyles({
     height: '100%',
     textAlign: 'center',
   },
+  loading: {
+    alignItems: 'center'
+  },
+  loader: {
+    margin: '0 auto'
+  }
 });
 
 export default function App() {
-  const [game, gameDispatch] = useReducer(gamesReducer, GAME_BOILERPLATE);
-  const [players, playersDispatch] = useReducer(playersReducer, []);
-  const [isReady, setIsReady] = useState(false);
+  const [games, gamesDispatch] = useReducer(gamesReducer, []);
+  const [isReady, setIsReady] = useState(false)
   const classes = useStyles();
 
-  useEffect(() => {
-    savePlayersToStorage(players);
-  }, [players]);
+  const lastGameState = useMemo(() => getLastGameState(games), [games]);
+  const lastGameParams = useMemo(() => getGameParamsByGameState(lastGameState), [lastGameState]);
+  const lastGamePlayers = useMemo(() => lastGameState.players, [lastGameState]);
 
   useEffect(() => {
-    saveAddonsToStorage(game.addons);
-    playersDispatch({ type: 'GAME_UPDATE', payload: game });
-  }, [game]);
+    /** Restore last games */
+    const savedGames = getGamesFromStorage();
+    gamesDispatch({ type: 'SET_GAMES', payload: savedGames});
 
-  useEffect(() => {
-    initGame();
-    initPlayers();
+    /** Init games array in storage if there was no data */
+    if (!savedGames.length) {
+      startNewGame();
+    }
+
     setIsReady(true);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function initGame(): void {
-    const addons = getAddonsFromStorage();
-    gameDispatch({ type: 'UPDATE', payload: { addons } });
-  }
+  useEffect(() => {
+    if (isReady) {
+      saveGamesToStorage(games);
+    }
+  }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function initPlayers(): void {
-    playersDispatch({ type: 'SET', payload: getPlayersFromStorage() });
+
+  function startNewGame() {
+    const gameId = Date.now();
+    const newGame = getNewGameByLastGame(gameId, lastGameState);
+    gamesDispatch({ type: 'ADD_GAME', payload: {
+      game: newGame,
+    }});
   }
 
   return (
-    <div className={classes.app}>
-      <GameContext.Provider value={{ state: game, dispatch: gameDispatch }}>
-        <PlayersContext.Provider value={{ state: players, dispatch: playersDispatch }}>
-          {isReady && (
-            <Layout>
-              <>
-                <Navigation />
-                <MainMenu />
-                <RouteWrapper>
-                  <Router routes={ROUTES} />
-                </RouteWrapper>
-              </>
-            </Layout>
-          )}
-        </PlayersContext.Provider>
-      </GameContext.Provider>
+    <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
+      <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
+        <CurrentGameContext.Provider value={{
+          currentGameState: lastGameState,
+          currentGameParams: lastGameParams,
+          currentGamePlayers: lastGamePlayers
+        }}>
+          <Layout>
+            {isReady ? <>
+              <Navigation />
+              <MainMenu>
+                <NewGame />
+                <AddonsMenu />
+                <LanguageMenu />
+              </MainMenu>
+              <RouteWrapper>
+                <Router routes={ROUTES} />
+              </RouteWrapper>
+            </> : <CircularProgress className={classes.loader}/>}
+          </Layout>
+        </CurrentGameContext.Provider>
+      </GamesContext.Provider>
     </div>
   );
 }

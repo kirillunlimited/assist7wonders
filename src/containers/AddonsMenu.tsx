@@ -4,7 +4,7 @@ import { Extension } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { ADDONS } from '../config/game';
-import { GameContext } from './App';
+import { GamesContext, CurrentGameContext } from './App';
 
 const useStyles = makeStyles({
   checkbox: {
@@ -13,7 +13,8 @@ const useStyles = makeStyles({
 });
 
 export default function MainMenu() {
-  const gameContext = useContext(GameContext);
+  const gamesContext = useContext(GamesContext);
+  const {currentGameParams} = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const { t } = useTranslation();
@@ -26,13 +27,18 @@ export default function MainMenu() {
     setAnchorEl(null);
   }
 
-  function handleMenuItemClick(event: React.MouseEvent, addon: string, isAdd: boolean) {
-    const selectedAddons = gameContext.state.addons;
-    gameContext.dispatch({
-      type: 'UPDATE',
-      payload: isAdd
-        ? { addons: [...selectedAddons, addon] }
-        : { addons: selectedAddons.filter(selectedAddon => selectedAddon !== addon) },
+  function handleMenuItemClick(_: React.MouseEvent, addon: string, isAdd: boolean) {
+    if (!currentGameParams) {
+      return;
+    }
+    const selectedAddons = currentGameParams?.addons || [];
+    const addons = isAdd ? [...selectedAddons, addon] : selectedAddons.filter(selectedAddon => selectedAddon !== addon)
+    gamesContext.dispatch({
+      type: 'UPDATE_ADDONS',
+      payload: {
+        gameId: currentGameParams?.gameId,
+        addons,
+      }
     });
   }
 
@@ -53,14 +59,14 @@ export default function MainMenu() {
           <MenuItem
             key={addon.name}
             onClick={e =>
-              handleMenuItemClick(e, addon.name, !gameContext.state.addons.includes(addon.name))
+              handleMenuItemClick(e, addon.name, !currentGameParams?.addons?.includes(addon.name))
             }
           >
             <Checkbox
               classes={{
                 root: classes.checkbox,
               }}
-              checked={gameContext.state.addons.includes(addon.name)}
+              checked={currentGameParams?.addons?.includes(addon.name)}
             />
             {t(addon.name)}
           </MenuItem>

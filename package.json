@@ -1,6 +1,6 @@
 {
   "name": "assist7wonders",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -13,12 +13,14 @@
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
     "debounce": "^1.2.0",
+    "firebase": "^8.9.1",
     "i18next": "^19.8.9",
     "i18next-browser-languagedetector": "^6.0.1",
     "lodash.shuffle": "^4.2.0",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
+    "react-firebaseui": "^5.0.2",
     "react-i18next": "^11.8.7",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
@@ -33,7 +35,7 @@
     "deploy": "npm run build && firebase deploy",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage --coverageDirectory='coverage'",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "proxy": "http://localhost:5000",

@@ -1,13 +1,14 @@
 /** GAME */
-export type CoreGame = {
+export type CoreGameParams = {
   maxPlayers: number;
   wonders: string[];
   scores: GameScore[];
 };
-export type Game = CoreGame & {
+export type GameParams = CoreGameParams & {
+  gameId: number;
   addons: string[];
 };
-export type AddonGame = CoreGame & {
+export type AddonGameParams = CoreGameParams & {
   name: string;
 };
 export type GameScore = {
@@ -21,6 +22,13 @@ export type GameScore = {
   sum?: (score: PlayerScore, neighborScores: PlayerScore[]) => GameScoreSumResult;
 };
 export type GameScoreSumResult = { result: number; calculations: string };
+
+export type GameState = {
+  gameId: number;
+  addons: string[];
+  players: Player[];
+  modified: number;
+};
 
 /** PLAYERS */
 export type Player = {
@@ -41,5 +49,12 @@ export type Route = {
   routes?: Route[];
   color?: string;
   component: Function;
-  error?: ({ game, players }: { game: Game; players: Player[] }) => string;
+  error?: ({ game, players }: { game: GameParams; players: Player[] }) => string;
+};
+
+/** USER */
+export type User = {
+  uid: string;
+  email?: string | null;
+  displayName?: string | null;
 };
