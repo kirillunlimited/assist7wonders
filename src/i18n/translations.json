@@ -31,6 +31,7 @@
       "naval": "Naval conflicts",
       "newGame": "New game",
       "newPlayer": "New player",
+      "newVersion": "A new version is available",
       "no": "No",
       "notEnoughPlayers": "Not enough players: add at least 2 players",
       "military": "Military conflicts",
@@ -47,6 +48,7 @@
       "startNewGameDescription": "Results will be reset and selected wonders will be shuffled. Are you sure?",
       "total": "Total",
       "treasury": "Treasury",
+      "update": "Update",
       "wonder": "Wonder",
       "wonders": "Wonders",
       "yes": "Yes"
@@ -84,6 +86,7 @@
       "naval": "Морские конфликты",
       "newGame": "Новая игра",
       "newPlayer": "Новый игрок",
+      "newVersion": "Доступна новая версия",
       "no": "Нет",
       "notEnoughPlayers": "Недостаточно игроков: добавьте не менее 2 игроков",
       "military": "Военные конфликты",
@@ -100,6 +103,7 @@
       "startNewGameDescription": "Результаты игроков будут сброшены, а выбранные чудеса света будут перемешаны. Вы уверены?",
       "total": "Итоги",
       "treasury": "Сокровища",
+      "update": "Обновить",
       "wonder": "Чудо света",
       "wonders": "Чудеса света",
       "yes": "Да"
@@ -132,6 +136,7 @@
       "naval": "Conflitti navali",
       "newGame": "Nuova partita",
       "newPlayer": "Nuovo giocatore",
+      "newVersion": "È disponibile una nuova versione",
       "no": "No",
       "notEnoughPlayers": "Numero di giocatori insufficiente: aggiungere almeno due giocatori",
       "military": "Conflitti militari",
@@ -148,6 +153,7 @@
       "startNewGameDescription": "I punteggi verranno azzerati e le meraviglie selezionate verranno rimescolate. Continuare?",
       "total": "Totale",
       "treasury": "Tesoro",
+      "update": "Update",
       "wonder": "Meraviglia",
       "wonders": "Meraviglie",
       "yes": "Si"

@@ -8,6 +8,7 @@ import NewGame from './NewGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import { CircularProgress } from '@material-ui/core';
+import VersionControl from './VersionControl';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
@@ -102,6 +103,7 @@ export default function App() {
           </Layout>
         </CurrentGameContext.Provider>
       </GamesContext.Provider>
+      <VersionControl/>
     </div>
   );
 }
