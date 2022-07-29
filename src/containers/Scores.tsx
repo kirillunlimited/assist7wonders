@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   tr: {
     '&:last-child td': {
       borderBottom: 'none',
-    }
+    },
   },
   td: {
     '&:first-child': {
@@ -35,11 +35,14 @@ const useStyles = makeStyles({
 
 export default function Scores(props: Props) {
   const gamesContext = useContext(GamesContext);
-  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
+  const { currentGameParams, currentGamePlayers } = useContext(CurrentGameContext);
   const classes = useStyles();
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
-    gamesContext.dispatch({ type: 'SET_PLAYER_SCORE', payload: { gameId: currentGameParams.gameId, name, scoreKey, value } });
+    gamesContext.dispatch({
+      type: 'SET_PLAYER_SCORE',
+      payload: { gameId: currentGameParams.gameId, name, scoreKey, value },
+    });
   }
 
   function getSum(player: Player, players: Player[], playerIndex: number): GameScoreSumResult {

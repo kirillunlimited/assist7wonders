@@ -5,5 +5,5 @@ export const FIREBASE_CONFIG = {
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-}
+};
 export const SAVE_TIMEOUT = 500;

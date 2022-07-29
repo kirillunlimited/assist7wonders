@@ -457,7 +457,7 @@ describe('getNeighborScores', () => {
         tablets: 1,
         treasury: 1,
         wonders: 1,
-      }
+      },
     ]);
   });
 
@@ -535,7 +535,7 @@ describe('getNeighborScores', () => {
         tablets: 1,
         treasury: 3,
         wonders: 10,
-      }
+      },
     ]);
   });
 });

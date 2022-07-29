@@ -16,7 +16,7 @@ import { GamesContext, CurrentGameContext } from './App';
 
 export default function NewGame() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameState} = useContext(CurrentGameContext);
+  const { currentGameState } = useContext(CurrentGameContext);
   const [isConfirmOpened, setIsConfirmOpened] = useState(false);
   const { t } = useTranslation();
 
@@ -35,7 +35,7 @@ export default function NewGame() {
       type: 'ADD_GAME',
       payload: {
         game: newGame,
-      }
+      },
     });
     handleCloseConfirm();
   }

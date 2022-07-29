@@ -52,7 +52,8 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
 
 export default function Players() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameState, currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
+  const { currentGameState, currentGameParams, currentGamePlayers } =
+    useContext(CurrentGameContext);
   const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
   const [deletedPlayer, setDeletedPlayer] = useState({
     player: null,
@@ -62,11 +63,14 @@ export default function Players() {
   const { t } = useTranslation();
 
   function handleSubmit(name: string, wonder: string) {
-    gamesContext.dispatch({ type: 'ADD_PLAYER', payload: {
-      gameId: currentGameParams?.gameId,
-      name,
-      wonder
-    } });
+    gamesContext.dispatch({
+      type: 'ADD_PLAYER',
+      payload: {
+        gameId: currentGameParams?.gameId,
+        name,
+        wonder,
+      },
+    });
   }
 
   function handleDeletePlayer(name: string) {
@@ -87,10 +91,11 @@ export default function Players() {
       setIsDeleteConfirmOpened(true);
 
       gamesContext.dispatch({
-        type: 'DELETE_PLAYER', payload: {
+        type: 'DELETE_PLAYER',
+        payload: {
           gameId: currentGameParams?.gameId,
-          name
-        }
+          name,
+        },
       });
     }
   }
@@ -98,17 +103,26 @@ export default function Players() {
   function handleRestorePlayer(): void {
     if (deletedPlayer?.player) {
       setIsDeleteConfirmOpened(false);
-      gamesContext.dispatch({ type: 'RESTORE_PLAYER', payload: {
-        gameId: currentGameParams?.gameId,
-        player: deletedPlayer.player,
-        index: deletedPlayer.index
-      } });
+      gamesContext.dispatch({
+        type: 'RESTORE_PLAYER',
+        payload: {
+          gameId: currentGameParams?.gameId,
+          player: deletedPlayer.player,
+          index: deletedPlayer.index,
+        },
+      });
     }
   }
 
   function handleShuffleWondersClick(): void {
-    const players = getPlayersWithShuffledWonders(currentGameState.players, currentGameParams.wonders);
-    gamesContext.dispatch({ type: 'SET_PLAYERS', payload: {gameId: currentGameState.gameId, players }});
+    const players = getPlayersWithShuffledWonders(
+      currentGameState.players,
+      currentGameParams.wonders
+    );
+    gamesContext.dispatch({
+      type: 'SET_PLAYERS',
+      payload: { gameId: currentGameState.gameId, players },
+    });
   }
 
   function handleCloseConfirm(event: React.SyntheticEvent | React.MouseEvent, reason?: string) {
@@ -119,7 +133,10 @@ export default function Players() {
   }
 
   function handleWonderChange(name: string, wonder: string) {
-    gamesContext.dispatch({ type: 'SET_PLAYER_WONDER', payload: { gameId: currentGameParams.gameId, name, wonder } });
+    gamesContext.dispatch({
+      type: 'SET_PLAYER_WONDER',
+      payload: { gameId: currentGameParams.gameId, name, wonder },
+    });
   }
 
   function onDragEnd(result: DropResult): void {
@@ -135,10 +152,11 @@ export default function Players() {
     );
 
     gamesContext.dispatch({
-      type: 'SET_PLAYERS', payload: {
+      type: 'SET_PLAYERS',
+      payload: {
         gameId: currentGameParams.gameId,
-        players: reorderedPlayers
-      }
+        players: reorderedPlayers,
+      },
     });
   }
 
@@ -200,7 +218,7 @@ export default function Players() {
           variant="outlined"
           color="primary"
           aria-label="add"
-          startIcon={<Shuffle/>}
+          startIcon={<Shuffle />}
           onClick={handleShuffleWondersClick}
         >
           {t('shuffleWonders')}

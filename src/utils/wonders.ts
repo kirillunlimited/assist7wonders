@@ -12,4 +12,4 @@ export const getWondersByAddons = (gameAddons: string[]): string[] => {
   }, [] as string[]);
 
   return [...BASE_GAME.wonders, ...addonWonders];
-}
+};

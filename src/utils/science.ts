@@ -188,9 +188,10 @@ export function getMaskPossibilities(
   return possibilities;
 }
 
-export function getBestSciencePossibility(
-  possibilities: number[][]
-): { result: number; possibility: number[] } {
+export function getBestSciencePossibility(possibilities: number[][]): {
+  result: number;
+  possibility: number[];
+} {
   return possibilities.reduce(
     (bestPossibility, possibility) => {
       const result = getScienceScore(possibility);

@@ -24,4 +24,4 @@ export const getGamesFromStorage = (): GameState[] => {
   }
 
   return [];
-}
+};

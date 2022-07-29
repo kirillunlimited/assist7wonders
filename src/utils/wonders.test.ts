@@ -1,7 +1,4 @@
-import {
-  shuffleWonders,
-  getWondersByAddons,
-} from './wonders';
+import { shuffleWonders, getWondersByAddons } from './wonders';
 import { BASE_GAME } from '../config/game';
 import cities from '../config/addons/cities';
 import leaders from '../config/addons/leaders';
@@ -25,6 +22,10 @@ describe('getWondersByAddons', () => {
   });
   test('should return proper wonders array', () => {
     expect(getWondersByAddons([leaders.name])).toEqual([...BASE_GAME.wonders, ...leaders.wonders]);
-    expect(getWondersByAddons([leaders.name, cities.name])).toEqual([...BASE_GAME.wonders, ...leaders.wonders, ...cities.wonders]);
+    expect(getWondersByAddons([leaders.name, cities.name])).toEqual([
+      ...BASE_GAME.wonders,
+      ...leaders.wonders,
+      ...cities.wonders,
+    ]);
   });
 });

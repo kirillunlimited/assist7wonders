@@ -20,14 +20,16 @@ import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 type GamesContextProps = {
   state: GameState[];
   dispatch: (action: GamesAction) => void;
-}
+};
 
 export const GamesContext = React.createContext({} as GamesContextProps);
-export const CurrentGameContext = React.createContext({} as {
-  currentGameState: GameState,
-  currentGameParams: GameParams,
-  currentGamePlayers: Player[]
-});
+export const CurrentGameContext = React.createContext(
+  {} as {
+    currentGameState: GameState;
+    currentGameParams: GameParams;
+    currentGamePlayers: Player[];
+  }
+);
 
 const useStyles = makeStyles({
   app: {
@@ -36,16 +38,16 @@ const useStyles = makeStyles({
     textAlign: 'center',
   },
   loading: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   loader: {
-    margin: '0 auto'
-  }
+    margin: '0 auto',
+  },
 });
 
 export default function App() {
   const [games, gamesDispatch] = useReducer(gamesReducer, []);
-  const [isReady, setIsReady] = useState(false)
+  const [isReady, setIsReady] = useState(false);
   const classes = useStyles();
 
   const lastGameState = useMemo(() => getLastGameState(games), [games]);
@@ -55,7 +57,7 @@ export default function App() {
   useEffect(() => {
     /** Restore last games */
     const savedGames = getGamesFromStorage();
-    gamesDispatch({ type: 'SET_GAMES', payload: savedGames});
+    gamesDispatch({ type: 'SET_GAMES', payload: savedGames });
 
     /** Init games array in storage if there was no data */
     if (!savedGames.length) {
@@ -71,39 +73,47 @@ export default function App() {
     }
   }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
 
-
   function startNewGame() {
     const gameId = Date.now();
     const newGame = getNewGameByLastGame(gameId, lastGameState);
-    gamesDispatch({ type: 'ADD_GAME', payload: {
-      game: newGame,
-    }});
+    gamesDispatch({
+      type: 'ADD_GAME',
+      payload: {
+        game: newGame,
+      },
+    });
   }
 
   return (
     <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-        <CurrentGameContext.Provider value={{
-          currentGameState: lastGameState,
-          currentGameParams: lastGameParams,
-          currentGamePlayers: lastGamePlayers
-        }}>
+        <CurrentGameContext.Provider
+          value={{
+            currentGameState: lastGameState,
+            currentGameParams: lastGameParams,
+            currentGamePlayers: lastGamePlayers,
+          }}
+        >
           <Layout>
-            {isReady ? <>
-              <Navigation />
-              <MainMenu>
-                <NewGame />
-                <AddonsMenu />
-                <LanguageMenu />
-              </MainMenu>
-              <RouteWrapper>
-                <Router routes={ROUTES} />
-              </RouteWrapper>
-            </> : <CircularProgress className={classes.loader}/>}
+            {isReady ? (
+              <>
+                <Navigation />
+                <MainMenu>
+                  <NewGame />
+                  <AddonsMenu />
+                  <LanguageMenu />
+                </MainMenu>
+                <RouteWrapper>
+                  <Router routes={ROUTES} />
+                </RouteWrapper>
+              </>
+            ) : (
+              <CircularProgress className={classes.loader} />
+            )}
           </Layout>
         </CurrentGameContext.Provider>
       </GamesContext.Provider>
-      <VersionControl/>
+      <VersionControl />
     </div>
   );
 }

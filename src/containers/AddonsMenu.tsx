@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 export default function MainMenu() {
   const gamesContext = useContext(GamesContext);
-  const {currentGameParams} = useContext(CurrentGameContext);
+  const { currentGameParams } = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const { t } = useTranslation();
@@ -32,13 +32,15 @@ export default function MainMenu() {
       return;
     }
     const selectedAddons = currentGameParams?.addons || [];
-    const addons = isAdd ? [...selectedAddons, addon] : selectedAddons.filter(selectedAddon => selectedAddon !== addon)
+    const addons = isAdd
+      ? [...selectedAddons, addon]
+      : selectedAddons.filter(selectedAddon => selectedAddon !== addon);
     gamesContext.dispatch({
       type: 'UPDATE_ADDONS',
       payload: {
         gameId: currentGameParams?.gameId,
         addons,
-      }
+      },
     });
   }
 

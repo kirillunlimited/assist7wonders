@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '48px'
+    height: '48px',
   },
   head: {
     backgroundColor: '#eee',
@@ -106,11 +106,19 @@ export default function Results(props: Props) {
   }
 
   function getGameDate(ms: number): string {
-    const userLocale = navigator.languages && navigator.languages.length
-      ? navigator.languages[0]
-      : navigator.language;
+    const userLocale =
+      navigator.languages && navigator.languages.length
+        ? navigator.languages[0]
+        : navigator.language;
     const date = new Date(ms);
-    const dateString = date.toLocaleString(userLocale, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    const dateString = date.toLocaleString(userLocale, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
     return dateString;
   }
 
@@ -124,13 +132,15 @@ export default function Results(props: Props) {
 
   return (
     <div className={props.className}>
-       <header className={classes.header}>
-         <Typography variant="body2">{getGameDate(props.modified)}</Typography>
-        {props.onDelete && <Tooltip title={t('deleteGame') || ''}>
-        <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
-          <Delete />
-        </IconButton>
-      </Tooltip>}
+      <header className={classes.header}>
+        <Typography variant="body2">{getGameDate(props.modified)}</Typography>
+        {props.onDelete && (
+          <Tooltip title={t('deleteGame') || ''}>
+            <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        )}
       </header>
       <TableContainer>
         <Table>
@@ -150,7 +160,9 @@ export default function Results(props: Props) {
           <TableBody>
             {props.players.map((player, playerIndex) => (
               <TableRow key={playerIndex}>
-                <TableCell className={classes.medal}>{winner === player.name ? '🏆' : ''}</TableCell>
+                <TableCell className={classes.medal}>
+                  {winner === player.name ? '🏆' : ''}
+                </TableCell>
                 <TableCell>
                   <Typography variant="body2">{player.name}</Typography>
                   <Typography variant="caption" color="textSecondary">
@@ -174,10 +186,8 @@ export default function Results(props: Props) {
         <DialogTitle disableTypography>
           <Typography variant="h6"> {t('deleteGame')}</Typography>
         </DialogTitle>
-          <DialogContent>
-            {t('deleteGameDescription')}
-          </DialogContent>
-          <DialogActions>
+        <DialogContent>{t('deleteGameDescription')}</DialogContent>
+        <DialogActions>
           <Button onClick={() => toggleDialog(false)} color="primary">
             {t('no')}
           </Button>

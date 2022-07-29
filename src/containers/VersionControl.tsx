@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     position: 'absolute',
     bottom: '8px',
     right: '8px',
-  }
+  },
 });
 
 export default function VersionControl() {
@@ -18,11 +18,14 @@ export default function VersionControl() {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const onSWUpdate = useCallback((registration: ServiceWorkerRegistration) => {
-    setShowReload(true);
-    setWaitingWorker(registration.waiting);
-    waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
-  }, [waitingWorker]);
+  const onSWUpdate = useCallback(
+    (registration: ServiceWorkerRegistration) => {
+      setShowReload(true);
+      setWaitingWorker(registration.waiting);
+      waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
+    },
+    [waitingWorker]
+  );
 
   useEffect(() => {
     serviceWorkerRegistration.register({ onUpdate: onSWUpdate });
@@ -33,7 +36,7 @@ export default function VersionControl() {
     waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
     setShowReload(false);
     window.location.reload();
-  };
+  }
 
   return (
     <div>
@@ -46,16 +49,14 @@ export default function VersionControl() {
         message={t('newVersion')}
         onClick={reloadPage}
         action={
-          <Button
-            color="inherit"
-            size="small"
-            onClick={reloadPage}
-          >
+          <Button color="inherit" size="small" onClick={reloadPage}>
             {t('update')}
           </Button>
         }
       />
-      <Typography className={classes.version} variant='caption'>{process.env.REACT_APP_VERSION}</Typography>
+      <Typography className={classes.version} variant="caption">
+        {process.env.REACT_APP_VERSION}
+      </Typography>
     </div>
   );
 }

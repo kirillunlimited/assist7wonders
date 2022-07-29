@@ -20,7 +20,7 @@ export const getMaxPlayersByAddons = (gameAddons: string[]): number => {
     }
     return max;
   }, 0);
-}
+};
 
 /** Slice extra players if new limit is less than before */
 export const updatePlayersCount = (players: Player[], maxPlayers: number): Player[] => {
@@ -53,6 +53,6 @@ export const getPlayersWithShuffledWonders = (players: Player[], wonders: string
     return {
       ...player,
       wonder: shuffledWonders[index],
-    }
+    };
   });
-}
+};

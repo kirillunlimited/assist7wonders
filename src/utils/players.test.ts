@@ -35,31 +35,51 @@ describe('updatePlayersCount', () => {
     expect(updatePlayersCount([], 0)).toEqual([]);
   });
   test('should slice players array', () => {
-    expect(updatePlayersCount([
+    expect(
+      updatePlayersCount(
+        [
+          {
+            name: 'player1',
+            wonder: 'wonder1',
+            score: {},
+          },
+          {
+            name: 'player2',
+            wonder: 'wonder2',
+            score: {},
+          },
+        ],
+        1
+      )
+    ).toEqual([
       {
         name: 'player1',
         wonder: 'wonder1',
         score: {},
       },
-      {
-        name: 'player2',
-        wonder: 'wonder2',
-        score: {},
-      }
-    ], 1))
-    .toEqual([
-      {
-        name: 'player1',
-        wonder: 'wonder1',
-        score: {},
-      }
     ]);
   });
 });
 
 describe('getPlayersWithUpdatedWonders', () => {
   test('should return same players array', () => {
-    expect(getPlayersWithUpdatedWonders([
+    expect(
+      getPlayersWithUpdatedWonders(
+        [
+          {
+            name: 'player1',
+            wonder: 'wonder1',
+            score: {},
+          },
+          {
+            name: 'player2',
+            wonder: 'wonder2',
+            score: {},
+          },
+        ],
+        ['wonder1', 'wonder2']
+      )
+    ).toEqual([
       {
         name: 'player1',
         wonder: 'wonder1',
@@ -69,34 +89,26 @@ describe('getPlayersWithUpdatedWonders', () => {
         name: 'player2',
         wonder: 'wonder2',
         score: {},
-      }
-    ], ['wonder1', 'wonder2'])).toEqual([
-      {
-        name: 'player1',
-        wonder: 'wonder1',
-        score: {},
       },
-      {
-        name: 'player2',
-        wonder: 'wonder2',
-        score: {},
-      }
-    ])
+    ]);
   });
 
   test('should return players array with changed wonders', () => {
-    const result = getPlayersWithUpdatedWonders([
-      {
-        name: 'player1',
-        wonder: 'wonder1',
-        score: {},
-      },
-      {
-        name: 'player2',
-        wonder: 'wonder2',
-        score: {},
-      }
-    ], ['wonder3', 'wonder4']);
+    const result = getPlayersWithUpdatedWonders(
+      [
+        {
+          name: 'player1',
+          wonder: 'wonder1',
+          score: {},
+        },
+        {
+          name: 'player2',
+          wonder: 'wonder2',
+          score: {},
+        },
+      ],
+      ['wonder3', 'wonder4']
+    );
 
     expect(result[0].wonder).not.toEqual('wonder1');
     expect(result[1].wonder).not.toEqual('wonder2');
@@ -108,18 +120,21 @@ describe('getPlayersWithShuffledWonders', () => {
     expect(getPlayersWithShuffledWonders([], [])).toEqual([]);
   });
   test('should shuffle selected wonders', () => {
-    const result = getPlayersWithShuffledWonders([
-      {
-        name: 'player1',
-        wonder: BASE_GAME.wonders[0],
-        score: {},
-      },
-      {
-        name: 'player2',
-        wonder: BASE_GAME.wonders[1],
-        score: {},
-      }
-    ], BASE_GAME.wonders);
+    const result = getPlayersWithShuffledWonders(
+      [
+        {
+          name: 'player1',
+          wonder: BASE_GAME.wonders[0],
+          score: {},
+        },
+        {
+          name: 'player2',
+          wonder: BASE_GAME.wonders[1],
+          score: {},
+        },
+      ],
+      BASE_GAME.wonders
+    );
     const shuffledWonders = result.map(player => player.wonder);
     expect(BASE_GAME.wonders).toContain(shuffledWonders[0]);
     expect(BASE_GAME.wonders).toContain(shuffledWonders[1]);

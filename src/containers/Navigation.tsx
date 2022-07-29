@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   tabs: {
-    height: '100%'
+    height: '100%',
   },
   indicator: {
     backgroundColor: '#FFF',
@@ -32,7 +32,7 @@ export default function Navigation() {
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
-  const {currentGameParams, currentGamePlayers} = useContext(CurrentGameContext);
+  const { currentGameParams, currentGamePlayers } = useContext(CurrentGameContext);
   const { t } = useTranslation();
 
   function renderTabs(routes: Route[]): Array<React.ReactNode> {

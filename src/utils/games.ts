@@ -1,26 +1,26 @@
 import { PlayerScore, GameScore, GameState, GameParams } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
-import {mergeScores} from './score';
-import {getWondersByAddons, shuffleWonders} from './wonders';
-import {getMaxPlayersByAddons} from './players';
+import { mergeScores } from './score';
+import { getWondersByAddons, shuffleWonders } from './wonders';
+import { getMaxPlayersByAddons } from './players';
 
-export const emptyGameState =  {
-    gameId: Date.now(),
-    modified: Date.now(),
-    players: [],
-    addons: [],
-  };
+export const emptyGameState = {
+  gameId: Date.now(),
+  modified: Date.now(),
+  players: [],
+  addons: [],
+};
 
 export const getLastGameState = (games: GameState[]): GameState => {
   const game = games.reduce((prev: GameState | null, current: GameState) => {
     if (!prev) {
       return current;
     }
-    return (prev.gameId > current.gameId) ? prev : current;
+    return prev.gameId > current.gameId ? prev : current;
   }, null);
 
   return game || emptyGameState;
-}
+};
 
 export const getGameParamsByGameState = (game: GameState): GameParams => {
   const gameAddons = game.addons;
@@ -39,7 +39,7 @@ export const getGameParamsByGameState = (game: GameState): GameParams => {
     wonders,
     scores: mergeScores([...BASE_GAME.scores, ...addonScores]),
   };
-}
+};
 
 /** Take params from last game or set it empty */
 export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameState => {
@@ -55,14 +55,14 @@ export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameS
         return {
           ...acc,
           [counterKey]: 0,
-        }
+        };
       }, {} as PlayerScore),
-    }
+    };
   });
 
   const params = {
     addons,
-    players
+    players,
   };
 
   return {
@@ -70,4 +70,4 @@ export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameS
     gameId,
     modified: gameId,
   };
-}
+};

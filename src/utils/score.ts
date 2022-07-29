@@ -1,5 +1,12 @@
 import { getScienceTotal } from './science';
-import { AddonGameParams, Player, PlayerScoreKey, PlayerScore, GameScore, GameScoreSumResult } from '../types';
+import {
+  AddonGameParams,
+  Player,
+  PlayerScoreKey,
+  PlayerScore,
+  GameScore,
+  GameScoreSumResult,
+} from '../types';
 import compass from '../img/compass.png';
 import tablets from '../img/tablets.png';
 import gears from '../img/gears.png';

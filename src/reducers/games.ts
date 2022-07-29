@@ -1,8 +1,12 @@
 import { GameState, Player, PlayerScoreKey } from '../types';
 import { ADDONS, BASE_GAME } from '../config/game';
-import { getMaxPlayersByAddons, getPlayersWithUpdatedWonders, updatePlayersCount } from '../utils/players';
+import {
+  getMaxPlayersByAddons,
+  getPlayersWithUpdatedWonders,
+  updatePlayersCount,
+} from '../utils/players';
 import { getWondersByAddons } from '../utils/wonders';
-import  {getAllCounters} from '../utils/score'
+import { getAllCounters } from '../utils/score';
 
 const counters = getAllCounters([BASE_GAME, ...ADDONS]);
 
@@ -31,15 +35,15 @@ type AddGameAction = {
   payload: {
     game: GameState;
   };
-}
+};
 
 type UpdateAddonsAction = {
   type: typeof UPDATE_ADDONS;
   payload: {
     gameId: number;
     addons: string[];
-  }
-}
+  };
+};
 
 type AddPlayerAction = {
   type: typeof ADD_PLAYER;
@@ -48,15 +52,15 @@ type AddPlayerAction = {
     name: string;
     wonder: string;
   };
-}
+};
 
 type SetPlayersAction = {
   type: typeof SET_PLAYERS;
   payload: {
     gameId: number;
-    players: Player[]
-  }
-}
+    players: Player[];
+  };
+};
 
 type DeletePlayerAction = {
   type: typeof DELETE_PLAYER;
@@ -64,7 +68,7 @@ type DeletePlayerAction = {
     gameId: number;
     name: string;
   };
-}
+};
 
 type RestorePlayerAction = {
   type: typeof RESTORE_PLAYER;
@@ -72,8 +76,8 @@ type RestorePlayerAction = {
     gameId: number;
     player: Player;
     index: number;
-  }
-}
+  };
+};
 
 type SetPlayerScoreAction = {
   type: typeof SET_PLAYER_SCORE;
@@ -83,7 +87,7 @@ type SetPlayerScoreAction = {
     scoreKey: PlayerScoreKey;
     value: number;
   };
-}
+};
 
 type SetPlayerWonderActions = {
   type: typeof SET_PLAYER_WONDER;
@@ -91,10 +95,19 @@ type SetPlayerWonderActions = {
     gameId: number;
     name: string;
     wonder: string;
-  }
-}
+  };
+};
 
-export type Action = SetGamesAction | AddGameAction | UpdateAddonsAction | AddPlayerAction | SetPlayersAction | DeletePlayerAction | RestorePlayerAction | SetPlayerScoreAction | SetPlayerWonderActions;
+export type Action =
+  | SetGamesAction
+  | AddGameAction
+  | UpdateAddonsAction
+  | AddPlayerAction
+  | SetPlayersAction
+  | DeletePlayerAction
+  | RestorePlayerAction
+  | SetPlayerScoreAction
+  | SetPlayerWonderActions;
 
 const reducer = (state: GameState[], action: Action) => {
   switch (action.type) {
@@ -102,28 +115,28 @@ const reducer = (state: GameState[], action: Action) => {
       return action.payload;
     case ADD_GAME:
       const { game } = action.payload;
-      return [
-        ...state,
-        game,
-      ];
+      return [...state, game];
     case UPDATE_ADDONS: {
-      const {gameId, addons} = action.payload;
+      const { gameId, addons } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           const wonders = getWondersByAddons(addons);
           const maxPlayers = getMaxPlayersByAddons(addons);
           return {
             ...game,
-            players: getPlayersWithUpdatedWonders(updatePlayersCount(game.players, maxPlayers), wonders),
+            players: getPlayersWithUpdatedWonders(
+              updatePlayersCount(game.players, maxPlayers),
+              wonders
+            ),
             addons,
             modified: Date.now(),
-          }
+          };
         }
         return game;
       });
     }
     case ADD_PLAYER: {
-      const {gameId, name, wonder} = action.payload;
+      const { gameId, name, wonder } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           return {
@@ -137,41 +150,41 @@ const reducer = (state: GameState[], action: Action) => {
                 score: {
                   ...counters,
                 },
-              }
-            ]
-          }
+              },
+            ],
+          };
         }
         return game;
       });
     }
     case SET_PLAYERS: {
-      const {gameId, players} = action.payload;
+      const { gameId, players } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           return {
             ...game,
             modified: Date.now(),
             players,
-          }
+          };
         }
         return game;
       });
     }
     case DELETE_PLAYER: {
-      const {gameId, name} = action.payload;
+      const { gameId, name } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           return {
             ...game,
             modified: Date.now(),
             players: game.players.filter(player => player.name !== name),
-          }
+          };
         }
         return game;
       });
     }
     case RESTORE_PLAYER: {
-      const {gameId, player, index} = action.payload;
+      const { gameId, player, index } = action.payload;
 
       if (player && index >= 0) {
         return state.map(game => {
@@ -179,8 +192,8 @@ const reducer = (state: GameState[], action: Action) => {
             return {
               ...game,
               modified: Date.now(),
-              players: [...game.players.slice(0, index), player, ...game.players.slice(index)]
-            }
+              players: [...game.players.slice(0, index), player, ...game.players.slice(index)],
+            };
           }
           return game;
         });
@@ -188,7 +201,7 @@ const reducer = (state: GameState[], action: Action) => {
       return state;
     }
     case SET_PLAYER_SCORE: {
-      const {gameId, name, scoreKey, value} = action.payload;
+      const { gameId, name, scoreKey, value } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           return {
@@ -202,17 +215,17 @@ const reducer = (state: GameState[], action: Action) => {
                     ...player.score,
                     [scoreKey]: value,
                   },
-                }
+                };
               }
               return player;
-            })
-          }
+            }),
+          };
         }
         return game;
       });
     }
     case SET_PLAYER_WONDER: {
-      const {gameId, name, wonder} = action.payload;
+      const { gameId, name, wonder } = action.payload;
       return state.map(game => {
         if (game.gameId === gameId) {
           return {
@@ -222,12 +235,12 @@ const reducer = (state: GameState[], action: Action) => {
               if (player.name === name) {
                 return {
                   ...player,
-                  wonder
-                }
+                  wonder,
+                };
               }
               return player;
-            })
-          }
+            }),
+          };
         }
         return game;
       });

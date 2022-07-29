@@ -7,16 +7,16 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   historyItem: {
-    "&:not(:first-child)": {
-      marginTop: '8px'
+    '&:not(:first-child)': {
+      marginTop: '8px',
     },
-  }
+  },
 }));
 
 export default function Total() {
   const classes = useStyles();
   const gamesContext = useContext(GamesContext);
-  const {currentGameParams} = useContext(CurrentGameContext);
+  const { currentGameParams } = useContext(CurrentGameContext);
 
   function getGameParams(game: GameState): GameParams {
     return getGameParamsByGameState(game);
@@ -24,7 +24,7 @@ export default function Total() {
 
   function handleHistoryGameDelete(gameId: number) {
     const games = gamesContext.state.filter(game => game.gameId !== gameId);
-    gamesContext.dispatch({type: 'SET_GAMES', payload: games});
+    gamesContext.dispatch({ type: 'SET_GAMES', payload: games });
   }
 
   function sortedGames(): GameState[] {
@@ -33,15 +33,21 @@ export default function Total() {
 
   return (
     <div>
-      {sortedGames().map(game => <Results
-        className={classes.historyItem}
-        key={game.gameId}
-        players={game.players}
-        game={getGameParams(game)}
-        modified={game.modified}
-        // The current game is not allowed to be deleted
-        onDelete={currentGameParams.gameId !== game.gameId ? () => handleHistoryGameDelete(game.gameId) : undefined}
-      />)}
+      {sortedGames().map(game => (
+        <Results
+          className={classes.historyItem}
+          key={game.gameId}
+          players={game.players}
+          game={getGameParams(game)}
+          modified={game.modified}
+          // The current game is not allowed to be deleted
+          onDelete={
+            currentGameParams.gameId !== game.gameId
+              ? () => handleHistoryGameDelete(game.gameId)
+              : undefined
+          }
+        />
+      ))}
     </div>
   );
 }
