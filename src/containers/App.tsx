@@ -7,13 +7,13 @@ import Router from './Router';
 import NewGame from './NewGame';
 import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
-import { CircularProgress } from '@material-ui/core';
 import VersionControl from './VersionControl';
+import { Box, CircularProgress } from '@mui/material';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/games';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
@@ -31,24 +31,9 @@ export const CurrentGameContext = React.createContext(
   }
 );
 
-const useStyles = makeStyles({
-  app: {
-    display: 'flex',
-    height: '100%',
-    textAlign: 'center',
-  },
-  loading: {
-    alignItems: 'center',
-  },
-  loader: {
-    margin: '0 auto',
-  },
-});
-
 export default function App() {
   const [games, gamesDispatch] = useReducer(gamesReducer, []);
   const [isReady, setIsReady] = useState(false);
-  const classes = useStyles();
 
   const lastGameState = useMemo(() => getLastGameState(games), [games]);
   const lastGameParams = useMemo(() => getGameParamsByGameState(lastGameState), [lastGameState]);
@@ -85,7 +70,14 @@ export default function App() {
   }
 
   return (
-    <div className={`${classes.app} ${!isReady ? classes.loading : ''}`}>
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100%',
+        textAlign: 'center',
+        alignItems: isReady ? '' : 'center',
+      }}
+    >
       <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
         <CurrentGameContext.Provider
           value={{
@@ -108,12 +100,17 @@ export default function App() {
                 </RouteWrapper>
               </>
             ) : (
-              <CircularProgress className={classes.loader} />
+              <CircularProgress
+                sx={{
+                  my: 0,
+                  mx: 'auto',
+                }}
+              />
             )}
           </Layout>
         </CurrentGameContext.Provider>
       </GamesContext.Provider>
       <VersionControl />
-    </div>
+    </Box>
   );
 }

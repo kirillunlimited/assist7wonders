@@ -1,36 +1,38 @@
 import React from 'react';
-import { AppBar, Toolbar } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import logo from '../img/logo.png';
 import logo2x from '../img/logo2x.png';
-
-const useStyles = makeStyles({
-  logoWrapper: {
-    flexGrow: 1,
-    textAlign: 'left',
-  },
-  logo: {
-    display: 'block',
-    maxHeight: '48px',
-  },
-});
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function MainMenu(props: Props) {
-  const classes = useStyles();
   const { t } = useTranslation();
 
   return (
     <AppBar>
       <Toolbar>
-        <div className={classes.logoWrapper}>
-          <img className={classes.logo} src={logo} alt={t('7wonders')} srcSet={`${logo2x} 2x`} />
-        </div>
+        <Box
+          sx={{
+            flexGrow: 1,
+            textAlign: 'left',
+          }}
+        >
+          <Box
+            component="img"
+            sx={{
+              display: 'block',
+              maxHeight: '48px',
+            }}
+            src={logo}
+            alt={t('7wonders')}
+            srcSet={`${logo2x} 2x`}
+          />
+        </Box>
         {props.children}
       </Toolbar>
     </AppBar>

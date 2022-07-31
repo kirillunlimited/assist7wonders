@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import { TableContainer, Table, TableRow, TableCell, TableBody, Chip } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { TableContainer, Table, TableRow, TableCell, TableBody, Chip } from '@mui/material';
 import Profile from '../components/Profile';
 import Counter from '../components/Counter';
 import { PlayerScoreKey, Player, GameScore, GameScoreSumResult } from '../types';
@@ -11,32 +10,20 @@ type Props = {
   score: GameScore;
 };
 
-const useStyles = makeStyles({
-  tr: {
-    '&:last-child td': {
-      borderBottom: 'none',
-    },
+const sxTd = {
+  '&:first-child': {
+    paddingLeft: 0,
   },
-  td: {
-    '&:first-child': {
-      paddingLeft: 0,
-    },
-    '&:last-child': {
-      paddingRight: 0,
-      whiteSpace: 'nowrap',
-      textAlign: 'center',
-    },
+  '&:last-child': {
+    paddingRight: 0,
+    whiteSpace: 'nowrap',
+    textAlign: 'center',
   },
-  empty: {
-    width: '100%',
-    padding: 0,
-  },
-});
+};
 
 export default function Scores(props: Props) {
   const gamesContext = useContext(GamesContext);
   const { currentGameParams, currentGamePlayers } = useContext(CurrentGameContext);
-  const classes = useStyles();
 
   function handleChange(name: string, scoreKey: PlayerScoreKey, value: number) {
     gamesContext.dispatch({
@@ -99,12 +86,31 @@ export default function Scores(props: Props) {
       <Table>
         <TableBody>
           {currentGamePlayers.map((player, playerIndex) => (
-            <TableRow className={classes.tr} key={player.name}>
-              <TableCell className={classes.td}>
+            <TableRow
+              sx={{
+                '&:last-child td': {
+                  borderBottom: 'none',
+                },
+              }}
+              key={player.name}
+            >
+              <TableCell sx={{ ...sxTd }}>
                 <Profile name={player.name} />
               </TableCell>
-              <TableCell className={`${classes.td} ${classes.empty}`} />
-              <TableCell className={classes.td}>{renderPlayerScore(player, playerIndex)}</TableCell>
+              <TableCell
+                sx={{
+                  ...sxTd,
+                  width: '100%',
+                  padding: 0,
+                }}
+              />
+              <TableCell
+                sx={{
+                  ...sxTd,
+                }}
+              >
+                {renderPlayerScore(player, playerIndex)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

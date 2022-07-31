@@ -57,7 +57,7 @@ export default function Counter(props: Props) {
         <Box
           component="img"
           src={SCORE_ICONS[props.counter]}
-          sx={{ width: '50px' }}
+          sx={{ width: '42px' }}
           alt={props.counter}
         />
       ) : null}

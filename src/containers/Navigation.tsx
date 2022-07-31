@@ -1,34 +1,13 @@
 import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { AppBar, Tabs, Tab, useMediaQuery } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { AppBar, Tabs, Tab, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import ROUTES from '../config/routes';
 import { Route } from '../types';
 import { CurrentGameContext } from './App';
 
-const useStyles = makeStyles(theme => ({
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: 'auto',
-    },
-  },
-  tabs: {
-    height: '100%',
-  },
-  indicator: {
-    backgroundColor: '#FFF',
-  },
-  tab: {
-    maxWidth: '160px',
-    opacity: 1,
-    lineHeight: 1.4,
-    textShadow: '0px 1px 0 #999',
-  },
-}));
-
 export default function Navigation() {
-  const classes = useStyles();
   const theme = useTheme();
   const bigScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const location = useLocation();
@@ -45,7 +24,12 @@ export default function Navigation() {
         return error ? null : (
           <Tab
             key={route.id}
-            className={classes.tab}
+            sx={{
+              maxWidth: '160px',
+              opacity: 1,
+              lineHeight: 1.4,
+              textShadow: '0px 1px 0 #999',
+            }}
             label={t(route.id)}
             component={Link}
             value={route.path}
@@ -60,13 +44,18 @@ export default function Navigation() {
   }
 
   return (
-    <AppBar component="nav" className={classes.appBar} position="static">
+    <AppBar
+      component="nav"
+      sx={{
+        width: { sm: 'auto' },
+      }}
+      position="static"
+    >
       <Tabs
         orientation={bigScreen ? 'vertical' : 'horizontal'}
-        classes={{
-          indicator: classes.indicator,
+        sx={{
+          height: '100%',
         }}
-        className={classes.tabs}
         value={location.pathname}
         variant={bigScreen ? 'standard' : 'scrollable'}
         scrollButtons="auto"

@@ -8,8 +8,8 @@ import {
   DialogContent,
   DialogContentText,
   Button,
-} from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+} from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { getNewGameByLastGame } from '../utils/games';
 import { GamesContext, CurrentGameContext } from './App';

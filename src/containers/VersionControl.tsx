@@ -1,21 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Snackbar, Button, Typography } from '@material-ui/core';
+import { Snackbar, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/core/styles';
 import * as serviceWorkerRegistration from '../serviceWorkerRegistration';
-
-const useStyles = makeStyles({
-  version: {
-    position: 'absolute',
-    bottom: '8px',
-    right: '8px',
-  },
-});
 
 export default function VersionControl() {
   const [showReload, setShowReload] = useState(false);
   const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
-  const classes = useStyles();
   const { t } = useTranslation();
 
   const onSWUpdate = useCallback(
@@ -54,7 +44,14 @@ export default function VersionControl() {
           </Button>
         }
       />
-      <Typography className={classes.version} variant="caption">
+      <Typography
+        sx={{
+          position: 'absolute',
+          bottom: theme => theme.spacing(1),
+          right: theme => theme.spacing(2),
+        }}
+        variant="caption"
+      >
         {process.env.REACT_APP_VERSION}
       </Typography>
     </div>

@@ -1,22 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { IconButton, Tooltip, Menu, MenuItem, Checkbox } from '@material-ui/core';
-import { Extension } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { IconButton, Tooltip, Menu, MenuItem, Checkbox } from '@mui/material';
+import { Extension } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { ADDONS } from '../config/game';
 import { GamesContext, CurrentGameContext } from './App';
-
-const useStyles = makeStyles({
-  checkbox: {
-    marginLeft: '-11px',
-  },
-});
 
 export default function MainMenu() {
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const classes = useStyles();
   const { t } = useTranslation();
 
   function handleOpenContextMenu(event: React.MouseEvent<HTMLElement>) {
@@ -64,12 +56,7 @@ export default function MainMenu() {
               handleMenuItemClick(e, addon.name, !currentGameParams?.addons?.includes(addon.name))
             }
           >
-            <Checkbox
-              classes={{
-                root: classes.checkbox,
-              }}
-              checked={currentGameParams?.addons?.includes(addon.name)}
-            />
+            <Checkbox checked={currentGameParams?.addons?.includes(addon.name)} />
             {t(addon.name)}
           </MenuItem>
         ))}

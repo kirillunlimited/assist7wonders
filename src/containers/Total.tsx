@@ -3,15 +3,6 @@ import { GamesContext, CurrentGameContext } from './App';
 import { GameParams, GameState } from '../types';
 import Results from '../components/Results';
 import { getGameParamsByGameState } from '../utils/games';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(() => ({
-  historyItem: {
-    '&:not(:first-child)': {
-      marginTop: '8px',
-    },
-  },
-}));
 
 export default function Total() {
   const gamesContext = useContext(GamesContext);
