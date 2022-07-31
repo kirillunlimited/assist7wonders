@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { IconButton, Tooltip, Menu, MenuItem, Checkbox } from '@mui/material';
+import React, { useState, useContext, useEffect } from 'react';
+import { IconButton, Tooltip, Menu, MenuItem, Checkbox, Badge } from '@mui/material';
 import { Extension } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { ADDONS } from '../config/game';
@@ -9,6 +9,12 @@ export default function MainMenu() {
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedAddonsCount, setSelectedAddonsCount] = useState(0);
+
+  useEffect(() => {
+    setSelectedAddonsCount(currentGameParams.addons.length);
+  }, [currentGameParams.addons]);
+
   const { t } = useTranslation();
 
   function handleOpenContextMenu(event: React.MouseEvent<HTMLElement>) {
@@ -39,9 +45,20 @@ export default function MainMenu() {
   return (
     <div>
       <Tooltip title={t('addons') || ''}>
-        <IconButton color="inherit" onClick={handleOpenContextMenu}>
-          <Extension />
-        </IconButton>
+        <Badge
+          badgeContent={selectedAddonsCount}
+          color="secondary"
+          sx={{
+            '& .MuiBadge-badge': {
+              top: 8,
+              right: 8,
+            },
+          }}
+        >
+          <IconButton color="inherit" onClick={handleOpenContextMenu}>
+            <Extension />
+          </IconButton>
+        </Badge>
       </Tooltip>
       <Menu
         anchorEl={anchorEl}
