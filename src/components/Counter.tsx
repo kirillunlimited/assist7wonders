@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, Input } from '@material-ui/core';
-import { AddCircle, RemoveCircle } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, IconButton, Input } from '@mui/material';
+import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import { SCORE_ICONS } from '../utils/score';
 import { isMinValue, isMaxValue } from '../utils/score';
 
@@ -13,21 +12,8 @@ export type Props = {
   min?: number;
 };
 
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  scoreIcon: {
-    width: '50px',
-  },
-});
-
 export default function Counter(props: Props) {
   const [localValue, setLocalValue] = useState(String(props.value));
-  const classes = useStyles();
 
   useEffect(() => {
     setLocalValue(String(props.value));
@@ -59,9 +45,21 @@ export default function Counter(props: Props) {
   }
 
   return (
-    <div className={classes.container}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      }}
+    >
       {SCORE_ICONS[props.counter] ? (
-        <img src={SCORE_ICONS[props.counter]} className={classes.scoreIcon} alt={props.counter} />
+        <Box
+          component="img"
+          src={SCORE_ICONS[props.counter]}
+          sx={{ width: '50px' }}
+          alt={props.counter}
+        />
       ) : null}
       <div>
         <IconButton
@@ -92,6 +90,6 @@ export default function Counter(props: Props) {
           />
         </IconButton>
       </div>
-    </div>
+    </Box>
   );
 }

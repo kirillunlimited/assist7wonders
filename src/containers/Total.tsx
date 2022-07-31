@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Total() {
-  const classes = useStyles();
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
 
@@ -35,7 +34,11 @@ export default function Total() {
     <div>
       {sortedGames().map(game => (
         <Results
-          className={classes.historyItem}
+          sx={{
+            '&:not(:first-child)': {
+              mt: 1,
+            },
+          }}
           key={game.gameId}
           players={game.players}
           game={getGameParams(game)}

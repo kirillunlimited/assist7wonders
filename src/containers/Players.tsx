@@ -181,6 +181,7 @@ export default function Players() {
                             </TableCell>
                             <TableCell className={classes.wonder}>
                               <WonderSelect
+                                variant="standard"
                                 value={player.wonder}
                                 wonders={currentGameParams.wonders}
                                 selectedWonders={currentGamePlayers.map(player => player.wonder)}

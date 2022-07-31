@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -14,54 +15,23 @@ import {
   DialogTitle,
   Button,
   Tooltip,
-} from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Delete } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { Player, PlayerScore, GameParams } from '../types';
 import { getTotal } from '../utils/score';
 import { getNeighborScores, getPlayerScoreByGame } from '../utils/score';
+import { SxProps, Theme } from '@mui/material/styles';
 
 type Props = {
+  sx?: SxProps<Theme>;
   players: Player[];
   game: GameParams;
   modified: number;
   onDelete?: () => void;
 } & React.HTMLAttributes<HTMLElement>;
 
-const useStyles = makeStyles(theme => ({
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '48px',
-  },
-  head: {
-    backgroundColor: '#eee',
-  },
-  headCell: {
-    fontWeight: 'bold',
-  },
-  scoresHead: {
-    textAlign: 'center',
-  },
-  score: {
-    color: '#FFF',
-    padding: theme.spacing(0, 1),
-    textAlign: 'center',
-  },
-  sum: {
-    textAlign: 'center',
-  },
-  medal: {
-    fontSize: '1.5em',
-    lineHeight: 0,
-    paddingRight: 0,
-  },
-}));
-
 export default function Results(props: Props) {
-  const classes = useStyles();
   const [winner, setWinner] = useState('');
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const { t } = useTranslation();
@@ -94,7 +64,12 @@ export default function Results(props: Props) {
       return (
         <TableCell
           key={score.id}
-          className={classes.score}
+          sx={{
+            color: '#FFF',
+            py: 0,
+            px: 1,
+            textAlign: 'center',
+          }}
           style={{ backgroundColor: score.color }}
         >
           {score.sum
@@ -131,8 +106,16 @@ export default function Results(props: Props) {
   }
 
   return (
-    <div className={props.className}>
-      <header className={classes.header}>
+    <Box sx={props.sx}>
+      <Box
+        component="header"
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '48px',
+        }}
+      >
         <Typography variant="body2">{getGameDate(props.modified)}</Typography>
         {props.onDelete && (
           <Tooltip title={t('deleteGame') || ''}>
@@ -141,26 +124,44 @@ export default function Results(props: Props) {
             </IconButton>
           </Tooltip>
         )}
-      </header>
+      </Box>
       <TableContainer>
         <Table>
-          <TableHead className={classes.head}>
-            <TableRow>
+          <TableHead sx={{ backgroundColor: '#eee' }}>
+            <TableRow
+              sx={{
+                fontWeight: 'bold',
+              }}
+            >
               <TableCell />
-              <TableCell className={classes.headCell}>{t('player')}</TableCell>
+              <TableCell>{t('player')}</TableCell>
               <TableCell
-                className={`${classes.headCell} ${classes.scoresHead}`}
+                sx={{
+                  textAlign: 'center',
+                }}
                 colSpan={props.game.scores.length}
               >
                 {t('scores')}
               </TableCell>
-              <TableCell className={`${classes.headCell} ${classes.scoresHead}`}>Σ</TableCell>
+              <TableCell
+                sx={{
+                  textAlign: 'center',
+                }}
+              >
+                Σ
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.players.map((player, playerIndex) => (
               <TableRow key={playerIndex}>
-                <TableCell className={classes.medal}>
+                <TableCell
+                  sx={{
+                    fontSize: '1.5em',
+                    lineHeight: 0,
+                    pr: 0,
+                  }}
+                >
                   {winner === player.name ? '🏆' : ''}
                 </TableCell>
                 <TableCell>
@@ -170,7 +171,7 @@ export default function Results(props: Props) {
                   </Typography>
                 </TableCell>
                 {renderPlayerScores(player, playerIndex)}
-                <TableCell className={classes.sum}>
+                <TableCell sx={{ textAlign: 'center' }}>
                   {getTotal(
                     getPlayerScoreByGame(player.score, props.game.scores),
                     getNeighborScores(props.players, playerIndex)
@@ -183,7 +184,7 @@ export default function Results(props: Props) {
       </TableContainer>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
-        <DialogTitle disableTypography>
+        <DialogTitle>
           <Typography variant="h6"> {t('deleteGame')}</Typography>
         </DialogTitle>
         <DialogContent>{t('deleteGameDescription')}</DialogContent>
@@ -196,6 +197,6 @@ export default function Results(props: Props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 }

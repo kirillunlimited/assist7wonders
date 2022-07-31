@@ -1,6 +1,5 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 export type Props = {
@@ -11,21 +10,14 @@ export type Props = {
   onSelect: (wonder: string) => void;
 };
 
-const useStyles = makeStyles({
-  formControl: {
-    width: '100%',
-  },
-});
-
 export default function WonderSelect(props: Props) {
-  const classes = useStyles();
   const { t } = useTranslation();
 
   function isValueSelected(wonder: string) {
     return props.selectedWonders.includes(wonder);
   }
 
-  function onChange(event: React.ChangeEvent<{ value: unknown }>) {
+  function onChange(event: SelectChangeEvent<string>) {
     const value = event.target.value as string;
     if (!isValueSelected(value)) {
       props.onSelect(value);
@@ -33,7 +25,12 @@ export default function WonderSelect(props: Props) {
   }
 
   return (
-    <FormControl variant={props.variant} className={classes.formControl}>
+    <FormControl
+      variant={props.variant}
+      sx={{
+        width: '100%',
+      }}
+    >
       <InputLabel role="label">{t('wonder')}</InputLabel>
       <Select role="select" label={t('wonder')} value={props.value} onChange={onChange}>
         {[...props.wonders].sort().map(wonder => (
