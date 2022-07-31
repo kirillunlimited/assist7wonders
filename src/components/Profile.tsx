@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Avatar, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { getAvatarText } from '../utils/players';
 
 type Props = {
