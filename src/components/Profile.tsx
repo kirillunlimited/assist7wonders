@@ -32,7 +32,7 @@ export default function Scores(props: Props) {
         sx={{
           ml: { sm: 1 },
           m: { xs: 0 },
-          textAlign: { xs: 'center' },
+          textAlign: { xs: 'center', sm: 'left' },
         }}
       >
         <Typography variant="body2">{props.name}</Typography>
