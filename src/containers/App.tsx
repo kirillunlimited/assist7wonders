@@ -9,6 +9,7 @@ import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import VersionControl from './VersionControl';
 import { Box, CircularProgress } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
@@ -21,6 +22,17 @@ type GamesContextProps = {
   state: GameState[];
   dispatch: (action: GamesAction) => void;
 };
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1565c0',
+    },
+    secondary: {
+      main: '#f44336',
+    },
+  },
+});
 
 export const GamesContext = React.createContext({} as GamesContextProps);
 export const CurrentGameContext = React.createContext(
@@ -70,47 +82,49 @@ export default function App() {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        height: '100%',
-        textAlign: 'center',
-        alignItems: isReady ? '' : 'center',
-      }}
-    >
-      <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-        <CurrentGameContext.Provider
-          value={{
-            currentGameState: lastGameState,
-            currentGameParams: lastGameParams,
-            currentGamePlayers: lastGamePlayers,
-          }}
-        >
-          <Layout>
-            {isReady ? (
-              <>
-                <Navigation />
-                <MainMenu>
-                  <NewGame />
-                  <AddonsMenu />
-                  <LanguageMenu />
-                </MainMenu>
-                <RouteWrapper>
-                  <Router routes={ROUTES} />
-                </RouteWrapper>
-              </>
-            ) : (
-              <CircularProgress
-                sx={{
-                  my: 0,
-                  mx: 'auto',
-                }}
-              />
-            )}
-          </Layout>
-        </CurrentGameContext.Provider>
-      </GamesContext.Provider>
-      <VersionControl />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+          textAlign: 'center',
+          alignItems: isReady ? '' : 'center',
+        }}
+      >
+        <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
+          <CurrentGameContext.Provider
+            value={{
+              currentGameState: lastGameState,
+              currentGameParams: lastGameParams,
+              currentGamePlayers: lastGamePlayers,
+            }}
+          >
+            <Layout>
+              {isReady ? (
+                <>
+                  <Navigation />
+                  <MainMenu>
+                    <NewGame />
+                    <AddonsMenu />
+                    <LanguageMenu />
+                  </MainMenu>
+                  <RouteWrapper>
+                    <Router routes={ROUTES} />
+                  </RouteWrapper>
+                </>
+              ) : (
+                <CircularProgress
+                  sx={{
+                    my: 0,
+                    mx: 'auto',
+                  }}
+                />
+              )}
+            </Layout>
+          </CurrentGameContext.Provider>
+        </GamesContext.Provider>
+        <VersionControl />
+      </Box>
+    </ThemeProvider>
   );
 }
