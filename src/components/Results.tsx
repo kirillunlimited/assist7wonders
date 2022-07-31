@@ -65,12 +65,12 @@ export default function Results(props: Props) {
         <TableCell
           key={score.id}
           sx={{
-            color: '#FFF',
+            color: theme => theme.palette.primary.contrastText,
             py: 0,
             px: 1,
             textAlign: 'center',
+            backgroundColor: score.color,
           }}
-          style={{ backgroundColor: score.color }}
         >
           {score.sum
             ? score.sum(playerScore, getNeighborScores(props.players, playerIndex)).result
@@ -127,7 +127,7 @@ export default function Results(props: Props) {
       </Box>
       <TableContainer>
         <Table>
-          <TableHead sx={{ backgroundColor: '#eee' }}>
+          <TableHead sx={{ backgroundColor: theme => theme.palette.background.default }}>
             <TableRow
               sx={{
                 fontWeight: 'bold',

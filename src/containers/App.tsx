@@ -10,11 +10,10 @@ import LanguageMenu from './LanguageMenu';
 import VersionControl from './VersionControl';
 import { Box, CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { blue, pink, blueGrey } from '@mui/material/colors';
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
-// import { makeStyles } from '@material-ui/core/styles';
 import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/games';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
 
@@ -26,10 +25,13 @@ type GamesContextProps = {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1565c0',
+      main: blue[800],
     },
     secondary: {
-      main: '#f44336',
+      main: pink[500],
+    },
+    background: {
+      default: blueGrey[50],
     },
   },
 });
@@ -89,6 +91,7 @@ export default function App() {
           height: '100%',
           textAlign: 'center',
           alignItems: isReady ? '' : 'center',
+          backgroundColor: theme.palette.background.default,
         }}
       >
         <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>

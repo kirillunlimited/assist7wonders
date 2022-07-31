@@ -21,7 +21,7 @@ export default function Scores(props: Props) {
       <Avatar
         sx={{
           backgroundColor: theme => theme.palette.primary.main,
-          color: theme => theme.palette.getContrastText(theme.palette.primary.main),
+          color: theme => theme.palette.primary.contrastText,
         }}
         alt={props.name}
       >

@@ -28,11 +28,11 @@ export default function Navigation() {
               maxWidth: '160px',
               opacity: 1,
               lineHeight: 1.4,
-              color: '#fff',
-              textShadow: '0px 1px 0 #999',
+              color: theme => theme.palette.primary.contrastText,
+              textShadow: theme => `1px 1px 2px ${theme.palette.text.secondary}`,
               py: 0,
               '&.Mui-selected': {
-                color: '#fff',
+                color: theme => theme.palette.primary.contrastText,
               },
             }}
             label={t(route.id)}
@@ -61,7 +61,7 @@ export default function Navigation() {
         sx={{
           height: '100%',
           '& .MuiTabs-indicator': {
-            backgroundColor: '#fff',
+            backgroundColor: theme => theme.palette.background.paper,
           },
         }}
         value={location.pathname}
