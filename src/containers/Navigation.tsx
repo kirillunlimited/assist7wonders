@@ -30,6 +30,7 @@ export default function Navigation() {
               lineHeight: 1.4,
               color: '#fff',
               textShadow: '0px 1px 0 #999',
+              py: 0,
               '&.Mui-selected': {
                 color: '#fff',
               },
