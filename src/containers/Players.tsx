@@ -155,7 +155,7 @@ export default function Players() {
                         {provided => (
                           <TableRow ref={provided.innerRef} {...provided.draggableProps}>
                             <TableCell
-                              sx={{ padding: 0, cursor: 'move' }}
+                              sx={{ py: 1, px: 0, cursor: 'move' }}
                               {...provided.dragHandleProps}
                             >
                               <Profile name={player.name} />

@@ -29,12 +29,19 @@ export default function Scores(props: Props) {
       </Avatar>
       <Box
         sx={{
-          ml: { sm: 1 },
-          m: { xs: 0 },
+          ml: { xs: 0, sm: 1 },
+          mt: { xs: 1, sm: 0 },
           textAlign: { xs: 'center', sm: 'left' },
         }}
       >
-        <Typography variant="body2">{props.name}</Typography>
+        <Typography
+          sx={{
+            lineHeight: { xs: 1.3 },
+          }}
+          variant="body2"
+        >
+          {props.name}
+        </Typography>
       </Box>
     </Box>
   );
