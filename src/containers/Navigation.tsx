@@ -28,7 +28,11 @@ export default function Navigation() {
               maxWidth: '160px',
               opacity: 1,
               lineHeight: 1.4,
+              color: '#fff',
               textShadow: '0px 1px 0 #999',
+              '&.Mui-selected': {
+                color: '#fff',
+              },
             }}
             label={t(route.id)}
             component={Link}
@@ -55,6 +59,9 @@ export default function Navigation() {
         orientation={bigScreen ? 'vertical' : 'horizontal'}
         sx={{
           height: '100%',
+          '& .MuiTabs-indicator': {
+            backgroundColor: '#fff',
+          },
         }}
         value={location.pathname}
         variant={bigScreen ? 'standard' : 'scrollable'}
