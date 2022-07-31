@@ -52,9 +52,10 @@ export default function Navigation() {
     <AppBar
       component="nav"
       sx={{
+        position: 'static',
         width: { sm: 'auto' },
       }}
-      position="static"
+      elevation={4}
     >
       <Tabs
         orientation={bigScreen ? 'vertical' : 'horizontal'}
