@@ -53,7 +53,7 @@ export default function Navigation() {
       component="nav"
       sx={{
         position: 'static',
-        width: { sm: 'auto' },
+        width: { xs: 'auto', sm: 160 },
       }}
       elevation={4}
     >
