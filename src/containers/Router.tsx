@@ -6,8 +6,10 @@ import { Route as RouteType } from '../types';
 import { CurrentGameContext } from './App';
 
 const sxTitle = {
-  fontSize: '30px',
-  fontWeight: 'bold',
+  fontSize: '1.5em',
+  textTransform: 'uppercase',
+  fontWeight: 500,
+  letterSpacing: 0,
   mb: 1,
   '&:last-child': {
     mb: 0,
