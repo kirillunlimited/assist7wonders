@@ -69,6 +69,7 @@ export default function MainMenu() {
         {ADDONS.map(addon => (
           <MenuItem
             key={addon.name}
+            sx={{ pl: 1 }}
             onClick={e =>
               handleMenuItemClick(e, addon.name, !currentGameParams?.addons?.includes(addon.name))
             }

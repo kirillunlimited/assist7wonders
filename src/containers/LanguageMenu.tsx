@@ -51,7 +51,7 @@ export default function MainMenu() {
       >
         <RadioGroup value={selectedLanguage}>
           {Object.keys(i18n.store.data).map(language => (
-            <MenuItem key={language} onClick={() => handleChange(language)}>
+            <MenuItem key={language} sx={{ pl: 1 }} onClick={() => handleChange(language)}>
               <Radio value={language} />
               {t(language)}
             </MenuItem>
