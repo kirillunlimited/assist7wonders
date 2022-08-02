@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { AppBar, Toolbar } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import routes from '../config/routes';
+import { getRouteByPathname } from '../utils/router';
 
 import { useTranslation } from 'react-i18next';
 import logo from '../img/logo.png';
@@ -11,10 +14,17 @@ type Props = {
 };
 
 export default function MainMenu(props: Props) {
+  const [currentColor, setCurrentColor] = useState('');
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentRoute = getRouteByPathname(location.pathname, routes);
+    setCurrentColor(currentRoute?.color || '');
+  }, [location]);
 
   return (
-    <AppBar>
+    <AppBar sx={{ backgroundColor: currentColor }}>
       <Toolbar>
         <Box
           sx={{
