@@ -16,7 +16,7 @@ import {
   Button,
   Tooltip,
 } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { AccessTime, Delete } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { Player, PlayerScore, GameParams } from '../types';
 import { getTotal } from '../utils/score';
@@ -116,7 +116,17 @@ export default function Results(props: Props) {
           height: '3em',
         }}
       >
-        <Typography variant="body2">{getGameDate(props.modified)}</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5em',
+            color: theme => theme.palette.text.secondary,
+          }}
+        >
+          <AccessTime fontSize="small" />
+          <Typography variant="body2">{getGameDate(props.modified)}</Typography>
+        </Box>
         {props.onDelete && (
           <Tooltip title={t('deleteGame') || ''}>
             <IconButton aria-label="delete" onClick={() => toggleDialog(true)}>
