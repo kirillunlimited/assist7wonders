@@ -26,8 +26,8 @@ export default function Total() {
       {sortedGames().map(game => (
         <Results
           sx={{
-            '&:not(:first-child)': {
-              mt: 1,
+            '&:not(:first-of-type)': {
+              mt: 2,
             },
           }}
           key={game.gameId}
