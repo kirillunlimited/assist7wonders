@@ -11,6 +11,7 @@ import {
   Button,
   Typography,
   Snackbar,
+  Alert,
 } from '@mui/material';
 import NewPlayer from '../components/NewPlayer';
 import Profile from '../components/Profile';
@@ -190,9 +191,9 @@ export default function Players() {
       ) : null}
 
       {currentGamePlayers.length < 2 ? (
-        <Typography variant="subtitle1" sx={{ mt: 2 }} component="p">
+        <Alert sx={{ mt: 2 }} severity="warning">
           {t('addMinPlayers')}
-        </Typography>
+        </Alert>
       ) : null}
 
       <Box sx={{ mt: 2 }}>

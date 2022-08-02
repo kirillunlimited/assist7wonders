@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Alert } from '@mui/material';
 import { Route as RouteType } from '../types';
 import { CurrentGameContext } from './App';
 
@@ -49,7 +49,9 @@ function RouteWithSubRoutes(route: RouteType) {
         </Typography>
       )}
       {error ? (
-        <Typography variant="subtitle1">{t(error)}</Typography>
+        <Alert sx={{ mt: 2 }} severity="warning">
+          {t(error)}
+        </Alert>
       ) : (
         <Route
           path={route.path}
