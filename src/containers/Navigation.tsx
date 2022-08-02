@@ -34,14 +34,12 @@ export default function Navigation() {
               '&.Mui-selected': {
                 color: theme => theme.palette.primary.contrastText,
               },
+              backgroundColor: route.color,
             }}
             label={t(route.id)}
             component={Link}
             value={route.path}
             to={route.path}
-            style={{
-              backgroundColor: route.color,
-            }}
           />
         );
       }

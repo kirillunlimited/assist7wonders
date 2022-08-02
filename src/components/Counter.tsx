@@ -73,7 +73,7 @@ export default function Counter(props: Props) {
           />
         </IconButton>
         <Input
-          style={{ width: 38 }}
+          sx={{ width: 38 }}
           type="number"
           value={localValue}
           onChange={onChange}
