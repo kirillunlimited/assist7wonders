@@ -12,7 +12,7 @@ export default function Layout(props: Props) {
         display: 'flex',
         width: '100%',
         flexDirection: { xs: 'column', sm: 'row' },
-        paddingTop: { xs: '56px', sm: '64px' },
+        paddingTop: { xs: 7, sm: 8 },
       }}
     >
       {props.children}

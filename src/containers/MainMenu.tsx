@@ -36,7 +36,7 @@ export default function MainMenu(props: Props) {
             component="img"
             sx={{
               display: 'block',
-              maxHeight: '48px',
+              maxHeight: '3em',
             }}
             src={logo}
             alt={t('7wonders')}

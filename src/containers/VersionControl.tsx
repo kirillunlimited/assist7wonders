@@ -47,8 +47,8 @@ export default function VersionControl() {
       <Typography
         sx={{
           position: 'absolute',
-          bottom: theme => theme.spacing(1),
-          right: theme => theme.spacing(2),
+          bottom: '0.5em',
+          right: '1em',
         }}
         variant="caption"
       >

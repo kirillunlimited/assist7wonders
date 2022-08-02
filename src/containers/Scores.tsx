@@ -100,7 +100,7 @@ export default function Scores(props: Props) {
               <TableCell
                 sx={{
                   ...sxTd,
-                  width: '100%',
+                  width: 1,
                   padding: 0,
                 }}
               />

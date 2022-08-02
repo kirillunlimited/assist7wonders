@@ -28,7 +28,7 @@ export default function WonderSelect(props: Props) {
     <FormControl
       variant={props.variant}
       sx={{
-        width: '100%',
+        width: 1,
       }}
     >
       <InputLabel role="label">{t('wonder')}</InputLabel>

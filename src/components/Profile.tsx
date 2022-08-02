@@ -14,7 +14,7 @@ export default function Scores(props: Props) {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        minWidth: { xs: '76px', sm: '124px' },
+        minWidth: { xs: '5em', sm: '9em' },
         flexDirection: { xs: 'column', sm: 'row' },
       }}
     >

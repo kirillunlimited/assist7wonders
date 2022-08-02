@@ -113,7 +113,7 @@ export default function Results(props: Props) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          height: '48px',
+          height: '3em',
         }}
       >
         <Typography variant="body2">{getGameDate(props.modified)}</Typography>

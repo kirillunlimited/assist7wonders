@@ -57,7 +57,7 @@ export default function Counter(props: Props) {
         <Box
           component="img"
           src={SCORE_ICONS[props.counter]}
-          sx={{ width: '42px' }}
+          sx={{ width: '3em' }}
           alt={props.counter}
         />
       ) : null}
@@ -73,7 +73,7 @@ export default function Counter(props: Props) {
           />
         </IconButton>
         <Input
-          sx={{ width: 38 }}
+          sx={{ width: '2em' }}
           type="number"
           value={localValue}
           onChange={onChange}

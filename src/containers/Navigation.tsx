@@ -25,7 +25,6 @@ export default function Navigation() {
           <Tab
             key={route.id}
             sx={{
-              maxWidth: '160px',
               opacity: 1,
               lineHeight: 1.4,
               color: theme => theme.palette.primary.contrastText,
@@ -51,7 +50,7 @@ export default function Navigation() {
       component="nav"
       sx={{
         position: 'static',
-        width: { xs: 'auto', sm: 160 },
+        width: { xs: 'auto', sm: '9em' },
         backgroundColor: theme => theme.palette.background.appBar,
       }}
       elevation={4}
