@@ -25,13 +25,14 @@ type GamesContextProps = {
 const theme = createTheme({
   palette: {
     primary: {
-      main: blue[800],
+      main: blue[700],
     },
     secondary: {
       main: pink[500],
     },
     background: {
       default: blueGrey[50],
+      appBar: blueGrey[200],
     },
   },
 });

@@ -52,6 +52,7 @@ export default function Navigation() {
       sx={{
         position: 'static',
         width: { xs: 'auto', sm: 160 },
+        backgroundColor: theme => theme.palette.background.appBar,
       }}
       elevation={4}
     >
