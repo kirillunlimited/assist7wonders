@@ -3,7 +3,7 @@ import { IconButton, Tooltip, Menu, MenuItem, Radio, RadioGroup, Badge } from '@
 import { Language } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
-export default function MainMenu() {
+export default function LanguageMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const { t, i18n } = useTranslation();

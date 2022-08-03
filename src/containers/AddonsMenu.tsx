@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ADDONS } from '../config/game';
 import { GamesContext, CurrentGameContext } from './App';
 
-export default function MainMenu() {
+export default function AddonsMenu() {
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
