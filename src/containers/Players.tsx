@@ -197,15 +197,20 @@ export default function Players() {
       ) : null}
 
       <Box sx={{ mt: 2 }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          aria-label="add"
-          startIcon={<Shuffle />}
-          onClick={handleShuffleWondersClick}
-        >
-          {t('shuffleWonders')}
-        </Button>
+        {currentGamePlayers.length >= 2 && (
+          <Button
+            sx={{
+              marginBottom: 2,
+            }}
+            variant="outlined"
+            color="primary"
+            aria-label="add"
+            startIcon={<Shuffle />}
+            onClick={handleShuffleWondersClick}
+          >
+            {t('shuffleWonders')}
+          </Button>
+        )}
         <NewPlayer
           names={currentGamePlayers.map(player => player.name)}
           wonders={currentGameParams.wonders}

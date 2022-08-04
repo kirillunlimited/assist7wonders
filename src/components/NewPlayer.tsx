@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Typography,
 } from '@mui/material';
 import { Close, PersonAdd } from '@mui/icons-material';
 import WonderSelect from './WonderSelect';
@@ -87,9 +86,6 @@ export default function NewPlayer(props: Props) {
   return (
     <div>
       <Button
-        sx={{
-          marginTop: 2,
-        }}
         disabled={props.isMax}
         startIcon={<PersonAdd />}
         variant="contained"
@@ -110,7 +106,7 @@ export default function NewPlayer(props: Props) {
             alignItems: 'center',
           }}
         >
-          <Typography variant="h6"> {t('newPlayer')}</Typography>
+          {t('newPlayer')}
           <IconButton aria-label="close" onClick={() => toggleDialog(false)}>
             <Close />
           </IconButton>
