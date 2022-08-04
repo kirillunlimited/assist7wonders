@@ -9,8 +9,8 @@ import AddonsMenu from './AddonsMenu';
 import LanguageMenu from './LanguageMenu';
 import VersionControl from './VersionControl';
 import { Box, CircularProgress } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, pink, blueGrey } from '@mui/material/colors';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../config/theme';
 import gamesReducer, { Action as GamesAction } from '../reducers/games';
 import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
@@ -21,21 +21,6 @@ type GamesContextProps = {
   state: GameState[];
   dispatch: (action: GamesAction) => void;
 };
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: blue[700],
-    },
-    secondary: {
-      main: pink[500],
-    },
-    background: {
-      default: blueGrey[50],
-      appBar: blueGrey[200],
-    },
-  },
-});
 
 export const GamesContext = React.createContext({} as GamesContextProps);
 export const CurrentGameContext = React.createContext(
