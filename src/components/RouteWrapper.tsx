@@ -17,7 +17,10 @@ export default function RouteWrapper(props: Props) {
         <Card
           sx={{
             padding: 2,
-            m: { sm: 4 },
+            m: {
+              xs: 2,
+              sm: 4,
+            },
           }}
           elevation={3}
         >
