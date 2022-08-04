@@ -11,7 +11,7 @@ export default createTheme({
     },
     background: {
       default: blueGrey[50],
-      appBar: blueGrey[200],
+      appBar: blue[700],
     },
   },
 });

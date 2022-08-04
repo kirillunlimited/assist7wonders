@@ -9,7 +9,7 @@ const routes: Route[] = [
     path: '/',
     id: 'players',
     exact: true,
-    color: '#3F51B5',
+    color: '#1976d2',
     component: Players,
   },
   {
