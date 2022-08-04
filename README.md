@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kirillunlimited/assist7wonders.svg?branch=master)](https://travis-ci.com/kirillunlimited/assist7wonders)
+[![Build Status](https://app.travis-ci.com/kirillunlimited/assist7wonders.svg?branch=master)](https://app.travis-ci.com/kirillunlimited/assist7wonders)
 [![Coverage Status](https://coveralls.io/repos/github/kirillunlimited/assist7wonders/badge.svg?branch=master)](https://coveralls.io/github/kirillunlimited/assist7wonders?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4b5baa33b48e4995b5adc37a65cae574)](https://app.codacy.com/gh/kirillunlimited/assist7wonders?utm_source=github.com&utm_medium=referral&utm_content=kirillunlimited/assist7wonders&utm_campaign=Badge_Grade_Settings)
 ![GitHub top language](https://img.shields.io/github/languages/top/kirillunlimited/assist7wonders)
