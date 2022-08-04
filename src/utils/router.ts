@@ -13,7 +13,7 @@ function convertScoresToRoutes(scores: GameScore[] = [], parentPath: string): Ro
     component: () => Scores({ score }),
     error: ({ players, game }) => {
       return !game.scores.some(gameScore => gameScore.id === score.id)
-        ? 'addonIsDisabled'
+        ? 'expansionIsDisabled'
         : players.length <= 1
         ? 'notEnoughPlayers'
         : '';

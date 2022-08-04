@@ -35,7 +35,6 @@
     "build": "npx shx rm -rf build && react-scripts build",
     "deploy": "npm run build && firebase deploy",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "coverage": "jest --coverage --coverageDirectory='coverage'",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "pretty": "prettier --write \"src/**/*.{ts,tsx,json}\""

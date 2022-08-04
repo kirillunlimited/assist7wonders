@@ -12,7 +12,7 @@
 
 ## Features
 
-- 🧩 Addons support:
+- 🧩 Expansions support:
   - 🦸 Leaders
   - 🏙️ Cities
   - 🗼 Babel
@@ -25,7 +25,7 @@
   - 🇬🇧 English
   - 🇷🇺 Russian
   - 🇮🇹 Italian (translated by [tommaso_ferrari](https://boardgamegeek.com/user/tommaso_ferrari))
-- 🧪 Science score calculator with wildcards
+- 🧪 Science score calculator with wildcards from every expansion
 - 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 - 📱 PWA support
 

@@ -44,7 +44,7 @@ export default function AddonsMenu() {
 
   return (
     <div>
-      <Tooltip title={t('addons') || ''}>
+      <Tooltip title={t('expansions') || ''}>
         <Badge
           badgeContent={selectedAddonsCount}
           color="secondary"
