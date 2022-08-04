@@ -9,6 +9,7 @@ const routes: Route[] = [
     path: '/',
     id: 'players',
     exact: true,
+    color: '#1976d2',
     component: Players,
   },
   {
@@ -21,6 +22,7 @@ const routes: Route[] = [
     id: 'total',
     exact: true,
     component: Total,
+    color: '#795548',
     error: ({ players }: { players: Player[] }) => (players.length <= 1 ? 'notEnoughPlayers' : ''),
   },
 ];

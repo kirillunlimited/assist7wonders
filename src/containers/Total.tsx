@@ -3,18 +3,8 @@ import { GamesContext, CurrentGameContext } from './App';
 import { GameParams, GameState } from '../types';
 import Results from '../components/Results';
 import { getGameParamsByGameState } from '../utils/games';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(() => ({
-  historyItem: {
-    '&:not(:first-child)': {
-      marginTop: '8px',
-    },
-  },
-}));
 
 export default function Total() {
-  const classes = useStyles();
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
 
@@ -35,7 +25,11 @@ export default function Total() {
     <div>
       {sortedGames().map(game => (
         <Results
-          className={classes.historyItem}
+          sx={{
+            '&:not(:first-of-type)': {
+              mt: 2,
+            },
+          }}
           key={game.gameId}
           players={game.players}
           game={getGameParams(game)}

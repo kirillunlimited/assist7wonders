@@ -4,7 +4,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/kirillunlimited/assist7wonders)
 [![License](https://img.shields.io/github/license/kirillunlimited/assist7wonders)](https://github.com/kirillunlimited/assist7wonders/blob/master/LICENSE.md)
 
-[![https://assist7wonders.web.app](./src/img/logo2x.png)](https://assist7wonders.web.app)
+[![https://assist7wonders.web.app](./logo.png)](https://assist7wonders.web.app)
 
 # 7 Wonders Assistant
 
@@ -12,7 +12,7 @@
 
 ## Features
 
-- 🧩 Addons support:
+- 🧩 Expansions support:
   - 🦸 Leaders
   - 🏙️ Cities
   - 🗼 Babel
@@ -25,7 +25,7 @@
   - 🇬🇧 English
   - 🇷🇺 Russian
   - 🇮🇹 Italian (translated by [tommaso_ferrari](https://boardgamegeek.com/user/tommaso_ferrari))
-- 🧪 Science score calculator with wildcards
+- 🧪 Science score calculator with wildcards from every expansion
 - 🎨 Simple, lightweight and user-friendly interface with the responsive layout for both desktop and mobile devices
 - 📱 PWA support
 

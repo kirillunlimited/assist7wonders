@@ -1,22 +1,20 @@
-import React, { useState, useContext } from 'react';
-import { IconButton, Tooltip, Menu, MenuItem, Checkbox } from '@material-ui/core';
-import { Extension } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useContext, useEffect } from 'react';
+import { IconButton, Tooltip, Menu, MenuItem, Checkbox, Badge } from '@mui/material';
+import { Extension } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { ADDONS } from '../config/game';
 import { GamesContext, CurrentGameContext } from './App';
 
-const useStyles = makeStyles({
-  checkbox: {
-    marginLeft: '-11px',
-  },
-});
-
-export default function MainMenu() {
+export default function AddonsMenu() {
   const gamesContext = useContext(GamesContext);
   const { currentGameParams } = useContext(CurrentGameContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const classes = useStyles();
+  const [selectedAddonsCount, setSelectedAddonsCount] = useState(0);
+
+  useEffect(() => {
+    setSelectedAddonsCount(currentGameParams.addons.length);
+  }, [currentGameParams.addons]);
+
   const { t } = useTranslation();
 
   function handleOpenContextMenu(event: React.MouseEvent<HTMLElement>) {
@@ -46,10 +44,21 @@ export default function MainMenu() {
 
   return (
     <div>
-      <Tooltip title={t('addons') || ''}>
-        <IconButton color="inherit" onClick={handleOpenContextMenu}>
-          <Extension />
-        </IconButton>
+      <Tooltip title={t('expansions') || ''}>
+        <Badge
+          badgeContent={selectedAddonsCount}
+          color="secondary"
+          sx={{
+            '& .MuiBadge-badge': {
+              top: 8,
+              right: 8,
+            },
+          }}
+        >
+          <IconButton color="inherit" onClick={handleOpenContextMenu}>
+            <Extension />
+          </IconButton>
+        </Badge>
       </Tooltip>
       <Menu
         anchorEl={anchorEl}
@@ -60,16 +69,12 @@ export default function MainMenu() {
         {ADDONS.map(addon => (
           <MenuItem
             key={addon.name}
+            sx={{ pl: 1 }}
             onClick={e =>
               handleMenuItemClick(e, addon.name, !currentGameParams?.addons?.includes(addon.name))
             }
           >
-            <Checkbox
-              classes={{
-                root: classes.checkbox,
-              }}
-              checked={currentGameParams?.addons?.includes(addon.name)}
-            />
+            <Checkbox checked={currentGameParams?.addons?.includes(addon.name)} />
             {t(addon.name)}
           </MenuItem>
         ))}

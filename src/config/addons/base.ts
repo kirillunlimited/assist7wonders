@@ -38,7 +38,7 @@ const base = {
     },
     {
       id: 'civilian',
-      color: '#2376CF',
+      color: '#1565c0',
       counters: [
         {
           id: 'civilian',

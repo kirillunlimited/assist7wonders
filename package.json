@@ -1,9 +1,12 @@
 {
   "name": "assist7wonders",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.9.2",
+    "@mui/styles": "^5.9.2",
     "@types/debounce": "^1.2.0",
     "@types/lodash.shuffle": "^4.2.6",
     "@types/node": "^12.0.0",
@@ -28,13 +31,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "run-p --race dev:firebase dev:*",
-    "dev:firebase": "firebase emulators:start",
-    "dev:react": "FAST_REFRESH=false react-scripts start",
+    "start": "FAST_REFRESH=false react-scripts start",
     "build": "npx shx rm -rf build && react-scripts build",
     "deploy": "npm run build && firebase deploy",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "coverage": "jest --coverage --coverageDirectory='coverage'",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "pretty": "prettier --write \"src/**/*.{ts,tsx,json}\""

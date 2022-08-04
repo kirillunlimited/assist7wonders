@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
+  Box,
   IconButton,
   TableContainer,
   Table,
@@ -10,38 +11,17 @@ import {
   Button,
   Typography,
   Snackbar,
-} from '@material-ui/core';
+  Alert,
+} from '@mui/material';
 import NewPlayer from '../components/NewPlayer';
 import Profile from '../components/Profile';
 import WonderSelect from '../components/WonderSelect';
-import { DeleteForever, Close, Shuffle } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import { DeleteForever, Close, Shuffle } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Player } from '../types';
 import { CurrentGameContext, GamesContext } from './App';
 import { getPlayersWithShuffledWonders } from '../utils/players';
-
-const useStyles = makeStyles(theme => ({
-  subtitle: {
-    marginTop: theme.spacing(2),
-  },
-  player: {
-    padding: 0,
-    cursor: 'move',
-  },
-  wonder: {
-    width: '100%',
-  },
-  controls: {
-    marginTop: theme.spacing(2),
-  },
-  delete: {
-    width: '100%',
-    padding: 0,
-    textAlign: 'right',
-  },
-}));
 
 const reorder = (list: Player[], startIndex: number, endIndex: number): Player[] => {
   const result = Array.from(list);
@@ -59,7 +39,6 @@ export default function Players() {
     player: null,
     index: -1,
   } as { player: Player | null; index: number });
-  const classes = useStyles();
   const { t } = useTranslation();
 
   function handleSubmit(name: string, wonder: string) {
@@ -176,18 +155,22 @@ export default function Players() {
                       <Draggable key={player.name} draggableId={player.name} index={index}>
                         {provided => (
                           <TableRow ref={provided.innerRef} {...provided.draggableProps}>
-                            <TableCell className={classes.player} {...provided.dragHandleProps}>
+                            <TableCell
+                              sx={{ py: 1, px: 0, cursor: 'move' }}
+                              {...provided.dragHandleProps}
+                            >
                               <Profile name={player.name} />
                             </TableCell>
-                            <TableCell className={classes.wonder}>
+                            <TableCell sx={{ width: '100%' }}>
                               <WonderSelect
+                                variant="standard"
                                 value={player.wonder}
                                 wonders={currentGameParams.wonders}
                                 selectedWonders={currentGamePlayers.map(player => player.wonder)}
                                 onSelect={wonder => handleWonderChange(player.name, wonder)}
                               />
                             </TableCell>
-                            <TableCell className={classes.delete}>
+                            <TableCell sx={{ width: '100%', padding: 0, textAlign: 'right' }}>
                               <IconButton onClick={() => handleDeletePlayer(player.name)}>
                                 <Tooltip title={t('deletePlayer') || ''}>
                                   <DeleteForever fontSize="large" color="secondary" />
@@ -208,21 +191,26 @@ export default function Players() {
       ) : null}
 
       {currentGamePlayers.length < 2 ? (
-        <Typography variant="subtitle1" className={classes.subtitle} component="p">
+        <Alert sx={{ mt: 2 }} severity="warning">
           {t('addMinPlayers')}
-        </Typography>
+        </Alert>
       ) : null}
 
-      <div className={classes.controls}>
-        <Button
-          variant="outlined"
-          color="primary"
-          aria-label="add"
-          startIcon={<Shuffle />}
-          onClick={handleShuffleWondersClick}
-        >
-          {t('shuffleWonders')}
-        </Button>
+      <Box sx={{ mt: 2 }}>
+        {currentGamePlayers.length >= 2 && (
+          <Button
+            sx={{
+              marginBottom: 2,
+            }}
+            variant="outlined"
+            color="primary"
+            aria-label="add"
+            startIcon={<Shuffle />}
+            onClick={handleShuffleWondersClick}
+          >
+            {t('shuffleWonders')}
+          </Button>
+        )}
         <NewPlayer
           names={currentGamePlayers.map(player => player.name)}
           wonders={currentGameParams.wonders}
@@ -230,7 +218,7 @@ export default function Players() {
           isMax={currentGamePlayers.length >= currentGameParams.maxPlayers}
           onSubmit={handleSubmit}
         />
-      </div>
+      </Box>
 
       <Snackbar
         anchorOrigin={{

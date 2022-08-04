@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Box,
   Button,
   TextField,
   Dialog,
@@ -7,10 +8,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Typography,
-} from '@material-ui/core';
-import { Close, PersonAdd } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Close, PersonAdd } from '@mui/icons-material';
 import WonderSelect from './WonderSelect';
 import { useTranslation } from 'react-i18next';
 import { shuffleWonders } from '../utils/wonders';
@@ -23,27 +22,7 @@ export type Props = {
   onSubmit: (name: string, wonder: string) => void;
 };
 
-const useStyles = makeStyles(theme => ({
-  button: {
-    marginTop: theme.spacing(2),
-  },
-  title: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  wondersSelect: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 export default function NewPlayer(props: Props) {
-  const classes = useStyles();
   const [name, setName] = useState('');
   const [wonder, setWonder] = useState('');
   const [isDialogOpened, setIsDialogOpened] = useState(false);
@@ -107,7 +86,6 @@ export default function NewPlayer(props: Props) {
   return (
     <div>
       <Button
-        className={classes.button}
         disabled={props.isMax}
         startIcon={<PersonAdd />}
         variant="contained"
@@ -119,13 +97,17 @@ export default function NewPlayer(props: Props) {
       </Button>
 
       <Dialog open={isDialogOpened} onClose={() => toggleDialog(false)}>
-        <DialogTitle disableTypography className={classes.title}>
-          <Typography variant="h6"> {t('newPlayer')}</Typography>
-          <IconButton
-            className={classes.closeButton}
-            aria-label="close"
-            onClick={() => toggleDialog(false)}
-          >
+        <DialogTitle
+          sx={{
+            margin: 0,
+            padding: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {t('newPlayer')}
+          <IconButton aria-label="close" onClick={() => toggleDialog(false)}>
             <Close />
           </IconButton>
         </DialogTitle>
@@ -146,7 +128,11 @@ export default function NewPlayer(props: Props) {
                 onChange={event => setName(event.target.value)}
               />
             </div>
-            <div className={classes.wondersSelect}>
+            <Box
+              sx={{
+                marginTop: 2,
+              }}
+            >
               <WonderSelect
                 value={wonder}
                 wonders={props.wonders}
@@ -154,7 +140,7 @@ export default function NewPlayer(props: Props) {
                 variant="outlined"
                 onSelect={setWonder}
               />
-            </div>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button role="submit" color="primary" type="submit" disabled={!isAddButtonEnabled()}>
