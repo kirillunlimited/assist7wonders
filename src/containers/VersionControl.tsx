@@ -1,20 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Snackbar, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSnackbar } from 'notistack';
 import * as serviceWorkerRegistration from '../serviceWorkerRegistration';
 
 export default function VersionControl() {
-  const [showReload, setShowReload] = useState(false);
   const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const { t } = useTranslation();
 
   const onSWUpdate = useCallback(
     (registration: ServiceWorkerRegistration) => {
-      setShowReload(true);
+      enqueueSnackbar(t('newVersion'), {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left',
+        },
+        autoHideDuration: 6000,
+        action: () => (
+          <Button variant="contained" size="small" onClick={reloadPage}>
+            {t('update')}
+          </Button>
+        ),
+      });
       setWaitingWorker(registration.waiting);
       waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
     },
-    [waitingWorker]
+    [waitingWorker] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   useEffect(() => {
@@ -24,26 +37,12 @@ export default function VersionControl() {
   /* Update service worker on manual page reload */
   function reloadPage() {
     waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
-    setShowReload(false);
+    closeSnackbar();
     window.location.reload();
   }
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={showReload}
-        message={t('newVersion')}
-        onClick={reloadPage}
-        action={
-          <Button color="inherit" size="small" onClick={reloadPage}>
-            {t('update')}
-          </Button>
-        }
-      />
       <Typography
         sx={{
           position: 'absolute',

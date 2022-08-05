@@ -16,6 +16,7 @@ import { Player, GameParams, GameState } from '../types';
 import ROUTES from '../config/routes';
 import { getGameParamsByGameState, getNewGameByLastGame, getLastGameState } from '../utils/games';
 import { getGamesFromStorage, saveGamesToStorage } from '../utils/storage';
+import { SnackbarProvider } from 'notistack';
 
 type GamesContextProps = {
   state: GameState[];
@@ -71,49 +72,51 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          display: 'flex',
-          height: '100%',
-          textAlign: 'center',
-          alignItems: isReady ? '' : 'center',
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
-          <CurrentGameContext.Provider
-            value={{
-              currentGameState: lastGameState,
-              currentGameParams: lastGameParams,
-              currentGamePlayers: lastGamePlayers,
-            }}
-          >
-            <Layout>
-              {isReady ? (
-                <>
-                  <Navigation />
-                  <MainMenu>
-                    <NewGame />
-                    <AddonsMenu />
-                    <LanguageMenu />
-                  </MainMenu>
-                  <RouteWrapper>
-                    <Router routes={ROUTES} />
-                  </RouteWrapper>
-                </>
-              ) : (
-                <CircularProgress
-                  sx={{
-                    my: 0,
-                    mx: 'auto',
-                  }}
-                />
-              )}
-            </Layout>
-          </CurrentGameContext.Provider>
-        </GamesContext.Provider>
-        <VersionControl />
-      </Box>
+      <SnackbarProvider maxSnack={3}>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '100%',
+            textAlign: 'center',
+            alignItems: isReady ? '' : 'center',
+            backgroundColor: theme.palette.background.default,
+          }}
+        >
+          <GamesContext.Provider value={{ state: games, dispatch: gamesDispatch }}>
+            <CurrentGameContext.Provider
+              value={{
+                currentGameState: lastGameState,
+                currentGameParams: lastGameParams,
+                currentGamePlayers: lastGamePlayers,
+              }}
+            >
+              <Layout>
+                {isReady ? (
+                  <>
+                    <Navigation />
+                    <MainMenu>
+                      <NewGame />
+                      <AddonsMenu />
+                      <LanguageMenu />
+                    </MainMenu>
+                    <RouteWrapper>
+                      <Router routes={ROUTES} />
+                    </RouteWrapper>
+                  </>
+                ) : (
+                  <CircularProgress
+                    sx={{
+                      my: 0,
+                      mx: 'auto',
+                    }}
+                  />
+                )}
+              </Layout>
+            </CurrentGameContext.Provider>
+          </GamesContext.Provider>
+          <VersionControl />
+        </Box>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

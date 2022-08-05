@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Box,
   IconButton,
@@ -10,7 +10,6 @@ import {
   Tooltip,
   Button,
   Typography,
-  Snackbar,
   Alert,
 } from '@mui/material';
 import NewPlayer from '../components/NewPlayer';
@@ -22,6 +21,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { Player } from '../types';
 import { CurrentGameContext, GamesContext } from './App';
 import { getPlayersWithShuffledWonders } from '../utils/players';
+import { useSnackbar, SnackbarKey } from 'notistack';
 
 const reorder = (list: Player[], startIndex: number, endIndex: number): Player[] => {
   const result = Array.from(list);
@@ -30,15 +30,16 @@ const reorder = (list: Player[], startIndex: number, endIndex: number): Player[]
   return result;
 };
 
+type DeletedPlayer = {
+  player: Player | null;
+  index: number;
+};
+
 export default function Players() {
   const gamesContext = useContext(GamesContext);
   const { currentGameState, currentGameParams, currentGamePlayers } =
     useContext(CurrentGameContext);
-  const [isDeleteConfirmOpened, setIsDeleteConfirmOpened] = useState(false);
-  const [deletedPlayer, setDeletedPlayer] = useState({
-    player: null,
-    index: -1,
-  } as { player: Player | null; index: number });
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { t } = useTranslation();
 
   function handleSubmit(name: string, wonder: string) {
@@ -53,21 +54,54 @@ export default function Players() {
   }
 
   function handleDeletePlayer(name: string) {
-    let playerIndex = -1;
-    const deletedPlayer = currentGamePlayers.find((player, index) => {
-      if (player.name === name) {
-        playerIndex = index;
-        return true;
-      }
-      return false;
-    });
+    const deletedPlayer = currentGamePlayers.reduce(
+      (result, player, index) => {
+        if (player.name === name) {
+          return {
+            player,
+            index,
+          };
+        }
+        return result;
+      },
+      { player: null, index: -1 } as DeletedPlayer
+    );
 
     if (deletedPlayer) {
-      setDeletedPlayer({
-        player: deletedPlayer,
-        index: playerIndex,
-      });
-      setIsDeleteConfirmOpened(true);
+      enqueueSnackbar(
+        <span
+          dangerouslySetInnerHTML={{
+            __html: t('deletingPlayerDescription', { name }),
+          }}
+        />,
+        {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          autoHideDuration: 6000,
+          action: snackbarId => (
+            <>
+              <Button
+                variant="contained"
+                size="small"
+                color="primary"
+                onClick={() => handleRestorePlayer(deletedPlayer, snackbarId)}
+              >
+                {t('restore')}
+              </Button>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={() => closeSnackbar(snackbarId)}
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            </>
+          ),
+        }
+      );
 
       gamesContext.dispatch({
         type: 'DELETE_PLAYER',
@@ -79,9 +113,9 @@ export default function Players() {
     }
   }
 
-  function handleRestorePlayer(): void {
+  function handleRestorePlayer(deletedPlayer: DeletedPlayer, snackbarId: SnackbarKey): void {
     if (deletedPlayer?.player) {
-      setIsDeleteConfirmOpened(false);
+      closeSnackbar(snackbarId);
       gamesContext.dispatch({
         type: 'RESTORE_PLAYER',
         payload: {
@@ -102,13 +136,6 @@ export default function Players() {
       type: 'SET_PLAYERS',
       payload: { gameId: currentGameState.gameId, players },
     });
-  }
-
-  function handleCloseConfirm(event: React.SyntheticEvent | React.MouseEvent, reason?: string) {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setIsDeleteConfirmOpened(false);
   }
 
   function handleWonderChange(name: string, wonder: string) {
@@ -219,38 +246,6 @@ export default function Players() {
           onSubmit={handleSubmit}
         />
       </Box>
-
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={isDeleteConfirmOpened}
-        autoHideDuration={6000}
-        onClose={handleCloseConfirm}
-        message={
-          <span
-            dangerouslySetInnerHTML={{
-              __html: t('deletingPlayerDescription', { name: deletedPlayer?.player?.name }),
-            }}
-          />
-        }
-        action={
-          <>
-            <Button color="secondary" size="small" onClick={handleRestorePlayer}>
-              {t('restore')}
-            </Button>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleCloseConfirm}
-            >
-              <Close fontSize="small" />
-            </IconButton>
-          </>
-        }
-      />
     </div>
   );
 }
