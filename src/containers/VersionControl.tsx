@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
@@ -10,29 +10,26 @@ export default function VersionControl() {
 
   const { t } = useTranslation();
 
-  const onSWUpdate = useCallback(
-    (registration: ServiceWorkerRegistration) => {
-      enqueueSnackbar(t('newVersion'), {
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'left',
-        },
-        autoHideDuration: 6000,
-        action: () => (
-          <Button variant="contained" size="small" onClick={reloadPage}>
-            {t('update')}
-          </Button>
-        ),
-      });
-      setWaitingWorker(registration.waiting);
-      waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
-    },
-    [waitingWorker] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  function onSWUpdate(registration: ServiceWorkerRegistration) {
+    enqueueSnackbar(t('newVersion'), {
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'left',
+      },
+      autoHideDuration: 6000,
+      action: () => (
+        <Button variant="contained" size="small" onClick={reloadPage}>
+          {t('update')}
+        </Button>
+      ),
+    });
+    setWaitingWorker(registration.waiting);
+    waitingWorker?.postMessage({ type: 'SKIP_WAITING' });
+  }
 
   useEffect(() => {
     serviceWorkerRegistration.register({ onUpdate: onSWUpdate });
-  }, [onSWUpdate]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Update service worker on manual page reload */
   function reloadPage() {

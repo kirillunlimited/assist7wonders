@@ -39,13 +39,28 @@ export default function NewPlayer(props: Props) {
     if (isDialogOpened) {
       setWonder(getRandomWonder());
     }
-  }, [props.selectedWonders]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.selectedWonders, isDialogOpened, getRandomWonder]);
+
+  const toggleDialog = useCallback(
+    (show: boolean) => {
+      setIsDialogOpened(show);
+
+      if (show) {
+        /* Set random wonder on open */
+        setWonder(getRandomWonder());
+      } else {
+        /* Reset wonder on close */
+        setWonder('');
+      }
+    },
+    [getRandomWonder]
+  );
 
   useEffect(() => {
     if (props.isMax) {
       toggleDialog(false);
     }
-  }, [props.isMax]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.isMax, toggleDialog]);
 
   function isAddButtonEnabled() {
     return !props.isMax && isNameValid(name) && isWonderValid(wonder);
@@ -57,18 +72,6 @@ export default function NewPlayer(props: Props) {
 
     /* Reset */
     setName('');
-  }
-
-  function toggleDialog(show: boolean) {
-    setIsDialogOpened(show);
-
-    if (show) {
-      /* Set random wonder on open */
-      setWonder(getRandomWonder());
-    } else {
-      /* Reset wonder on close */
-      setWonder('');
-    }
   }
 
   function isNameValid(name: string): boolean {

@@ -41,34 +41,30 @@ export default function App() {
   const lastGamePlayers = useMemo(() => lastGameState.players, [lastGameState]);
 
   useEffect(() => {
-    /** Restore last games */
+    /** Restore games */
     const savedGames = getGamesFromStorage();
     gamesDispatch({ type: 'SET_GAMES', payload: savedGames });
 
-    /** Init games array in storage if there was no data */
     if (!savedGames.length) {
-      startNewGame();
+      /** Start new game */
+      const gameId = Date.now();
+      const newGame = getNewGameByLastGame(gameId, null);
+      gamesDispatch({
+        type: 'ADD_GAME',
+        payload: {
+          game: newGame,
+        },
+      });
     }
 
     setIsReady(true);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isReady) {
       saveGamesToStorage(games);
     }
-  }, [games]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function startNewGame() {
-    const gameId = Date.now();
-    const newGame = getNewGameByLastGame(gameId, lastGameState);
-    gamesDispatch({
-      type: 'ADD_GAME',
-      payload: {
-        game: newGame,
-      },
-    });
-  }
+  }, [games, isReady]);
 
   return (
     <ThemeProvider theme={theme}>

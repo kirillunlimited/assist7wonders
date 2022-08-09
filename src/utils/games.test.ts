@@ -79,6 +79,14 @@ describe('getGameParamsByGameState', () => {
 });
 
 describe('getNewGameByLastGame', () => {
+  test('should return empty gameState', () => {
+    expect(getNewGameByLastGame(1, null)).toEqual({
+      gameId: 1,
+      addons: [],
+      players: [],
+      modified: 1,
+    });
+  });
   test('should return new gameState', () => {
     const lastGameState = {
       gameId: 0,

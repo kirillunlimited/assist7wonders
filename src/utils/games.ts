@@ -42,7 +42,16 @@ export const getGameParamsByGameState = (game: GameState): GameParams => {
 };
 
 /** Take params from last game or set it empty */
-export const getNewGameByLastGame = (gameId: number, lastGame: GameState): GameState => {
+export const getNewGameByLastGame = (gameId: number, lastGame: GameState | null): GameState => {
+  if (!lastGame) {
+    return {
+      gameId,
+      modified: gameId,
+      addons: [],
+      players: [],
+    };
+  }
+
   const addons = lastGame.addons;
   const wonders = getWondersByAddons(addons);
   const shuffledWonders = shuffleWonders(wonders);
