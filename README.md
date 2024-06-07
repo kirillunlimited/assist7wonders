@@ -18,6 +18,7 @@
   - 🗼 Babel
   - 🛥️ Armada
   - 🗿 Wonder pack
+  - 🏛️ Edifice
 - 👨‍👩‍👧‍👦 Players management:
   - 🏛 Select & randomize wonders
   - 🔄 Change order of the players with drag & drop
