@@ -1,6 +1,6 @@
 {
   "name": "assist7wonders",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
