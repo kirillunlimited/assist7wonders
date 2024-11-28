@@ -1,3 +1,5 @@
+import { getBabelTotal } from '../../utils/score';
+
 const babel = {
   name: 'Babel',
   maxPlayers: 7,
@@ -10,8 +12,10 @@ const babel = {
         {
           id: 'babel',
           min: 0,
+          max: 3
         },
       ],
+      sum: getBabelTotal,
     },
     {
       id: 'projects',
