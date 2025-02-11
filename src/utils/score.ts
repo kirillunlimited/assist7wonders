@@ -56,6 +56,25 @@ export function getTreasuryTotal(playerScore: PlayerScore): GameScoreSumResult {
   };
 }
 
+export function getBabelTotal(playerScore: PlayerScore): GameScoreSumResult {
+  let result = 0;
+  switch (playerScore.babel){
+    case 1:
+      result = 2;
+      break;
+    case 2:
+      result = 5;
+      break;
+    case 3:
+      result = 10;
+      break;
+  }
+  return {
+    result,
+    calculations: `Σ <strong>${result.toString()}</strong>`,
+  };
+}
+
 export function isMinValue(value: number, min?: number): boolean {
   return min !== undefined && value <= min;
 }

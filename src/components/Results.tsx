@@ -43,16 +43,18 @@ export default function Results(props: Props) {
           getPlayerScoreByGame(player.score, props.game.scores),
           getNeighborScores(props.players, playerIndex)
         );
+        const playerTreasury = player.score.treasury;
 
-        if (acc.name === '' || playerSum > acc.score) {
+        if (acc.name === '' || playerSum > acc.score || (playerSum === acc.score && playerTreasury > acc.treasury)) {
           acc = {
             name: player.name,
             score: playerSum,
+            treasury: playerTreasury
           };
         }
         return acc;
       },
-      { name: '', score: 0 }
+      { name: '', score: 0, treasury: 0 }
     );
     const winner = bestPlayer ? bestPlayer.name : '';
     setWinner(winner);
@@ -74,7 +76,7 @@ export default function Results(props: Props) {
         >
           {score.sum
             ? score.sum(playerScore, getNeighborScores(props.players, playerIndex)).result
-            : playerScore[score.id as keyof PlayerScore]}
+            : (playerScore[score.id as keyof PlayerScore] || 0)}
         </TableCell>
       );
     });
