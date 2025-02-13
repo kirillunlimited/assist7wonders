@@ -6,9 +6,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
+      - name: Build
+        run: yarn install --immutable && yarn build
+      - name: Deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ASSIST7WONDERS }}'
           projectId: assist7wonders
+          firebaseToolsVersion: 12.9.1

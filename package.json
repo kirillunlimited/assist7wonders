@@ -33,7 +33,8 @@
   },
   "scripts": {
     "start": "FAST_REFRESH=false react-scripts start",
-    "build": "npx shx rm -rf build && react-scripts build",
+    "build": "react-scripts build",
+    "build-clean": "npx shx rm -rf build && react-scripts build",
     "test": "react-scripts test",
     "coverage": "jest --coverage --coverageDirectory='coverage'",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
